@@ -40,3 +40,13 @@ proguard/
 
 # Android Studio captures folder
 captures/
+.idea/vcs.xml
+app/libs/
+app/src/main/java/com/nutsandbolts/splash/Controller/HomeActivity.java
+app/src/main/java/com/nutsandbolts/splash/Model/
+app/src/main/res/drawable/
+app/src/main/res/layout/activity_home.xml
+
+# Google Login and Firebase Client IDs
+/app/google-services.json
+/app/src/main/assets/OAuth.json
