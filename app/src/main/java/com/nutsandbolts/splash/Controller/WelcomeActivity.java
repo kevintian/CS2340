@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -149,6 +148,8 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
+        } else {
+            FirebaseAuth.getInstance().signOut();
         }
     }
 
@@ -182,10 +183,20 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                             Toast.makeText(self, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 //                            Toast.makeText()
+                        } else {
+                            authenticationDone();
                         }
                         // ...
                     }
                 });
+    }
+
+    /**
+     * Method that is run after user has logged in
+     */
+    private void authenticationDone() {
+        Intent homeIntent  = new Intent(WelcomeActivity.this, HomeActivity.class);
+        startActivity(homeIntent);
     }
 
     private String getWebOAuth() {

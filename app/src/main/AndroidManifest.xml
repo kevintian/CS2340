@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Controller.HomeActivity"></activity>
+        <activity android:name=".Controller.HomeActivity" />
+        <activity android:name=".Controller.RegisterActivity"></activity>
     </application>
 
 </manifest>
