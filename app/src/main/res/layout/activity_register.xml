@@ -10,4 +10,97 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.nutsandbolts.splash.Controller.RegisterActivity">
 
+    <TextView
+        android:id="@+id/register_welcome_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Welcome to Splash! Let's get you registered" />
+
+    <TextView
+        android:id="@+id/email_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/register_welcome_textview"
+        android:padding="5dp"
+        android:text="Email Address:"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/email_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/email_label"
+        android:layout_toEndOf="@+id/email_label"
+        android:padding="5dp"
+        android:text=""
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/display_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/email_label"
+        android:padding="5dp"
+        android:text="Display Name:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_alignTop="@id/display_name_label"
+        android:layout_toEndOf="@+id/display_name_label"
+        android:id="@+id/display_name_edit_text"
+        android:padding="5dp"
+        android:text=""
+        android:hint="Enter Display Name"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/home_address_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/display_name_label"
+        android:padding="5dp"
+        android:text="Home Address:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_alignTop="@id/home_address_label"
+        android:layout_toEndOf="@+id/home_address_label"
+        android:id="@+id/home_address_edit_text"
+        android:padding="5dp"
+        android:text=""
+        android:hint="Enter Home Address"
+        android:textSize="15sp" />
+
+    <Button
+        android:text="Register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/register_button" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/email_text"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@id/email_label"-->
+        <!--android:layout_toEndOf="@+id/email_label"-->
+        <!--android:padding="5dp"-->
+        <!--android:text=""-->
+        <!--android:textSize="15sp" />-->
+
 </RelativeLayout>

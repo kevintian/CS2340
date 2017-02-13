@@ -22,6 +22,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nutsandbolts.splash.R;
 
 import org.json.JSONException;
@@ -47,6 +52,11 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
      */
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    /*
+    Firebase Database Reference
+     */
+    DatabaseReference mUserRef;
 
     /*
     Request Code
@@ -88,6 +98,11 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         Get Firebase mAuth instance
          */
         mAuth = FirebaseAuth.getInstance();
+
+        /*
+        Get Firebase Database 'Users' reference
+         */
+        mUserRef = FirebaseDatabase.getInstance().getReference("users");
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -162,7 +177,8 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         } else {
             // Signed out, show unauthenticated UI.
             Log.d("Authentication", result.getStatus().toString());
-            Toast.makeText(this, "Connectivity problem - sign in with Google Failed", Toast.LENGTH_SHORT).show();        }
+            Toast.makeText(this, "Connectivity problem - sign in with Google Failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -195,8 +211,27 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
      * Method that is run after user has logged in
      */
     private void authenticationDone() {
-        Intent homeIntent  = new Intent(WelcomeActivity.this, HomeActivity.class);
-        startActivity(homeIntent);
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d("UID", uid);
+        DatabaseReference mThisUserRef = mUserRef.child(uid);
+        mThisUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Object value = dataSnapshot.getValue();
+                Intent loggedInIntent;
+                if (value == null) { // User has not been registered
+                    loggedInIntent = new Intent(WelcomeActivity.this, RegisterActivity.class);
+                } else { // User has already been registered
+                    loggedInIntent = new Intent(WelcomeActivity.this, HomeActivity.class);
+                }
+                startActivity(loggedInIntent);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private String getWebOAuth() {
