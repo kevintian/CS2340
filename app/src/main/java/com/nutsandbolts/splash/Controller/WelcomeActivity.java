@@ -56,7 +56,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     /*
     Firebase Database Reference
      */
-    DatabaseReference mUserRef;
+    DatabaseReference mRegisteredUserRef;
 
     /*
     Request Code
@@ -100,9 +100,9 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         mAuth = FirebaseAuth.getInstance();
 
         /*
-        Get Firebase Database 'Users' reference
+        Get Firebase Database 'registered-users' reference
          */
-        mUserRef = FirebaseDatabase.getInstance().getReference("users");
+        mRegisteredUserRef = FirebaseDatabase.getInstance().getReference("registered-users");
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -110,10 +110,10 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is signed in
+                    // RegisteredUser is signed in
                     Log.d("Authentication", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
-                    // User is signed out
+                    // RegisteredUser is signed out
                     Log.d("Authentication", "onAuthStateChanged:signed_out");
                 }
                 // ...
@@ -148,7 +148,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     }
 
     /**
-     * Signs the user in using Google
+     * Signs the registered user in using Google
      */
     private void signInWithGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -213,15 +213,15 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     private void authenticationDone() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Log.d("UID", uid);
-        DatabaseReference mThisUserRef = mUserRef.child(uid);
+        DatabaseReference mThisUserRef = mRegisteredUserRef.child(uid);
         mThisUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Object value = dataSnapshot.getValue();
                 Intent loggedInIntent;
-                if (value == null) { // User has not been registered
+                if (value == null) { // RegisteredUser has not been registered
                     loggedInIntent = new Intent(WelcomeActivity.this, RegisterActivity.class);
-                } else { // User has already been registered
+                } else { // RegisteredUser has already been registered
                     loggedInIntent = new Intent(WelcomeActivity.this, HomeActivity.class);
                 }
                 startActivity(loggedInIntent);

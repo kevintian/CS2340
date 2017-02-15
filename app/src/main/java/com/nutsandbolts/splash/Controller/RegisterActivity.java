@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.nutsandbolts.splash.Model.User;
+import com.nutsandbolts.splash.Model.RegisteredUser;
 import com.nutsandbolts.splash.R;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -24,9 +24,9 @@ public class RegisterActivity extends AppCompatActivity {
     private Button registerButton;
 
     /*
-    User model
+    RegisteredUser model
      */
-    private User user;
+    private RegisteredUser registeredUser;
 
     /*
     Display Name and Home Address variables
@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = (Button) findViewById(R.id.register_button);
 
         /*
-        Get User Data
+        Get RegisteredUser Data
          */
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         displayName = firebaseUser.getDisplayName();
@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         emailText.setText(firebaseUser.getEmail());
 
-        user = new User(displayName, firebaseUser.getUid(), firebaseUser.getEmail(), homeAddress);
+        registeredUser = new RegisteredUser(displayName, firebaseUser.getUid(), firebaseUser.getEmail(), homeAddress);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,10 +73,10 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (homeAddress.length() == 0) {
                     Toast.makeText(getApplicationContext(), "Enter Home Address"
                             , Toast.LENGTH_SHORT).show();
-                } else if (user != null) {
-                    user.setDisplayName(displayName);
-                    user.setHomeAddress(homeAddress);
-                    user.writeToDatabase();
+                } else if (registeredUser != null) {
+                    registeredUser.setDisplayName(displayName);
+                    registeredUser.setHomeAddress(homeAddress);
+                    registeredUser.writeToDatabase();
                 }
             }
         });
