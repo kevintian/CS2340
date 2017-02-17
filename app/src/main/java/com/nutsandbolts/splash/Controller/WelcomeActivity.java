@@ -56,7 +56,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     /*
     Firebase Database Reference
      */
-    DatabaseReference mRegisteredUserRef;
+    private DatabaseReference mRegisteredUserRef;
 
     /*
     Request Code
@@ -177,7 +177,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         } else {
             // Signed out, show unauthenticated UI.
             Log.d("Authentication", result.getStatus().toString());
-            Toast.makeText(this, "Connectivity problem - sign in with Google Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "App Fingerprint Not Recognized - Access to Database Denied", Toast.LENGTH_SHORT).show();
         }
     }
 

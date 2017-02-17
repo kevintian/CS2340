@@ -60,7 +60,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         emailText.setText(firebaseUser.getEmail());
 
-        registeredUser = new RegisteredUser(displayName, firebaseUser.getUid(), firebaseUser.getEmail(), homeAddress);
+        registeredUser = new RegisteredUser(displayName, firebaseUser.getUid(),
+                firebaseUser.getEmail(), homeAddress);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,11 +69,11 @@ public class RegisterActivity extends AppCompatActivity {
                 String displayName = displayNameText.getText().toString();
                 String homeAddress = homeAddressText.getText().toString();
                 if (displayName.length() == 0) {
-                    Toast.makeText(getApplicationContext(), "Enter Display Name"
-                            , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "Enter Display Name", Toast.LENGTH_SHORT).show();
                 } else if (homeAddress.length() == 0) {
-                    Toast.makeText(getApplicationContext(), "Enter Home Address"
-                            , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "Enter Home Address", Toast.LENGTH_SHORT).show();
                 } else if (registeredUser != null) {
                     registeredUser.setDisplayName(displayName);
                     registeredUser.setHomeAddress(homeAddress);
