@@ -40,3 +40,9 @@ proguard/
 
 # Android Studio captures folder
 captures/
+#.idea/vcs.xml
+#app/libs/
+
+# Google Login and Firebase Client IDs
+/app/google-services.json
+/app/src/main/assets/OAuth.json
