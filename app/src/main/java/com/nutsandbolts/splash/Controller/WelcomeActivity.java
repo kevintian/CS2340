@@ -81,51 +81,60 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
 
         // Configure Google Sign In
         String webAuth = getWebOAuth();
-        Log.d("WEBAUTH", webAuth);
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+        if (webAuth == null) {
+            Toast toast = Toast.makeText(getApplicationContext(), "Unable to get Web OAuth due to unrecognized certificate.\n" +
+                            "You are running an unauthorized version of the app.\n" +
+                            "Please install an official version.",
+                    Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            Log.d("WEBAUTH", webAuth);
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
 
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+
+            // Build a GoogleApiClient with access to the Google Sign-In API and the
+            // options specified by gso.
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
 
         /*
         Get Firebase mAuth instance
          */
-        mAuth = FirebaseAuth.getInstance();
+            mAuth = FirebaseAuth.getInstance();
 
         /*
         Get Firebase Database 'registered-users' reference
          */
-        mRegisteredUserRef = FirebaseDatabase.getInstance().getReference("registered-users");
+            mRegisteredUserRef = FirebaseDatabase.getInstance().getReference("registered-users");
 
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // RegisteredUser is signed in
-                    Log.d("Authentication", "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // RegisteredUser is signed out
-                    Log.d("Authentication", "onAuthStateChanged:signed_out");
+            mAuthListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user != null) {
+                        // RegisteredUser is signed in
+                        Log.d("Authentication", "onAuthStateChanged:signed_in:" + user.getUid());
+                    } else {
+                        // RegisteredUser is signed out
+                        Log.d("Authentication", "onAuthStateChanged:signed_out");
+                    }
+                    // ...
                 }
-                // ...
-            }
-        };
+            };
 
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signInWithGoogle();
-            }
-        });
+            googleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signInWithGoogle();
+                }
+            });
+        }
     }
 
     @Override
