@@ -30,7 +30,7 @@ public class RegisteredUser implements Parcelable {
      * Make a new student
      *
      * @param displayName  The user's display name
-     * @param id The user's id
+     * @param id           The user's id
      * @param emailAddress The user's email address
      * @param homeAddress  The user's home address
      */
@@ -70,9 +70,12 @@ public class RegisteredUser implements Parcelable {
         this.displayName = displayName;
     }
 
-    // RegisteredUser's emails cannot be changed as they are registered using Google
     public String getEmailAddress() {
         return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getHomeAddress() {
@@ -122,12 +125,12 @@ public class RegisteredUser implements Parcelable {
 
     public static final Parcelable.Creator<RegisteredUser> CREATOR
             = new Parcelable.Creator<RegisteredUser>() {
-                public RegisteredUser createFromParcel(Parcel in) {
-                    return new RegisteredUser(in);
-                }
+        public RegisteredUser createFromParcel(Parcel in) {
+            return new RegisteredUser(in);
+        }
 
-                public RegisteredUser[] newArray(int size) {
-                    return new RegisteredUser[size];
-                }
-            };
+        public RegisteredUser[] newArray(int size) {
+            return new RegisteredUser[size];
+        }
+    };
 }

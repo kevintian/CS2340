@@ -221,7 +221,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
      */
     private void authenticationDone() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d("UID", uid);
+//        Log.d("UID", uid);
         DatabaseReference mThisUserRef = mRegisteredUserRef.child(uid);
         mThisUserRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -229,7 +229,8 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                 Object value = dataSnapshot.getValue();
                 Intent loggedInIntent;
                 if (value == null) { // RegisteredUser has not been registered
-                    loggedInIntent = new Intent(WelcomeActivity.this, RegisterActivity.class);
+                    loggedInIntent = new Intent(WelcomeActivity.this, EditProfileActivity.class);
+                    loggedInIntent.putExtra("isEdit", false);
                 } else { // RegisteredUser has already been registered
                     loggedInIntent = new Intent(WelcomeActivity.this, HomeActivity.class);
                 }
