@@ -112,6 +112,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 DatabaseReference mThisUserRef = mRegisteredUserRef.child(uid);
                 mThisUserRef.addValueEventListener(new ValueEventListener() {
                     @Override
+                    //DataSnapshot contains data from the Firebase Database
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Object value = dataSnapshot.getValue();
                         if (value != null) {

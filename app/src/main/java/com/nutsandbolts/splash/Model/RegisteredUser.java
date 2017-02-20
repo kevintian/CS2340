@@ -18,13 +18,14 @@ import java.util.List;
 
 public class RegisteredUser implements Parcelable {
 
-    private static List<String> legalTypes = Arrays.asList(
-            "UR", "WK", "MG", "AD");
+//    private static List<String> legalTypes = Arrays.asList(
+//            "UR", "WK", "MG", "AD");
 
     private String displayName;
     private String id;
     private String emailAddress;
     private String homeAddress;
+    private UserType userType;
 
     /**
      * Make a new student
