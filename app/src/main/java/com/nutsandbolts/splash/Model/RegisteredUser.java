@@ -36,11 +36,12 @@ public class RegisteredUser implements Parcelable {
      * @param homeAddress  The user's home address
      */
     public RegisteredUser(String displayName, String id, String emailAddress,
-                          String homeAddress) {
+                          String homeAddress, UserType userType) {
         this.id = id;
         this.displayName = displayName;
         this.emailAddress = emailAddress;
         this.homeAddress = homeAddress;
+        this.userType = userType;
     }
 
     /**
@@ -52,6 +53,7 @@ public class RegisteredUser implements Parcelable {
         mUserRef.child("display-name").setValue(displayName);
         mUserRef.child("email-address").setValue(emailAddress);
         mUserRef.child("home-address").setValue(homeAddress);
+        mUserRef.child("user-type").setValue(userType);
     }
 
     /* **********************
@@ -87,8 +89,12 @@ public class RegisteredUser implements Parcelable {
         this.homeAddress = homeAddress;
     }
 
-    private List<String> getLegalTypes() {
-        return new ArrayList<>(legalTypes);
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     /**
@@ -109,6 +115,7 @@ public class RegisteredUser implements Parcelable {
         displayName = in.readString();
         emailAddress = in.readString();
         homeAddress = in.readString();
+        userType = UserType.valueOf(in.readString());
     }
 
     @Override
@@ -122,6 +129,7 @@ public class RegisteredUser implements Parcelable {
         dest.writeString(displayName);
         dest.writeString(emailAddress);
         dest.writeString(homeAddress);
+        dest.writeString(userType.name());
     }
 
     public static final Parcelable.Creator<RegisteredUser> CREATOR

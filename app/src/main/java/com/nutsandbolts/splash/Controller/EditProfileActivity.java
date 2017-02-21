@@ -5,8 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nutsandbolts.splash.Model.RegisteredUser;
+import com.nutsandbolts.splash.Model.UserType;
 import com.nutsandbolts.splash.R;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -30,6 +33,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText homeAddressText;
     private Button registerButton;
     private TextView welcomeText;
+    private Spinner userTypeSpinner;
 
     /*
     RegisteredUser model
@@ -57,6 +61,15 @@ public class EditProfileActivity extends AppCompatActivity {
         homeAddressText = (EditText) findViewById(R.id.home_address_edit_text);
         registerButton = (Button) findViewById(R.id.register_button);
         welcomeText = (TextView) findViewById(R.id.edit_welcome_textview);
+        userTypeSpinner = (Spinner) findViewById(R.id.user_type_spinner);
+
+        /*
+          Set up the adapter to display the allowable user types in the spinner
+         */
+        ArrayAdapter<String> adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, UserType.values());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        userTypeSpinner.setAdapter(adapter);
+
 
         /*
         Get RegisteredUser Data
@@ -70,8 +83,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
         emailText.setText(firebaseUser.getEmail());
 
+
+        //TODO: Change this
         registeredUser = new RegisteredUser(displayName, firebaseUser.getUid(),
-                firebaseUser.getEmail(), homeAddress);
+                firebaseUser.getEmail(), homeAddress, UserType.CONTRIBUTOR);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +94,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 String emailAddress = emailText.getText().toString();
                 String displayName = displayNameText.getText().toString();
                 String homeAddress = homeAddressText.getText().toString();
+                UserType userType = (UserType) userTypeSpinner.getSelectedItem();
                 if (displayName.length() == 0) {
                     Toast.makeText(getApplicationContext(),
                             "Enter Display Name", Toast.LENGTH_SHORT).show();
@@ -92,6 +108,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     registeredUser.setEmailAddress(emailAddress);
                     registeredUser.setDisplayName(displayName);
                     registeredUser.setHomeAddress(homeAddress);
+                    registeredUser.setUserType(userType);
                     registeredUser.writeToDatabase();
                 }
             }
@@ -116,9 +133,12 @@ public class EditProfileActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Object value = dataSnapshot.getValue();
                         if (value != null) {
+                            //Load current userdata into view
                             emailText.setText((CharSequence) dataSnapshot.child("email-address").getValue());
                             displayNameText.setText((CharSequence) dataSnapshot.child("display-name").getValue());
                             homeAddressText.setText((CharSequence) dataSnapshot.child("home-address").getValue());
+                            //DataSnapshot returns a native type -> cast it to string, parse as enum, and get ordinal position
+                            userTypeSpinner.setSelection(UserType.valueOf((String)dataSnapshot.child("user-type").getValue()).ordinal());
                         }
                     }
 
