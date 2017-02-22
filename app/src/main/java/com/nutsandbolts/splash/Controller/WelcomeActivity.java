@@ -186,7 +186,7 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         } else {
             // Signed out, show unauthenticated UI.
             Log.d("Authentication", result.getStatus().toString());
-            Toast.makeText(this, "App Fingerprint Not Recognized - Access to Database Denied", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Login Canceled", Toast.LENGTH_SHORT).show();
         }
     }
 
