@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Controller.HomeActivity" />
-        <activity android:name=".Controller.RegisterActivity"></activity>
+        <activity android:name=".Controller.EditProfileActivity" />
+        <activity android:name=".Controller.SubmitWaterReportActivity"></activity>
     </application>
 
 </manifest>

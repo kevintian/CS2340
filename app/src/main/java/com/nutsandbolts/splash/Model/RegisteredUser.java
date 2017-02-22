@@ -18,28 +18,30 @@ import java.util.List;
 
 public class RegisteredUser implements Parcelable {
 
-    private static List<String> legalTypes = Arrays.asList(
-            "UR", "WK", "MG", "AD");
+//    private static List<String> legalTypes = Arrays.asList(
+//            "UR", "WK", "MG", "AD");
 
     private String displayName;
     private String id;
     private String emailAddress;
     private String homeAddress;
+    private UserType userType;
 
     /**
      * Make a new student
      *
      * @param displayName  The user's display name
-     * @param id The user's id
+     * @param id           The user's id
      * @param emailAddress The user's email address
      * @param homeAddress  The user's home address
      */
     public RegisteredUser(String displayName, String id, String emailAddress,
-                          String homeAddress) {
+                          String homeAddress, UserType userType) {
         this.id = id;
         this.displayName = displayName;
         this.emailAddress = emailAddress;
         this.homeAddress = homeAddress;
+        this.userType = userType;
     }
 
     /**
@@ -51,6 +53,7 @@ public class RegisteredUser implements Parcelable {
         mUserRef.child("display-name").setValue(displayName);
         mUserRef.child("email-address").setValue(emailAddress);
         mUserRef.child("home-address").setValue(homeAddress);
+        mUserRef.child("user-type").setValue(userType);
     }
 
     /* **********************
@@ -70,9 +73,12 @@ public class RegisteredUser implements Parcelable {
         this.displayName = displayName;
     }
 
-    // RegisteredUser's emails cannot be changed as they are registered using Google
     public String getEmailAddress() {
         return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getHomeAddress() {
@@ -83,8 +89,12 @@ public class RegisteredUser implements Parcelable {
         this.homeAddress = homeAddress;
     }
 
-    private List<String> getLegalTypes() {
-        return new ArrayList<>(legalTypes);
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     /**
@@ -105,6 +115,7 @@ public class RegisteredUser implements Parcelable {
         displayName = in.readString();
         emailAddress = in.readString();
         homeAddress = in.readString();
+        userType = UserType.valueOf(in.readString());
     }
 
     @Override
@@ -118,16 +129,17 @@ public class RegisteredUser implements Parcelable {
         dest.writeString(displayName);
         dest.writeString(emailAddress);
         dest.writeString(homeAddress);
+        dest.writeString(userType.name());
     }
 
     public static final Parcelable.Creator<RegisteredUser> CREATOR
             = new Parcelable.Creator<RegisteredUser>() {
-                public RegisteredUser createFromParcel(Parcel in) {
-                    return new RegisteredUser(in);
-                }
+        public RegisteredUser createFromParcel(Parcel in) {
+            return new RegisteredUser(in);
+        }
 
-                public RegisteredUser[] newArray(int size) {
-                    return new RegisteredUser[size];
-                }
-            };
+        public RegisteredUser[] newArray(int size) {
+            return new RegisteredUser[size];
+        }
+    };
 }
