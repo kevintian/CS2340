@@ -27,7 +27,7 @@ public class RegisteredUser implements Parcelable {
     private String homeAddress;
 
     /**
-     * Make a new student
+     * Make a new user
      *
      * @param displayName  The user's display name
      * @param id The user's id
@@ -46,8 +46,10 @@ public class RegisteredUser implements Parcelable {
      * Write's the user's data to the database
      */
     public void writeToDatabase() {
-        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference mUserRef = mRootRef.child("registered-users").child(id);
+        DatabaseReference mRootRef = FirebaseDatabase.getInstance()
+            .getReference();
+        DatabaseReference mUserRef = mRootRef.child("registered-users")
+            .child(id);
         mUserRef.child("display-name").setValue(displayName);
         mUserRef.child("email-address").setValue(emailAddress);
         mUserRef.child("home-address").setValue(homeAddress);
@@ -57,32 +59,64 @@ public class RegisteredUser implements Parcelable {
      * Getters and setters
      */
 
-    // RegisteredUser's ids cannot be changed as they are registered using Google
+    // RegisteredUser's ids cannot be changed as they
+    // are registered using Google
+    
+    /**
+     * Get ID of user
+     * @return String This returns the ID of the registered user
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Get display name of user
+     * @return String This returns the user's display name
+     */
     public String getDisplayName() {
         return displayName;
     }
 
+    /**
+     * Sets display name of user
+     * @param displayName The user's display name
+     */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
-    // RegisteredUser's emails cannot be changed as they are registered using Google
+    /**
+     * Get email address of user
+     * @return String This returns the user's email address
+     */
+    // RegisteredUser's emails cannot be changed 
+    // as they are registered using Google
     public String getEmailAddress() {
         return emailAddress;
     }
 
+    /**
+     * Get home address of user
+     * @return String This returns the user's home address
+     */
     public String getHomeAddress() {
         return homeAddress;
     }
 
+    /**
+     * Sets home addres of user
+     * @param homeAddress The user's home address
+     */
     public void setHomeAddress(String homeAddress) {
         this.homeAddress = homeAddress;
     }
 
+    /**
+     * Gets Legal Types
+     * @return List This returns a list of Strings
+     * of the user's legal types
+     */
     private List<String> getLegalTypes() {
         return new ArrayList<>(legalTypes);
     }
@@ -100,6 +134,11 @@ public class RegisteredUser implements Parcelable {
      *
      */
 
+    /**
+     * Make a new user
+     *
+     * @param in 
+     */
     private RegisteredUser(Parcel in) {
         id = in.readString();
         displayName = in.readString();

@@ -44,7 +44,8 @@ public class HomeActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // RegisteredUser is signed in
-                    Log.d("Authentication", "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d("Authentication", "onAuthStateChanged:signed_in:"
+                        + user.getUid());
                     returnToWelcomeScreen();
                 } else {
                     // RegisteredUser is signed out
@@ -55,8 +56,12 @@ public class HomeActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * Brings user back to welcome screen
+     */
     private void returnToWelcomeScreen() {
-        Intent welcomeIntent  = new Intent(HomeActivity.this, WelcomeActivity.class);
+        Intent welcomeIntent  = new Intent(HomeActivity
+            .this, WelcomeActivity.class);
         startActivity(welcomeIntent);
     }
 }
