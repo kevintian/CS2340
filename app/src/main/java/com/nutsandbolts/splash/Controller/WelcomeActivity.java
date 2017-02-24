@@ -27,6 +27,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nutsandbolts.splash.Model.WaterCondition;
+import com.nutsandbolts.splash.Model.WaterSourceReport;
+import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
 import org.json.JSONException;
@@ -34,6 +37,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 public class WelcomeActivity extends AppCompatActivity
     implements GoogleApiClient.OnConnectionFailedListener {

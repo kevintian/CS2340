@@ -10,7 +10,12 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.nutsandbolts.splash.Model.WaterCondition;
+import com.nutsandbolts.splash.Model.WaterSourceReport;
+import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
+
+import java.util.Date;
 
 public class HomeActivity extends AppCompatActivity {
 
