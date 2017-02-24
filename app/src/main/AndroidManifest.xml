@@ -17,7 +17,8 @@
         </activity>
         <activity android:name=".Controller.HomeActivity" />
         <activity android:name=".Controller.EditProfileActivity" />
-        <activity android:name=".Controller.SubmitWaterReportActivity"></activity>
+        <activity android:name=".Controller.SubmitWaterReportActivity" />
+        <activity android:name=".Controller.ViewWaterReportsActivity"></activity>
     </application>
 
 </manifest>

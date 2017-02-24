@@ -20,6 +20,8 @@ public class HomeActivity extends AppCompatActivity {
     */
     private Button signOutButton;
     private Button editProfileButton;
+    private Button submitWaterReportButton;
+    private Button viewWaterReportsButton;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -48,6 +50,24 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        submitWaterReportButton = (Button) findViewById(R.id.submit_water_report_button);
+
+        submitWaterReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitWaterReport();
+            }
+        });
+
+        viewWaterReportsButton = (Button) findViewById(R.id.view_water_reports_button);
+
+        viewWaterReportsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewWaterReports();
+            }
+        });
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -73,6 +93,18 @@ public class HomeActivity extends AppCompatActivity {
         Intent welcomeIntent  = new Intent(HomeActivity
             .this, WelcomeActivity.class);
         startActivity(welcomeIntent);
+    }
+
+    private void submitWaterReport() {
+        Intent submitWaterReportIntent = new Intent(HomeActivity
+                .this, SubmitWaterReportActivity.class);
+        startActivity(submitWaterReportIntent);
+    }
+
+    private void viewWaterReports() {
+        Intent viewWaterReportsIntent = new Intent(HomeActivity
+                .this, ViewWaterReportsActivity.class);
+        startActivity(viewWaterReportsIntent);
     }
 
     private void editProfile() {
