@@ -35,7 +35,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class WelcomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class WelcomeActivity extends AppCompatActivity
+    implements GoogleApiClient.OnConnectionFailedListener {
 
     /*
     Widgets we will need to define listeners for
@@ -77,52 +78,60 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         /*
         Get widgets from view
          */
-        googleButton = (SignInButton) findViewById(R.id.sign_in_with_google_button);
+        googleButton = (SignInButton) findViewById(R
+            .id.sign_in_with_google_button);
 
         // Configure Google Sign In
         String webAuth = getWebOAuth();
         if (webAuth == null) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Unable to get Web OAuth due to unrecognized certificate.\n" +
-                            "You are running an unauthorized version of the app.\n" +
-                            "Please install an official version.",
-                    Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getApplicationContext(),
+                "Unable to get Web OAuth due to unrecognized certificate.\n"
+                + "You are running an unauthorized version of the app.\n"
+                + "Please install an official version.", Toast.LENGTH_LONG);
             toast.show();
         } else {
             Log.d("WEBAUTH", webAuth);
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
                     .build();
 
 
-            // Build a GoogleApiClient with access to the Google Sign-In API and the
+            // Build a GoogleApiClient with
+            // access to the Google Sign-In API and the
             // options specified by gso.
             mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                    .enableAutoManage(this /* FragmentActivity */,
+                        this /* OnConnectionFailedListener */)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
 
-        /*
+            /*
         Get Firebase mAuth instance
          */
             mAuth = FirebaseAuth.getInstance();
 
-        /*
+            /*
         Get Firebase Database 'registered-users' reference
          */
-            mRegisteredUserRef = FirebaseDatabase.getInstance().getReference("registered-users");
+            mRegisteredUserRef = FirebaseDatabase.getInstance()
+                .getReference("registered-users");
 
 
             mAuthListener = new FirebaseAuth.AuthStateListener() {
                 @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                public void onAuthStateChanged(@NonNull
+                    FirebaseAuth firebaseAuth) {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     if (user != null) {
                         // RegisteredUser is signed in
-                        Log.d("Authentication", "onAuthStateChanged:signed_in:" + user.getUid());
+                        Log.d("Authentication", "onAuthStateChanged:signed_in:"
+                            + user.getUid());
                     } else {
                         // RegisteredUser is signed out
-                        Log.d("Authentication", "onAuthStateChanged:signed_out");
+                        Log.d("Authentication",
+                            "onAuthStateChanged:signed_out");
                     }
                     // ...
                 }
@@ -160,7 +169,8 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
      * Signs the registered user in using Google
      */
     private void signInWithGoogle() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Intent signInIntent = Auth.GoogleSignInApi
+            .getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -168,15 +178,22 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        // Result returned from launching the Intent
+        // from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            GoogleSignInResult result = Auth
+                .GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         } else {
             FirebaseAuth.getInstance().signOut();
         }
     }
 
+    /**
+     * handles the sign in result
+     *
+     * @param result The result of the sign in
+     */
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d("Authentication", "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
@@ -186,34 +203,49 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         } else {
             // Signed out, show unauthenticated UI.
             Log.d("Authentication", result.getStatus().toString());
-            Toast.makeText(this, "App Fingerprint Not Recognized - Access to Database Denied", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                "App Fingerprint Not Recognized - Access to Database Denied",
+                Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * authorizes the sign in of the google account
+     * @param acct The google account that is signed in
+     *
+     */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d("Authentication", "firebaseAuthWithGoogle:" + acct.getId());
 
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        AuthCredential credential = GoogleAuthProvider
+            .getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("Authentication", "signInWithCredential:onComplete:" + task.isSuccessful());
+                .addOnCompleteListener(this,
+                    new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("Authentication",
+                                "signInWithCredential:onComplete:"
+                                + task.isSuccessful());
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w("Authentication", "signInWithCredential", task.getException());
-                            Toast.makeText(self, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-//                            Toast.makeText()
-                        } else {
-                            authenticationDone();
+                            // If sign in fails, display a message to the user.
+                            // If sign in succeeds
+                            // the auth state listener will be notified
+                            // and logic to handle the
+                            // signed in user can be handled in the listener.
+                            if (!task.isSuccessful()) {
+                                Log.w("Authentication",
+                                    "signInWithCredential",
+                                        task.getException());
+                                Toast.makeText(self, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                                // Toast.makeText()
+                            } else {
+                                authenticationDone();
+                            }
+                            // ...
                         }
-                        // ...
-                    }
-                });
+                    });
     }
 
     /**
@@ -229,6 +261,12 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
                 Object value = dataSnapshot.getValue();
                 Intent loggedInIntent;
                 if (value == null) { // RegisteredUser has not been registered
+                    loggedInIntent = new Intent(WelcomeActivity.this,
+                        RegisterActivity.class);
+                } else { // RegisteredUser has already
+                    // been registered
+                    loggedInIntent = new Intent(WelcomeActivity.this,
+                        HomeActivity.class);
                     loggedInIntent = new Intent(WelcomeActivity.this, EditProfileActivity.class);
                     loggedInIntent.putExtra("isEdit", false);
                 } else { // RegisteredUser has already been registered
@@ -244,6 +282,10 @@ public class WelcomeActivity extends AppCompatActivity implements GoogleApiClien
         });
     }
 
+    /**
+     * Gets the web authorization
+     * @return String This returns a string of the web authorization
+     */
     private String getWebOAuth() {
         String json = null;
         String oauth = null;
