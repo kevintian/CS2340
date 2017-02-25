@@ -3,8 +3,11 @@ package com.nutsandbolts.splash.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
 
@@ -14,7 +17,7 @@ import java.util.Date;
 
 public class WaterSourceReport implements Parcelable {
     private Date dateTime;
-    private int reportID;
+//    private long reportID;
     private String reporterName;
     private String reporterUID;
     private double latitude;
@@ -29,30 +32,48 @@ public class WaterSourceReport implements Parcelable {
     public void writeToDatabase() {
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         String key = mRootRef.child("posts").push().getKey();
-        DatabaseReference mReportRef = mRootRef.child("water-source-reports").child(key);
+        final DatabaseReference mReportRef = mRootRef.child("water-source-reports").child(key);
         mReportRef.child("date-time").setValue(dateTime.getTime());
         mReportRef.child("latitude").setValue(latitude);
         mReportRef.child("longitude").setValue(longitude);
-        mReportRef.child("report-id").setValue(reportID);
         mReportRef.child("reporter-name").setValue(reporterName);
         mReportRef.child("water-condition").setValue(waterCondition);
         mReportRef.child("water-type").setValue(waterType);
+
+        DatabaseReference mCountRef = mRootRef.child("total-source-reports");
+        mCountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long reportID = 0;
+                if (dataSnapshot.getValue() != null) {
+                    reportID = (long) dataSnapshot.getValue();
+                }
+                reportID = reportID + 1;
+                dataSnapshot.getRef().setValue(reportID);
+                mReportRef.child("report-id").setValue(reportID);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
      * Create a new WaterReport
-     * @param dateTime time the report was created
-     * @param reportID a unique identifying number for the report
-     * @param reporterName the name of the user who created this report
-     * @param reporterUID the UID of the user who created this report
-     * @param latitude latitude of the location of the water
-     * @param longitude longitude of the location of the water
-     * @param waterType type of water being reported
+     *
+     * @param dateTime       time the report was created
+     * @param reporterName   the name of the user who created this report
+     * @param reporterUID    the UID of the user who created this report
+     * @param latitude       latitude of the location of the water
+     * @param longitude      longitude of the location of the water
+     * @param waterType      type of water being reported
      * @param waterCondition condition of water being reported
      */
-    public WaterSourceReport(Date dateTime, int reportID, String reporterName, String reporterUID, double latitude, double longitude, WaterType waterType, WaterCondition waterCondition) {
+    public WaterSourceReport(Date dateTime, String reporterName, String reporterUID, double latitude, double longitude, WaterType waterType, WaterCondition waterCondition) {
         this.dateTime = dateTime;
-        this.reportID = reportID;
+//        this.reportID = reportID;
         this.reporterName = reporterName;
         this.reporterUID = reporterUID;
         this.latitude = latitude;
@@ -64,12 +85,12 @@ public class WaterSourceReport implements Parcelable {
     /**
      * Getters and Setters
      */
-    public Date getDateTime() {
-        return dateTime;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public int getReportID() {
-        return reportID;
+    public Date getDateTime() {
+        return dateTime;
     }
 
     public String getReporterName() {
@@ -95,6 +116,7 @@ public class WaterSourceReport implements Parcelable {
     public WaterCondition getWaterCondition() {
         return waterCondition;
     }
+
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
@@ -131,7 +153,6 @@ public class WaterSourceReport implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(dateTime.getTime());
-        dest.writeInt(reportID);
         dest.writeString(reporterName);
         dest.writeString(reporterUID);
         dest.writeDouble(latitude);
@@ -142,7 +163,6 @@ public class WaterSourceReport implements Parcelable {
 
     private WaterSourceReport(Parcel in) {
         dateTime = new Date(in.readLong());
-        reportID = in.readInt();
         reporterName = in.readString();
         reporterUID = in.readString();
         latitude = in.readDouble();
