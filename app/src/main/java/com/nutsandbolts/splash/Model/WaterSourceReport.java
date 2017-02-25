@@ -23,12 +23,8 @@ public class WaterSourceReport implements Parcelable {
     private WaterType waterType;
     private WaterCondition waterCondition;
 
-    //TODO: Add in Field and ENUM for type of water  (Bottled, Well, Stream, Lake, Spring, Other)
-
-    //TODO: Add in Field and ENUM for condition of water (Waste, Treatable-Clear, Treatable-Muddy, Potable)
-
     /**
-     * Write's the user's data to the database
+     * Write's the water report to the database
      */
     public void writeToDatabase() {
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();

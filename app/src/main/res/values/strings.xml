@@ -2,6 +2,6 @@
     <string name="app_name">Splash</string>
     <string name="sign_out_text">Sign Out</string>
     <string name="edit_profile_text">Edit Profile</string>
-    <string name="submit_water_report_text">Submit Water Report</string>
+    <string name="submit_water_report_text">Submit Water Source Report</string>
     <string name="view_water_reports_text">View Water Reports</string>
 </resources>
