@@ -1,6 +1,13 @@
 package com.nutsandbolts.splash.Controller;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +26,7 @@ import com.nutsandbolts.splash.R;
 
 import java.util.Date;
 
-public class SubmitWaterReportActivity extends AppCompatActivity {
+public class SubmitWaterReportActivity extends AppCompatActivity  implements LocationListener {
 
     /*
    Widgets we will need to define listeners for
@@ -46,22 +53,36 @@ public class SubmitWaterReportActivity extends AppCompatActivity {
     private WaterSourceReport waterSourceReport;
 
     /*
-    Flag to check if GPS signal was found
+    Variables to enable GPS functionality
      */
     private boolean signalFound;
+    private double gpsLatitude;
     private double gpsLongitude;
-    private double gpsLongtide;
+    LocationManager locationManager;
 
     /*
     FirebaseUser object to get credentials of user when submitting
      */
     private FirebaseUser firebaseUser;
 
+    private static final String[] INITIAL_PERMS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+    };
+    private static final int INITIAL_REQUEST = 1337;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_water_report);
+
+
+        /*
+        Request GPS Permissions
+         */
+        if (Build.VERSION.SDK_INT >= 23 && PackageManager.PERMISSION_GRANTED != checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
+        }
 
         /*
         Get widgets from view
@@ -122,5 +143,53 @@ public class SubmitWaterReportActivity extends AppCompatActivity {
                 startActivity(homeIntent);
             }
         });
+
+        gpsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (signalFound) {
+                    latitude = gpsLatitude;
+                    longitude = gpsLongitude;
+                    latitudeText.setText(Double.toString(latitude));
+                    longitudeText.setText(Double.toString(longitude));
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "GPS Signal Not Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //getting setting up LocationManager
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    500,   // Interval in milliseconds
+                    10, this);
+        } catch (SecurityException e) {
+//            Toast.makeText(getBaseContext(), "Security exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        gpsLatitude = location.getLatitude();
+        gpsLongitude = location.getLongitude();
+        signalFound = true;
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Toast.makeText(getBaseContext(), "Gps turned on", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(getBaseContext(), "Gps turned off", Toast.LENGTH_SHORT).show();
     }
 }
