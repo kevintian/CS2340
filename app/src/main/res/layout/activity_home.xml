@@ -11,10 +11,17 @@
     tools:context="com.nutsandbolts.splash.Controller.HomeActivity">
 
     <Button
-        android:text="@string/sign_out_text"
+        android:id="@+id/sign_out_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sign_out_button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/sign_out_text" />
+
+    <Button
+        android:id="@+id/edit_profile_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sign_out_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/edit_profile_text" />
 </RelativeLayout>

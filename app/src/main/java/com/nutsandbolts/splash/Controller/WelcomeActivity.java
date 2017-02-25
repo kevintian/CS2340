@@ -191,7 +191,7 @@ public class WelcomeActivity extends AppCompatActivity
 
     /**
      * handles the sign in result
-     * 
+     *
      * @param result The result of the sign in
      */
     private void handleSignInResult(GoogleSignInResult result) {
@@ -210,9 +210,9 @@ public class WelcomeActivity extends AppCompatActivity
     }
 
     /**
-     * authorizes the sign in of the google account 
+     * authorizes the sign in of the google account
      * @param acct The google account that is signed in
-     * 
+     *
      */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d("Authentication", "firebaseAuthWithGoogle:" + acct.getId());
@@ -235,7 +235,7 @@ public class WelcomeActivity extends AppCompatActivity
                             // signed in user can be handled in the listener.
                             if (!task.isSuccessful()) {
                                 Log.w("Authentication",
-                                    "signInWithCredential", 
+                                    "signInWithCredential",
                                         task.getException());
                                 Toast.makeText(self, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
@@ -253,7 +253,7 @@ public class WelcomeActivity extends AppCompatActivity
      */
     private void authenticationDone() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d("UID", uid);
+//        Log.d("UID", uid);
         DatabaseReference mThisUserRef = mRegisteredUserRef.child(uid);
         mThisUserRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -267,6 +267,10 @@ public class WelcomeActivity extends AppCompatActivity
                     // been registered
                     loggedInIntent = new Intent(WelcomeActivity.this,
                         HomeActivity.class);
+                    loggedInIntent = new Intent(WelcomeActivity.this, EditProfileActivity.class);
+                    loggedInIntent.putExtra("isEdit", false);
+                } else { // RegisteredUser has already been registered
+                    loggedInIntent = new Intent(WelcomeActivity.this, HomeActivity.class);
                 }
                 startActivity(loggedInIntent);
             }

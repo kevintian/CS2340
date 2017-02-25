@@ -19,6 +19,7 @@ public class HomeActivity extends AppCompatActivity {
     Widgets we will need to define listeners for
     */
     private Button signOutButton;
+    private Button editProfileButton;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -35,6 +36,15 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 returnToWelcomeScreen();
+            }
+        });
+
+        editProfileButton = (Button) findViewById(R.id.edit_profile_button);
+
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editProfile();
             }
         });
 
@@ -63,5 +73,11 @@ public class HomeActivity extends AppCompatActivity {
         Intent welcomeIntent  = new Intent(HomeActivity
             .this, WelcomeActivity.class);
         startActivity(welcomeIntent);
+    }
+
+    private void editProfile() {
+        Intent editIntent = new Intent(HomeActivity.this, EditProfileActivity.class);
+        editIntent.putExtra("isEdit", true);
+        startActivity(editIntent);
     }
 }
