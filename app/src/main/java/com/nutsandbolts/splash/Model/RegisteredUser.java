@@ -95,6 +95,11 @@ public class RegisteredUser implements Parcelable {
     }
 
 
+    /**
+     * Set email address of user
+     *
+     * @param emailAddress The user's email address
+     */
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
@@ -117,10 +122,20 @@ public class RegisteredUser implements Parcelable {
         this.homeAddress = homeAddress;
     }
 
+    /**
+     * Gets usertype of user
+     *
+     * @return The user's usertype
+     */
     public UserType getUserType() {
         return userType;
     }
 
+    /**
+     * Sets usertype of user
+     *
+     * @param userType  The user's usertype
+     */
     public void setUserType(UserType userType) {
         this.userType = userType;
     }

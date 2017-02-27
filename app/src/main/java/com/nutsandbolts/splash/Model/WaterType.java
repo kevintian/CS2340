@@ -14,10 +14,20 @@ public enum WaterType {
 
     private final String type;
 
+    /**
+     * Make a new WaterType enum
+     *
+     * @param name  The water's type
+     */
     WaterType(String name) {
         this.type = name;
     }
 
+    /**
+     * Returns a string representation of the water's water type
+     *
+     * @return  The water's watertype
+     */
     public String getType() {
         return type;
     }

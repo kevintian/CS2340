@@ -12,10 +12,20 @@ public enum WaterCondition {
 
     private final String condition;
 
+    /**
+     * Make a new WaterCondition enum
+     *
+     * @param condition  The water's condition
+     */
     WaterCondition(String condition) {
         this.condition = condition;
     }
 
+    /**
+     * Returns a string representation of the water's condition
+     *
+     * @return  The water's condition
+     */
     public String getCondition() {
         return condition;
     }

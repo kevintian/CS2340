@@ -100,18 +100,27 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(welcomeIntent);
     }
 
+    /**
+     * Brings user back to submit screen
+     */
     private void submitWaterReport() {
         Intent submitWaterReportIntent = new Intent(HomeActivity
                 .this, SubmitWaterReportActivity.class);
         startActivity(submitWaterReportIntent);
     }
 
+    /**
+     * Brings user back to reports overview screen
+     */
     private void viewWaterReports() {
         Intent viewWaterReportsIntent = new Intent(HomeActivity
                 .this, ViewWaterReportsActivity.class);
         startActivity(viewWaterReportsIntent);
     }
 
+    /**
+     * Brings user back to edit screen
+     */
     private void editProfile() {
         Intent editIntent = new Intent(HomeActivity.this, EditProfileActivity.class);
         editIntent.putExtra("isEdit", true);

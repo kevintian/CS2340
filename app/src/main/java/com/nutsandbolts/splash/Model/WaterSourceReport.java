@@ -161,6 +161,12 @@ public class WaterSourceReport implements Parcelable {
         dest.writeString(waterCondition.getCondition());
     }
 
+
+    /**
+     * Loads water source information from a parcel
+     *
+     * @param  in Parceled data
+     */
     private WaterSourceReport(Parcel in) {
         dateTime = new Date(in.readLong());
         reporterName = in.readString();
