@@ -17,7 +17,7 @@ import java.util.Date;
 
 public class WaterSourceReport implements Parcelable {
     private Date dateTime;
-//    private long reportID;
+    private long reportID;
     private String reporterName;
     private String reporterUID;
     private double latitude;
@@ -44,13 +44,13 @@ public class WaterSourceReport implements Parcelable {
         mCountRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                long reportID = 0;
+                long nextReportID = 0;
                 if (dataSnapshot.getValue() != null) {
-                    reportID = (long) dataSnapshot.getValue();
+                    nextReportID = (long) dataSnapshot.getValue();
                 }
-                reportID = reportID + 1;
-                dataSnapshot.getRef().setValue(reportID);
-                mReportRef.child("report-id").setValue(reportID);
+                nextReportID = nextReportID + 1;
+                dataSnapshot.getRef().setValue(nextReportID);
+                mReportRef.child("report-id").setValue(nextReportID);
             }
 
             @Override
@@ -76,6 +76,26 @@ public class WaterSourceReport implements Parcelable {
 //        this.reportID = reportID;
         this.reporterName = reporterName;
         this.reporterUID = reporterUID;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.waterType = waterType;
+        this.waterCondition = waterCondition;
+    }
+
+    /**
+     * Create a new WaterReport
+     *
+     * @param dateTime       time the report was created
+     * @param reporterName   the name of the user who created this report
+     * @param latitude       latitude of the location of the water
+     * @param longitude      longitude of the location of the water
+     * @param waterType      type of water being reported
+     * @param waterCondition condition of water being reported
+     */
+    public WaterSourceReport(Date dateTime, String reporterName, long reportID, double latitude, double longitude, WaterType waterType, WaterCondition waterCondition) {
+        this.dateTime = dateTime;
+        this.reporterName = reporterName;
+        this.reportID = reportID;
         this.latitude = latitude;
         this.longitude = longitude;
         this.waterType = waterType;
@@ -132,6 +152,18 @@ public class WaterSourceReport implements Parcelable {
 
     public void setWaterCondition(WaterCondition waterCondition) {
         this.waterCondition = waterCondition;
+    }
+
+    public long getReportID() {
+        return reportID;
+    }
+
+    public void setReportID(long reportID) {
+        this.reportID = reportID;
+    }
+
+    public void setReporterName(String reporterName) {
+        this.reporterName = reporterName;
     }
 
     /**
