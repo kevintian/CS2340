@@ -87,6 +87,7 @@ public class WaterSourceReport implements Parcelable {
      *
      * @param dateTime       time the report was created
      * @param reporterName   the name of the user who created this report
+     * @param reportID       Id of the report
      * @param latitude       latitude of the location of the water
      * @param longitude      longitude of the location of the water
      * @param waterType      type of water being reported
@@ -105,70 +106,128 @@ public class WaterSourceReport implements Parcelable {
     /**
      * Getters and Setters
      */
+
+    /**
+     * Sets the Date and Time of the Water Source Report 
+     * @param dateTime a Date Object that contains the current date and time
+     */
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 
+    /**
+     * Gets the Date and Time of the Water Source Report 
+     * @return Date. returns the date and time of the water source report
+     */
     public Date getDateTime() {
         return dateTime;
     }
 
+    /**
+     * Gets the name of the User that wrote the Water Source Report 
+     * @return String of reporterName returns the name of the user that submitted the report
+     */
     public String getReporterName() {
         return reporterName;
     }
 
+    /**
+     * Gets the Date and Time of the Water Source Report 
+     * @return String of reporterUID returns the name of the user that submitted the report
+     */
     public String getReporterUID() {
         return reporterUID;
     }
 
+    /**
+     * Gets the name of the latitude of the location 
+     * @return double latitude of the location
+     */
     public double getLatitude() {
         return latitude;
     }
 
+    /**
+     * Gets the name of the longitude of the location 
+     * @return double of longitude of the location
+     */
     public double getLongitude() {
         return longitude;
     }
 
+    /**
+     * Gets the type of water
+     * @return WaterType the type of water reported
+     */
     public WaterType getWaterType() {
         return waterType;
     }
 
+    /**
+     * Gets the condition of water
+     * @return WaterCondition returns the condition of the water reported
+     */
     public WaterCondition getWaterCondition() {
         return waterCondition;
     }
 
-
+    /**
+     * Sets the latitude of the location 
+     * @param  latitude Set a double as the latitude of the location
+     */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
+    /**
+     * Sets the longitude of the location 
+     * @param longitude Set a double as the longitude of the location
+     */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
+    /**
+     * Sets the water type put in the report
+     * @param waterType Sets the waterType put in the report
+     */
     public void setWaterType(WaterType waterType) {
         this.waterType = waterType;
     }
 
+    /**
+     * Sets the water condition put in the report
+     * @param waterCondition Sets the water condition put in the report
+     */
     public void setWaterCondition(WaterCondition waterCondition) {
         this.waterCondition = waterCondition;
     }
 
+    /**
+     * gets the id of the report
+     * @return long  returns the id of the report
+     */
     public long getReportID() {
         return reportID;
     }
 
+    /**
+     * sets the id of the report
+     * @param reportID the id of the report
+     */
     public void setReportID(long reportID) {
         this.reportID = reportID;
     }
 
+    /**
+     * sets the name of the reporter of the report
+     * @param reporterName the name of the user that wrote the report
+     */
     public void setReporterName(String reporterName) {
         this.reporterName = reporterName;
     }
 
-    /**
-     * @return the display string representation
-     */
+    
     @Override
     public String toString() {
         return "Water Report submitted by " + reporterName + " on " + dateTime;

@@ -69,7 +69,12 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
 
     }
 
-    //Checks if the value is a long -> if so, converts to double
+    /**
+     * Checks if the value is a long -> if so, converts to double
+     * 
+     * @param longValue - an object that is thought to be a long
+     * @return double A double that is converted form the long param
+     */
     private double convertDouble(Object longValue){
         double valueTwo = -1; // whatever to state invalid!
 
@@ -87,7 +92,13 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
         private Context context;
         private List<WaterSourceReport> sourceReports;
 
-        //Constructor, called on creation
+        /**
+         * Constructor, called on creation
+         *
+         * @param context An Context object of current state of the application/object
+         * @param resource An int representation of the amount of water sources
+         * @param objects An Array List of all of the Water Source reports
+         */
         public waterSourceArrayAdapter(Context context, int resource,
                                        ArrayList<WaterSourceReport> objects) {
             super(context, resource, objects);
@@ -96,7 +107,14 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
             this.sourceReports = objects;
         }
 
-        //Called when rendering the list
+
+        /**
+         * Called when rendering the list, gets the View displayed
+         *
+         * @param position int representation of which report in the source reports
+         * @param convertView a View used to convert display
+         * @param parents a ViewGroup that contains other views
+         */
         public View getView(int position, View convertView, ViewGroup parents) {
             //Get the report we are displaying
             WaterSourceReport report = sourceReports.get(position);

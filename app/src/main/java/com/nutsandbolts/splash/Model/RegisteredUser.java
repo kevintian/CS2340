@@ -27,6 +27,7 @@ public class RegisteredUser implements Parcelable {
      * @param id           The user's id
      * @param emailAddress The user's email address
      * @param homeAddress  The user's home address
+     * @param userType     The user's authorization level/userType
      */
     public RegisteredUser(String displayName, String id, String emailAddress,
                           String homeAddress, UserType userType) {
@@ -156,7 +157,7 @@ public class RegisteredUser implements Parcelable {
     /**
      * Make a new user
      *
-     * @param in
+     * @param in Where the info of the registered user is written into
      */
     private RegisteredUser(Parcel in) {
         id = in.readString();
