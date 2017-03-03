@@ -27,6 +27,8 @@ public class HomeActivity extends AppCompatActivity {
     private Button editProfileButton;
     private Button submitWaterReportButton;
     private Button viewWaterReportsButton;
+    private Button viewMapButton;
+
 
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -70,6 +72,15 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewWaterReports();
+            }
+        });
+
+        viewMapButton = (Button) findViewById(R.id.view_map_button);
+
+        viewMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewMap();
             }
         });
 
@@ -125,5 +136,14 @@ public class HomeActivity extends AppCompatActivity {
         Intent editIntent = new Intent(HomeActivity.this, EditProfileActivity.class);
         editIntent.putExtra("isEdit", true);
         startActivity(editIntent);
+    }
+
+    /**
+     * Brings user back to map
+     */
+    private void viewMap() {
+        Intent viewMapIntent = new Intent(HomeActivity
+                .this, MapActivity.class);
+        startActivity(viewMapIntent);
     }
 }

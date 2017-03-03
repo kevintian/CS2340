@@ -40,4 +40,12 @@
         android:layout_below="@+id/submit_water_report_button"
         android:layout_centerHorizontal="true"
         android:text="@string/view_water_reports_text" />
+
+    <Button
+        android:id="@+id/view_map_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_water_reports_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/view_map_text" />
 </RelativeLayout>
