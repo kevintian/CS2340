@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_submit_water_report"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.nutsandbolts.splash.Controller.SubmitWaterReportActivity">
+
+    <TextView
+        android:id="@+id/submit_water_report_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Submit Water Source Report"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/water_source_type_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/submit_water_report_text"
+        android:padding="5dp"
+        android:text="Water Type:"
+        android:textSize="15sp" />
+
+    <Spinner
+        android:id="@+id/water_source_type_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/water_source_type_label"
+        android:layout_toEndOf="@+id/water_source_type_label" />
+
+    <TextView
+        android:id="@+id/water_source_condition_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/water_source_type_label"
+        android:padding="5dp"
+        android:text="Water Condition:"
+        android:textSize="15sp" />
+
+    <Spinner
+        android:id="@+id/water_source_condition_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/water_source_condition_label"
+        android:layout_toEndOf="@+id/water_source_condition_label" />
+
+    <TextView
+        android:id="@+id/water_source_latitude_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/water_source_condition_label"
+        android:padding="5dp"
+        android:text="Latitude:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/water_source_latitude_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/water_source_latitude_label"
+        android:layout_toEndOf="@+id/water_source_latitude_label"
+        android:hint="Enter Latitude"
+        android:inputType="numberDecimal"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/water_source_longitude_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/water_source_latitude_label"
+        android:padding="5dp"
+        android:text="Longitude:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/water_source_longitude_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/water_source_longitude_label"
+        android:layout_toEndOf="@+id/water_source_longitude_label"
+        android:ems="10"
+        android:hint="Enter Longitude"
+        android:inputType="numberDecimal"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/generate_from_gps_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/water_source_longitude_label"
+        android:layout_centerHorizontal="true"
+        android:text="Generate Coordinates From GPS" />
+
+
+    <Button
+        android:id="@+id/upload_water_report_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Submit" />
+
+</RelativeLayout>

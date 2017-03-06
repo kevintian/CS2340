@@ -17,7 +17,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="Welcome to Splash! Let's get you registered" />
+        android:text="Welcome to Splash! Let's get you registered"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/email_label"
@@ -35,9 +36,9 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/email_label"
         android:layout_toEndOf="@+id/email_label"
+        android:hint="Enter Email Address"
         android:padding="5dp"
         android:text=""
-        android:hint="Enter Email Address"
         android:textSize="15sp" />
 
     <TextView
@@ -51,16 +52,16 @@
         android:textSize="15sp" />
 
     <EditText
+        android:id="@+id/display_name_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
         android:layout_alignTop="@id/display_name_label"
         android:layout_toEndOf="@+id/display_name_label"
-        android:id="@+id/display_name_edit_text"
+        android:ems="10"
+        android:hint="Enter Display Name"
+        android:inputType="textPersonName"
         android:padding="5dp"
         android:text=""
-        android:hint="Enter Display Name"
         android:textSize="15sp" />
 
     <TextView
@@ -74,52 +75,42 @@
         android:textSize="15sp" />
 
     <EditText
+        android:id="@+id/home_address_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
         android:layout_alignTop="@id/home_address_label"
         android:layout_toEndOf="@+id/home_address_label"
-        android:id="@+id/home_address_edit_text"
+        android:ems="10"
+        android:hint="Enter Home Address"
+        android:inputType="textPersonName"
         android:padding="5dp"
         android:text=""
-        android:hint="Enter Home Address"
         android:textSize="15sp" />
-
-    <Button
-        android:text="Register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/register_button" />
 
     <TextView
         android:id="@+id/user_type_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/home_address_label"
         android:padding="5dp"
         android:text="User Type:"
-        android:textSize="15sp"
-        android:layout_below="@+id/home_address_label"
-        android:layout_alignParentStart="true" />
+        android:textSize="15sp" />
 
     <Spinner
+        android:id="@+id/user_type_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/user_type_spinner"
         android:layout_alignBottom="@+id/user_type_label"
-        android:layout_toEndOf="@+id/user_type_label"
-        android:layout_below="@+id/home_address_label" />
+        android:layout_below="@+id/home_address_label"
+        android:layout_toEndOf="@+id/user_type_label" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/email_text"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignTop="@id/email_label"-->
-        <!--android:layout_toEndOf="@+id/email_label"-->
-        <!--android:padding="5dp"-->
-        <!--android:text=""-->
-        <!--android:textSize="15sp" />-->
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Register" />
 
 </RelativeLayout>

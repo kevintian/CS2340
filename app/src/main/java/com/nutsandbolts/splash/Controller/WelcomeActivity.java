@@ -27,6 +27,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nutsandbolts.splash.Model.WaterCondition;
+import com.nutsandbolts.splash.Model.WaterSourceReport;
+import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
 import org.json.JSONException;
@@ -34,6 +37,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 public class WelcomeActivity extends AppCompatActivity
     implements GoogleApiClient.OnConnectionFailedListener {
@@ -203,9 +207,7 @@ public class WelcomeActivity extends AppCompatActivity
         } else {
             // Signed out, show unauthenticated UI.
             Log.d("Authentication", result.getStatus().toString());
-            Toast.makeText(this,
-                "App Fingerprint Not Recognized - Access to Database Denied",
-                Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Login Canceled", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -261,12 +263,6 @@ public class WelcomeActivity extends AppCompatActivity
                 Object value = dataSnapshot.getValue();
                 Intent loggedInIntent;
                 if (value == null) { // RegisteredUser has not been registered
-                    loggedInIntent = new Intent(WelcomeActivity.this,
-                        RegisterActivity.class);
-                } else { // RegisteredUser has already
-                    // been registered
-                    loggedInIntent = new Intent(WelcomeActivity.this,
-                        HomeActivity.class);
                     loggedInIntent = new Intent(WelcomeActivity.this, EditProfileActivity.class);
                     loggedInIntent.putExtra("isEdit", false);
                 } else { // RegisteredUser has already been registered

@@ -28,12 +28,12 @@ public class EditProfileActivity extends AppCompatActivity {
     /*
     Widgets we will need to define listeners for
     */
+    private TextView welcomeText;
     private EditText emailText;
     private EditText displayNameText;
     private EditText homeAddressText;
-    private Button registerButton;
-    private TextView welcomeText;
     private Spinner userTypeSpinner;
+    private Button registerButton;
 
     /*
     RegisteredUser model
@@ -41,11 +41,12 @@ public class EditProfileActivity extends AppCompatActivity {
     private RegisteredUser registeredUser;
 
     /*
-    Display Name and Home Address variables
+    Display Name, Email and Home Address variables
      */
     private String emailAddress;
     private String displayName;
     private String homeAddress;
+    private UserType userType;
 
 
     @Override
@@ -84,17 +85,16 @@ public class EditProfileActivity extends AppCompatActivity {
         emailText.setText(firebaseUser.getEmail());
 
 
-        //TODO: Change this
         registeredUser = new RegisteredUser(displayName, firebaseUser.getUid(),
                 firebaseUser.getEmail(), homeAddress, UserType.CONTRIBUTOR);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emailAddress = emailText.getText().toString();
-                String displayName = displayNameText.getText().toString();
-                String homeAddress = homeAddressText.getText().toString();
-                UserType userType = (UserType) userTypeSpinner.getSelectedItem();
+                emailAddress = emailText.getText().toString();
+                displayName = displayNameText.getText().toString();
+                homeAddress = homeAddressText.getText().toString();
+                userType = (UserType) userTypeSpinner.getSelectedItem();
                 if (displayName.length() == 0) {
                     Toast.makeText(getApplicationContext(),
                             "Enter Display Name", Toast.LENGTH_SHORT).show();
@@ -110,6 +110,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     registeredUser.setHomeAddress(homeAddress);
                     registeredUser.setUserType(userType);
                     registeredUser.writeToDatabase();
+                    Intent homeIntent = new Intent(EditProfileActivity.this, HomeActivity.class);
+                    startActivity(homeIntent);
                 }
             }
         });

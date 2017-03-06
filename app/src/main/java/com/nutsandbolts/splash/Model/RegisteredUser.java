@@ -6,10 +6,6 @@ import android.os.Parcelable;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Created by Deb Banerji on 12-Feb-17.
  * <p>
@@ -17,9 +13,6 @@ import java.util.List;
  */
 
 public class RegisteredUser implements Parcelable {
-
-//    private static List<String> legalTypes = Arrays.asList(
-//            "UR", "WK", "MG", "AD");
 
     private String displayName;
     private String id;
@@ -34,6 +27,7 @@ public class RegisteredUser implements Parcelable {
      * @param id The user's id
      * @param emailAddress The user's email address
      * @param homeAddress  The user's home address
+     * @param userType     The user's authorization level/userType
      */
     public RegisteredUser(String displayName, String id, String emailAddress,
                           String homeAddress, UserType userType) {
@@ -49,9 +43,9 @@ public class RegisteredUser implements Parcelable {
      */
     public void writeToDatabase() {
         DatabaseReference mRootRef = FirebaseDatabase.getInstance()
-            .getReference();
+                .getReference();
         DatabaseReference mUserRef = mRootRef.child("registered-users")
-            .child(id);
+                .child(id);
         mUserRef.child("display-name").setValue(displayName);
         mUserRef.child("email-address").setValue(emailAddress);
         mUserRef.child("home-address").setValue(homeAddress);
@@ -67,6 +61,7 @@ public class RegisteredUser implements Parcelable {
 
     /**
      * Get ID of user
+     *
      * @return String This returns the ID of the registered user
      */
     public String getId() {
@@ -75,6 +70,7 @@ public class RegisteredUser implements Parcelable {
 
     /**
      * Get display name of user
+     *
      * @return String This returns the user's display name
      */
     public String getDisplayName() {
@@ -83,6 +79,7 @@ public class RegisteredUser implements Parcelable {
 
     /**
      * Sets display name of user
+     *
      * @param displayName The user's display name
      */
     public void setDisplayName(String displayName) {
@@ -91,20 +88,26 @@ public class RegisteredUser implements Parcelable {
 
     /**
      * Get email address of user
+     *
      * @return String This returns the user's email address
      */
-    // RegisteredUser's emails cannot be changed
-    // as they are registered using Google
     public String getEmailAddress() {
         return emailAddress;
     }
 
+
+    /**
+     * Set email address of user
+     *
+     * @param emailAddress The user's email address
+     */
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
     /**
      * Get home address of user
+     *
      * @return String This returns the user's home address
      */
     public String getHomeAddress() {
@@ -112,26 +115,30 @@ public class RegisteredUser implements Parcelable {
     }
 
     /**
-     * Sets home addres of user
+     * Sets home address of user
+     *
      * @param homeAddress The user's home address
      */
     public void setHomeAddress(String homeAddress) {
         this.homeAddress = homeAddress;
     }
 
+    /**
+     * Gets usertype of user
+     *
+     * @return The user's usertype
+     */
     public UserType getUserType() {
         return userType;
     }
 
+    /**
+     * Sets usertype of user
+     *
+     * @param userType  The user's usertype
+     */
     public void setUserType(UserType userType) {
         this.userType = userType;
-    /**
-     * Gets Legal Types
-     * @return List This returns a list of Strings
-     * of the user's legal types
-     */
-    private List<String> getLegalTypes() {
-        return new ArrayList<>(legalTypes);
     }
 
     /**
@@ -150,7 +157,7 @@ public class RegisteredUser implements Parcelable {
     /**
      * Make a new user
      *
-     * @param in
+     * @param in Where the info of the registered user is written into
      */
     private RegisteredUser(Parcel in) {
         id = in.readString();
