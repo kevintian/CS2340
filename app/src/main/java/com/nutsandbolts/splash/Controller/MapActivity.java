@@ -1,8 +1,8 @@
 package com.nutsandbolts.splash.Controller;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,12 +20,19 @@ import com.nutsandbolts.splash.Model.WaterSourceReport;
 import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private ChildEventListener mWaterSourceReportsChildEventListener;
+    private DatabaseReference mWaterSourceReportsRef;
+
+    @Override
+    public void onBackPressed() {
+        mWaterSourceReportsRef.removeEventListener(mWaterSourceReportsChildEventListener);
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,19 +59,31 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //        LatLng sydney = new LatLng(-34, 151);
+        //        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-        DatabaseReference mWaterSourceReportsRef = FirebaseDatabase.getInstance().getReference().child("water-source-reports");
-        mWaterSourceReportsRef.addChildEventListener(new ChildEventListener() {
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Intent submitWaterReportIntent = new Intent(MapActivity
+                        .this, SubmitWaterReportActivity.class);
+                submitWaterReportIntent.putExtra("latitude", latLng.latitude);
+                submitWaterReportIntent.putExtra("longitude", latLng.longitude);
+                mWaterSourceReportsRef.removeEventListener(mWaterSourceReportsChildEventListener);
+                startActivity(submitWaterReportIntent);
+            }
+        });
+
+        mWaterSourceReportsRef = FirebaseDatabase.getInstance().getReference().child("water-source-reports");
+        mWaterSourceReportsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 //Get current report information
                 Date date = new Date((long) dataSnapshot.child("date-time").getValue());
                 String reporterName = (String) dataSnapshot.child("reporter-name").getValue();
                 long reportID = (long) dataSnapshot.child("report-id").getValue();
-                    /*Firebase saves nondecimal numbers as longs automatically, so use method
+                /*Firebase saves nondecimal numbers as longs automatically, so use method
                      to convert the number if it is a long*/
                 //TODO: Create a constructor to create WaterSourceReport from a dataSnapshot
                 double latitude = ViewWaterReportsActivity.convertDouble(dataSnapshot.child("latitude").getValue());
@@ -98,7 +117,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        mWaterSourceReportsRef.addChildEventListener(mWaterSourceReportsChildEventListener);
 
     }
 }

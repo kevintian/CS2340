@@ -26,7 +26,7 @@ import com.nutsandbolts.splash.R;
 
 import java.util.Date;
 
-public class SubmitWaterReportActivity extends AppCompatActivity  implements LocationListener {
+public class SubmitWaterReportActivity extends AppCompatActivity implements LocationListener {
 
     /*
    Widgets we will need to define listeners for
@@ -58,7 +58,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity  implements Loc
     private boolean signalFound;
     private double gpsLatitude;
     private double gpsLongitude;
-    LocationManager locationManager;
+    private LocationManager locationManager;
 
     /*
     FirebaseUser object to get credentials of user when submitting
@@ -66,7 +66,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity  implements Loc
     private FirebaseUser firebaseUser;
 
     private static final String[] INITIAL_PERMS = {
-            Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
     };
     private static final int INITIAL_REQUEST = 1337;
 
@@ -95,16 +95,28 @@ public class SubmitWaterReportActivity extends AppCompatActivity  implements Loc
         submitButton = (Button) findViewById(R.id.upload_water_report_button);
 
         /*
+        Get latitude and longitude if report was created from MapActivity
+         */
+        Intent intent = this.getIntent();
+
+        if (intent != null) {
+            latitude = intent.getDoubleExtra("latitude", 0);
+            latitudeText.setText(Double.toString(latitude));
+            longitude = intent.getDoubleExtra("longitude", 0);
+            longitudeText.setText(Double.toString(longitude));
+        }
+
+        /*
           Set up the adapter to display the allowable water types in the spinner
          */
-        ArrayAdapter<String> waterTypeAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, WaterType.values());
+        ArrayAdapter<String> waterTypeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, WaterType.values());
         waterTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         waterTypeSpinner.setAdapter(waterTypeAdapter);
 
         /*
           Set up the adapter to display the allowable water conditions in the spinner
          */
-        ArrayAdapter<String> waterConditionAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, WaterCondition.values());
+        ArrayAdapter<String> waterConditionAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, WaterCondition.values());
         waterConditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         waterConditionSpinner.setAdapter(waterConditionAdapter);
 
@@ -166,7 +178,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity  implements Loc
                     500,   // Interval in milliseconds
                     10, this);
         } catch (SecurityException e) {
-//            Toast.makeText(getBaseContext(), "Security exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    //            Toast.makeText(getBaseContext(), "Security exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
