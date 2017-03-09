@@ -66,7 +66,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
     private FirebaseUser firebaseUser;
 
     private static final String[] INITIAL_PERMS = {
-        Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
     };
     private static final int INITIAL_REQUEST = 1337;
 
@@ -126,7 +126,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         Date date = new Date(System.currentTimeMillis());
-        waterSourceReport = new WaterSourceReport(date, firebaseUser.getDisplayName(), firebaseUser.getUid(), latitude, longitude, waterType, waterCondition);
+        waterSourceReport = new WaterSourceReport(date, System.currentTimeMillis(), firebaseUser.getDisplayName(), firebaseUser.getUid(), latitude, longitude, waterType, waterCondition);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +144,6 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
                 waterCondition = (WaterCondition) waterConditionSpinner.getSelectedItem();
 
                 Date date = new Date(System.currentTimeMillis());
-                //TODO: replace firebaseUser.getDisplayName() with user's chosen values
                 waterSourceReport.setDateTime(date);
                 waterSourceReport.setLatitude(latitude);
                 waterSourceReport.setLongitude(longitude);
@@ -178,7 +177,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
                     500,   // Interval in milliseconds
                     10, this);
         } catch (SecurityException e) {
-                    //            Toast.makeText(getBaseContext(), "Security exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            //            Toast.makeText(getBaseContext(), "Security exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 

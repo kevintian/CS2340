@@ -37,6 +37,7 @@ public class WaterSourceReport implements Parcelable {
         mReportRef.child("latitude").setValue(latitude);
         mReportRef.child("longitude").setValue(longitude);
         mReportRef.child("reporter-name").setValue(reporterName);
+        mReportRef.child("reporter-uid").setValue(reporterUID);
         mReportRef.child("water-condition").setValue(waterCondition);
         mReportRef.child("water-type").setValue(waterType);
         mReportRef.child("report-id").setValue(dateTime.getTime());
@@ -59,12 +60,27 @@ public class WaterSourceReport implements Parcelable {
 
             }
         });
+
+        DatabaseReference mReporterRef = mRootRef.child("registered-users").child(reporterUID).child("display-name");
+        mReporterRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String displayName = (String) dataSnapshot.getValue();
+                mReportRef.child("reporter-name").setValue(displayName);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
      * Create a new WaterReport
      *
      * @param dateTime       time the report was created
+     * @param reportID       id of the report
      * @param reporterName   the name of the user who created this report
      * @param reporterUID    the UID of the user who created this report
      * @param latitude       latitude of the location of the water
@@ -72,9 +88,9 @@ public class WaterSourceReport implements Parcelable {
      * @param waterType      type of water being reported
      * @param waterCondition condition of water being reported
      */
-    public WaterSourceReport(Date dateTime, String reporterName, String reporterUID, double latitude, double longitude, WaterType waterType, WaterCondition waterCondition) {
+    public WaterSourceReport(Date dateTime, long reportID, String reporterName, String reporterUID, double latitude, double longitude, WaterType waterType, WaterCondition waterCondition) {
         this.dateTime = dateTime;
-        //        this.reportID = reportID;
+        this.reportID = reportID;
         this.reporterName = reporterName;
         this.reporterUID = reporterUID;
         this.latitude = latitude;
@@ -84,24 +100,22 @@ public class WaterSourceReport implements Parcelable {
     }
 
     /**
-     * Create a new WaterReport
+     * Create a new WaterReport from a data snapshot
      *
-     * @param dateTime       time the report was created
-     * @param reporterName   the name of the user who created this report
-     * @param reportID       Id of the report
-     * @param latitude       latitude of the location of the water
-     * @param longitude      longitude of the location of the water
-     * @param waterType      type of water being reported
-     * @param waterCondition condition of water being reported
+     * @param dataSnapshot Firebase data snapshot from which to create water report
+     * @return Water Source Report built from snapshot
      */
-    public WaterSourceReport(Date dateTime, String reporterName, long reportID, double latitude, double longitude, WaterType waterType, WaterCondition waterCondition) {
-        this.dateTime = dateTime;
-        this.reporterName = reporterName;
-        this.reportID = reportID;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.waterType = waterType;
-        this.waterCondition = waterCondition;
+    public static WaterSourceReport buildWaterSourceReportFromSnapShot(DataSnapshot dataSnapshot) {
+        //Get current report information
+        Date date = new Date((long) dataSnapshot.child("date-time").getValue());
+        String reporterName = (String) dataSnapshot.child("reporter-name").getValue();
+        String reporterUID = (String) dataSnapshot.child("reporter-uid").getValue();
+        long reportID = (long) dataSnapshot.child("report-id").getValue();
+        double latitude = convertDouble(dataSnapshot.child("latitude").getValue());
+        double longitude = convertDouble(dataSnapshot.child("longitude").getValue());
+        WaterType type = WaterType.valueOf((String) dataSnapshot.child("water-type").getValue());
+        WaterCondition condition = WaterCondition.valueOf((String) dataSnapshot.child("water-condition").getValue());
+        return new WaterSourceReport(date, reportID, reporterName, reporterUID, latitude, longitude, type, condition);
     }
 
     /**
@@ -136,9 +150,9 @@ public class WaterSourceReport implements Parcelable {
     }
 
     /**
-     * Gets the Date and Time of the Water Source Report
+     * returns the UID of the user that submitted the report
      *
-     * @return String of reporterUID returns the name of the user that submitted the report
+     * @return String of reporterUID
      */
     public String getReporterUID() {
         return reporterUID;
@@ -243,6 +257,15 @@ public class WaterSourceReport implements Parcelable {
         this.reporterName = reporterName;
     }
 
+    /**
+     * manually changes the report's recorded UID for reporter
+     *
+     * @param reporterName the UID of the user that wrote the report
+     */
+    public void setReporterUID(String reporterName) {
+        this.reporterName = reporterName;
+    }
+
 
     @Override
     public String toString() {
@@ -294,4 +317,22 @@ public class WaterSourceReport implements Parcelable {
             return new WaterSourceReport[size];
         }
     };
+
+    /**
+     * Checks if the value is a long -> if so, converts to double
+     *
+     * @param longValue - an object that is thought to be a long
+     * @return double A double that is converted form the long param
+     */
+    static double convertDouble(Object longValue) {
+        double valueTwo = -1; // whatever to state invalid!
+
+        if (longValue instanceof Long) {
+            valueTwo = ((Long) longValue).doubleValue();
+        } else if (longValue instanceof Double) {
+            valueTwo = (double) longValue;
+        }
+
+        return valueTwo;
+    }
 }
