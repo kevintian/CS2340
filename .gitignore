@@ -48,3 +48,4 @@ captures/
 /app/src/main/assets/OAuth.json
 /app/src/debug/google-services.json
 /app/src/release/res/values/google_maps_api.xml
+/app/src/debug/res/values/google_maps_api.xml
