@@ -2,8 +2,8 @@ package com.nutsandbolts.splash.Controller;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,24 +12,22 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.nutsandbolts.splash.Model.WaterCondition;
 import com.nutsandbolts.splash.Model.WaterSourceReport;
-import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ViewWaterReportsActivity extends AppCompatActivity {
 
     private DatabaseReference mWaterSourceReportsRef;
-    private ValueEventListener mWaterSourceReportsListener;
+    private ChildEventListener mWaterSourceReportsListener;
+    private ArrayAdapter<WaterSourceReport> mArrayAdapter;
 
     @Override
     public void onBackPressed() {
@@ -46,37 +44,36 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
         mWaterSourceReportsRef = FirebaseDatabase.getInstance().getReference().child("water-source-reports");
         final ListView listView = (ListView) findViewById(R.id.report_list);
         final ArrayList<WaterSourceReport> reports = new ArrayList<WaterSourceReport>();
-        mWaterSourceReportsListener = new ValueEventListener() {
+
+        mArrayAdapter = new WaterSourceArrayAdapter(ViewWaterReportsActivity.this, 0, reports);
+        listView.setAdapter(mArrayAdapter);
+
+        mWaterSourceReportsListener = new ChildEventListener() {
+
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot report : dataSnapshot.getChildren()) {
-
-                    try {
-                        //Get current report information
-                        Date date = new Date((long) report.child("date-time").getValue());
-                        String reporterName = (String) report.child("reporter-name").getValue();
-
-                        long reportID = 0;
-                        if (report.child("report-id").getValue() != null) {
-                            reportID = (long) report.child("report-id").getValue();
-                        }
-                        /*Firebase saves nondecimal numbers as longs automatically, so use method
-                        to convert the number if it is a long*/
-                        double latitude = convertDouble(report.child("latitude").getValue());
-                        double longitude = convertDouble(report.child("longitude").getValue());
-                        WaterType type = WaterType.valueOf((String) report.child("water-type").getValue());
-                        WaterCondition condition = WaterCondition.valueOf((String) report.child("water-condition").getValue());
-
-                        //Add to arraylist
-                        reports.add(new WaterSourceReport(date, reporterName, reportID, latitude, longitude, type, condition));
-                    } catch (NullPointerException e) {
-                        Log.d("Datasnapshot error", report.toString());
-                    }
-
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                try {
+                    WaterSourceReport waterSourceReport = WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
+                    reports.add(waterSourceReport);
+                    mArrayAdapter.notifyDataSetChanged();
+                } catch (NullPointerException e) {
+                    Log.d("Datasnapshot error", dataSnapshot.toString());
                 }
+            }
 
-                ArrayAdapter<WaterSourceReport> arrayAdapter = new WaterSourceArrayAdapter(ViewWaterReportsActivity.this, 0, reports);
-                listView.setAdapter(arrayAdapter);
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -84,27 +81,10 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
 
             }
         };
-        mWaterSourceReportsRef.addValueEventListener(mWaterSourceReportsListener);
+        mWaterSourceReportsRef.addChildEventListener(mWaterSourceReportsListener);
 
     }
 
-    /**
-     * Checks if the value is a long -> if so, converts to double
-     *
-     * @param longValue - an object that is thought to be a long
-     * @return double A double that is converted form the long param
-     */
-    static double convertDouble(Object longValue) {
-        double valueTwo = -1; // whatever to state invalid!
-
-        if (longValue instanceof Long) {
-            valueTwo = ((Long) longValue).doubleValue();
-        } else if (longValue instanceof Double) {
-            valueTwo = (double) longValue;
-        }
-
-        return valueTwo;
-    }
 
     //Create a custom array adapter class to use the xml layout we created
     private class WaterSourceArrayAdapter extends ArrayAdapter<WaterSourceReport> {

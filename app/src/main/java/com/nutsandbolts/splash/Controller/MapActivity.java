@@ -58,10 +58,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        //        LatLng sydney = new LatLng(-34, 151);
-        //        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Add move the camera to Georgia Tech
+        LatLng sydney = new LatLng(33.7756, -84.3963);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -79,20 +78,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mWaterSourceReportsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //Get current report information
-                Date date = new Date((long) dataSnapshot.child("date-time").getValue());
-                String reporterName = (String) dataSnapshot.child("reporter-name").getValue();
-                long reportID = (long) dataSnapshot.child("report-id").getValue();
-                /*Firebase saves nondecimal numbers as longs automatically, so use method
-                     to convert the number if it is a long*/
-                //TODO: Create a constructor to create WaterSourceReport from a dataSnapshot
-                double latitude = ViewWaterReportsActivity.convertDouble(dataSnapshot.child("latitude").getValue());
-                double longitude = ViewWaterReportsActivity.convertDouble(dataSnapshot.child("longitude").getValue());
-                WaterType type = WaterType.valueOf((String) dataSnapshot.child("water-type").getValue());
-                WaterCondition condition = WaterCondition.valueOf((String) dataSnapshot.child("water-condition").getValue());
-
                 //Add to arraylist
-                WaterSourceReport waterSourceReport = new WaterSourceReport(date, reporterName, reportID, latitude, longitude, type, condition);
+                WaterSourceReport waterSourceReport = WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
                 LatLng waterSourceReportPosition = new LatLng(waterSourceReport.getLatitude(), waterSourceReport.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(waterSourceReportPosition).title(waterSourceReport.getWaterType() + ", " + waterSourceReport.getWaterCondition()));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(waterSourceReportPosition));
