@@ -10,12 +10,20 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.nutsandbolts.splash.Model.RegisteredUser;
+import com.nutsandbolts.splash.Model.UserType;
 import com.nutsandbolts.splash.Model.WaterCondition;
 import com.nutsandbolts.splash.Model.WaterSourceReport;
 import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -86,6 +94,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        submitQualityReportButton.setVisibility(View.GONE);
+
         viewQualityReportsButton = (Button) findViewById(R.id.view_quality_reports_button);
 
         viewQualityReportsButton.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +105,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        viewQualityReportsButton.setVisibility(View.GONE);
+
         viewMapButton = (Button) findViewById(R.id.view_map_button);
 
         viewMapButton.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +115,10 @@ public class HomeActivity extends AppCompatActivity {
                 viewMap();
             }
         });
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        showQualityReportControls(firebaseUser);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -120,6 +136,32 @@ public class HomeActivity extends AppCompatActivity {
                 // ...
             }
         };
+    }
+
+    /**
+    Shows controls for water quality report if user is a worker/manager
+     */
+    private void showQualityReportControls(FirebaseUser user) {
+        DatabaseReference mRootRef = FirebaseDatabase.getInstance()
+                .getReference();
+        DatabaseReference mUserRef = mRootRef.child("registered-users")
+                .child(user.getUid()).child("user-type");
+        mUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String userType = dataSnapshot.getValue().toString();
+                Log.d("USERTYPE", userType);
+                if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {
+                    submitQualityReportButton.setVisibility(View.VISIBLE);
+                    viewQualityReportsButton.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
