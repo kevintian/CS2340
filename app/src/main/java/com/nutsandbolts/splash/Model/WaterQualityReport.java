@@ -83,7 +83,7 @@ public class WaterQualityReport implements Parcelable {
         int contaminantPPM = (int) dataSnapshot.child("contaminant-ppm").getValue();
         WaterQuality waterQuality = WaterQuality.valueOf((String) dataSnapshot.child("water-quality").getValue());
         return new WaterQualityReport(dateTime, reportID, reporterName,
-                 reporterUID, latitude, longitude, virusPPM,
+                reporterUID, latitude, longitude, virusPPM,
                 contaminantPPM, waterQuality);
     }
 
