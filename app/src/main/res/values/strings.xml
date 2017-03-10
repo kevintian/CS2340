@@ -3,7 +3,9 @@
     <string name="sign_out_text">Sign Out</string>
     <string name="edit_profile_text">Edit Profile</string>
     <string name="submit_water_report_text">Submit Water Source Report</string>
-    <string name="view_water_reports_text">View Water Reports</string>
+    <string name="view_water_reports_text">View Water Source Reports</string>
+    <string name="submit_quality_report_text">Submit Water Quality Report</string>
+    <string name="view_quality_reports_text">View Water Quality Reports</string>
     <string name="view_map_text">View Map</string>
     <string name="title_activity_map">Map</string>
 </resources>
