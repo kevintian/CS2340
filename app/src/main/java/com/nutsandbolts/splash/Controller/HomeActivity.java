@@ -27,6 +27,8 @@ public class HomeActivity extends AppCompatActivity {
     private Button editProfileButton;
     private Button submitWaterReportButton;
     private Button viewWaterReportsButton;
+    private Button submitQualityReportButton;
+    private Button viewQualityReportsButton;
     private Button viewMapButton;
 
 
@@ -75,6 +77,24 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        submitQualityReportButton = (Button) findViewById(R.id.submit_quality_report_button);
+
+        submitQualityReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitWaterQualityReport();
+            }
+        });
+
+        viewQualityReportsButton = (Button) findViewById(R.id.view_quality_reports_button);
+
+        viewQualityReportsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewWaterQualityReports();
+            }
+        });
+
         viewMapButton = (Button) findViewById(R.id.view_map_button);
 
         viewMapButton.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +132,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Brings user back to submit screen
+     * Brings user to submit water source report screen
      */
     private void submitWaterReport() {
         Intent submitWaterReportIntent = new Intent(HomeActivity
@@ -121,12 +141,30 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Brings user back to reports overview screen
+     * Brings user to water source reports overview screen
      */
     private void viewWaterReports() {
         Intent viewWaterReportsIntent = new Intent(HomeActivity
                 .this, ViewWaterReportsActivity.class);
         startActivity(viewWaterReportsIntent);
+    }
+
+    /**
+     * Brings user to submit water quality report screen
+     */
+    private void submitWaterQualityReport() {
+        Intent submitWaterQualityReportIntent = new Intent(HomeActivity
+                .this, SubmitQualityReportActivity.class);
+        startActivity(submitWaterQualityReportIntent);
+    }
+
+    /**
+     * Brings user to water quality reports overview screen
+     */
+    private void viewWaterQualityReports() {
+        Intent viewWaterQualityReportsIntent = new Intent(HomeActivity
+                .this, ViewQualityReportActivity.class);
+        startActivity(viewWaterQualityReportsIntent);
     }
 
     /**

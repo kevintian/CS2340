@@ -42,10 +42,26 @@
         android:text="@string/view_water_reports_text" />
 
     <Button
-        android:id="@+id/view_map_button"
+        android:id="@+id/submit_quality_report_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/view_water_reports_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/submit_quality_report_text" />
+
+    <Button
+        android:id="@+id/view_quality_reports_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/submit_quality_report_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/view_quality_reports_text" />
+
+    <Button
+        android:id="@+id/view_map_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_quality_reports_button"
         android:layout_centerHorizontal="true"
         android:text="@string/view_map_text" />
 </RelativeLayout>
