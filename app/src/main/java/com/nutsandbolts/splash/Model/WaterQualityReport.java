@@ -11,6 +11,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
 
+import static com.nutsandbolts.splash.Model.WaterSourceReport.convertDouble;
+
 /**
  * Created by Suprabhat Gurrala on 3/8/17.
  */
@@ -27,6 +29,9 @@ public class WaterQualityReport implements Parcelable {
     private int contaminantPPm;
     private WaterQuality waterQuality;
 
+    /**
+     * Writes this water report to the database.
+     */
     public void writeToDatabase() {
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         String key = mRootRef.child("posts").push().getKey();
@@ -61,6 +66,28 @@ public class WaterQualityReport implements Parcelable {
     }
 
     /**
+     * Create a new WaterReport from a data snapshot
+     *
+     * @param dataSnapshot Firebase data snapshot from which to create water report
+     * @return Water Source Report built from snapshot
+     */
+    public static WaterQualityReport buildWaterQualityReportFromSnapShot(DataSnapshot dataSnapshot) {
+        //Get current report information
+        Date dateTime = new Date((long) dataSnapshot.child("date-time").getValue());
+        String reporterName = (String) dataSnapshot.child("reporter-name").getValue();
+        String reporterUID = (String) dataSnapshot.child("reporter-uid").getValue();
+        long reportID = (long) dataSnapshot.child("report-id").getValue();
+        double latitude = convertDouble(dataSnapshot.child("latitude").getValue());
+        double longitude = convertDouble(dataSnapshot.child("longitude").getValue());
+        int virusPPM = (int) dataSnapshot.child("virus-ppm").getValue();
+        int contaminantPPM = (int) dataSnapshot.child("contaminant-ppm").getValue();
+        WaterQuality waterQuality = WaterQuality.valueOf((String) dataSnapshot.child("water-quality").getValue());
+        return new WaterQualityReport(dateTime, reportID, reporterName,
+                String reporterUID, latitude, longitude, virusPPM,
+                contaminantPPM, waterQuality);
+    }
+
+    /**
      * Create a new WaterQualityReport
      * @param dateTime time the report was created
      * @param reportID report number
@@ -84,6 +111,10 @@ public class WaterQualityReport implements Parcelable {
         this.waterQuality = waterQuality;
     }
 
+    /**
+     * Creates a WaterQualityReport object from a Parcel
+     * @param in
+     */
     protected WaterQualityReport(Parcel in) {
         dateTime = new Date(in.readLong());
         reportID = in.readLong();
