@@ -26,7 +26,7 @@ public class WaterQualityReport implements Parcelable {
     private double longitude;
 
     private int virusPPM;
-    private int contaminantPPm;
+    private int contaminantPPM;
     private WaterQuality waterQuality;
 
     /**
@@ -40,10 +40,12 @@ public class WaterQualityReport implements Parcelable {
         mReportRef.child("latitude").setValue(latitude);
         mReportRef.child("longitude").setValue(longitude);
         mReportRef.child("reporter-name").setValue(reporterName);
+        mReportRef.child("reporter-uid").setValue(reporterUID);
+        mReportRef.child("report-id").setValue(dateTime.getTime());
+
         mReportRef.child("virus-ppm").setValue(virusPPM);
-        mReportRef.child("contaminant-ppm").setValue(contaminantPPm);
+        mReportRef.child("contaminant-ppm").setValue(contaminantPPM);
         mReportRef.child("water-quality").setValue(waterQuality);
-        mReportRef.child("report-id").setValue(reportID);
 
         DatabaseReference mCountRef = mRootRef.child("total-source-reports");
         mCountRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -96,18 +98,18 @@ public class WaterQualityReport implements Parcelable {
      * @param latitude location of water
      * @param longitude location of water
      * @param virusPPM parts per million of viruses
-     * @param contaminantPPm parts per million of contaminants
+     * @param contaminantPPM parts per million of contaminants
      * @param waterQuality quality of water (Safe, treatable, unsafe)
      */
-    public WaterQualityReport(Date dateTime, long reportID, String reporterName, String reporterUID, double latitude, double longitude, int virusPPM, int contaminantPPm, WaterQuality waterQuality) {
+    public WaterQualityReport(Date dateTime, long reportID, String reporterName, String reporterUID, double latitude, double longitude, int virusPPM, int contaminantPPM, WaterQuality waterQuality) {
         this.dateTime = dateTime;
-        this.reportID = dateTime.getTime();
+        this.reportID = reportID;
         this.reporterName = reporterName;
         this.reporterUID = reporterUID;
         this.latitude = latitude;
         this.longitude = longitude;
         this.virusPPM = virusPPM;
-        this.contaminantPPm = contaminantPPm;
+        this.contaminantPPM = contaminantPPM;
         this.waterQuality = waterQuality;
     }
 
@@ -123,7 +125,7 @@ public class WaterQualityReport implements Parcelable {
         latitude = in.readDouble();
         longitude = in.readDouble();
         virusPPM = in.readInt();
-        contaminantPPm = in.readInt();
+        contaminantPPM = in.readInt();
         waterQuality = WaterQuality.valueOf(in.readString());
     }
 
@@ -136,7 +138,7 @@ public class WaterQualityReport implements Parcelable {
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
         dest.writeInt(virusPPM);
-        dest.writeInt(contaminantPPm);
+        dest.writeInt(contaminantPPM);
         dest.writeString(waterQuality.getQuality());
     }
 
@@ -156,4 +158,24 @@ public class WaterQualityReport implements Parcelable {
             return new WaterQualityReport[size];
         }
     };
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setVirusPPM(int virusPPM) {
+        this.virusPPM = virusPPM;
+    }
+
+    public void setContaminantPPM(int contaminantPPM) {
+        this.contaminantPPM = contaminantPPM;
+    }
+
+    public void setWaterQuality(WaterQuality waterQuality) {
+        this.waterQuality = waterQuality;
+    }
 }
