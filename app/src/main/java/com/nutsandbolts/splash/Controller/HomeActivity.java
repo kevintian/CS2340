@@ -127,7 +127,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (user != null) {
                     // RegisteredUser is signed in
                     Log.d("Authentication", "onAuthStateChanged:signed_in:"
-                        + user.getUid());
+                            + user.getUid());
                     returnToWelcomeScreen();
                 } else {
                     // RegisteredUser is signed out
@@ -139,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-    Shows controls for water quality report if user is a worker/manager
+     * Shows controls for water quality report if user is a worker/manager
      */
     private void showQualityReportControls(FirebaseUser user) {
         DatabaseReference mRootRef = FirebaseDatabase.getInstance()
@@ -153,6 +153,8 @@ public class HomeActivity extends AppCompatActivity {
                 Log.d("USERTYPE", userType);
                 if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {
                     submitQualityReportButton.setVisibility(View.VISIBLE);
+                }
+                if ("MANAGER".equals(userType)) {
                     viewQualityReportsButton.setVisibility(View.VISIBLE);
                 }
             }
@@ -168,8 +170,8 @@ public class HomeActivity extends AppCompatActivity {
      * Brings user back to welcome screen
      */
     private void returnToWelcomeScreen() {
-        Intent welcomeIntent  = new Intent(HomeActivity
-            .this, WelcomeActivity.class);
+        Intent welcomeIntent = new Intent(HomeActivity
+                .this, WelcomeActivity.class);
         startActivity(welcomeIntent);
     }
 
