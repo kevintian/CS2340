@@ -81,8 +81,8 @@ public class WaterQualityReport implements Parcelable {
         long reportID = (long) dataSnapshot.child("report-id").getValue();
         double latitude = convertDouble(dataSnapshot.child("latitude").getValue());
         double longitude = convertDouble(dataSnapshot.child("longitude").getValue());
-        int virusPPM = (int) dataSnapshot.child("virus-ppm").getValue();
-        int contaminantPPM = (int) dataSnapshot.child("contaminant-ppm").getValue();
+        int virusPPM = ((Long) dataSnapshot.child("virus-ppm").getValue()).intValue();
+        int contaminantPPM = ((Long) dataSnapshot.child("contaminant-ppm").getValue()).intValue();
         WaterQuality waterQuality = WaterQuality.valueOf((String) dataSnapshot.child("water-quality").getValue());
         return new WaterQualityReport(dateTime, reportID, reporterName,
                 reporterUID, latitude, longitude, virusPPM,
@@ -197,5 +197,86 @@ public class WaterQualityReport implements Parcelable {
      */
     public void setWaterQuality(WaterQuality waterQuality) {
         this.waterQuality = waterQuality;
+    }
+
+    /**
+     * Gets the Date and Time of the Water Quality Report
+     *
+     * @return Date. returns the date and time of the water quality report
+     */
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    /**
+     * Gets the name of the User that wrote the Water Quality Report
+     *
+     * @return String of reporterName returns the name of the user that submitted the report
+     */
+    public String getReporterName() {
+        return reporterName;
+    }
+
+    /**
+     * returns the UID of the user that submitted the report
+     *
+     * @return String of reporterUID
+     */
+    public String getReporterUID() {
+        return reporterUID;
+    }
+
+    /**
+     * Gets the name of the latitude of the location
+     *
+     * @return double latitude of the location
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Gets the name of the longitude of the location
+     *
+     * @return double of longitude of the location
+     */
+    public double getLongitude() {
+        return longitude;
+    }
+
+    /**
+     * Gets the quality of water
+     *
+     * @return WaterQuality the quality of water reported
+     */
+    public WaterQuality getWaterQuality() {
+        return waterQuality;
+    }
+
+    /**
+     * Gets the virus ppm of water
+     *
+     * @return int returns the virus ppm of the water reported
+     */
+    public int getVirusPPM() {
+        return virusPPM;
+    }
+
+    /**
+     * Gets the contaminant ppm of water
+     *
+     * @return int returns the contaminant ppm of the water reported
+     */
+    public int getContaminantPPM() {
+        return contaminantPPM;
+    }
+
+    /**
+     * gets the id of the report
+     *
+     * @return long  returns the id of the report
+     */
+    public long getReportID() {
+        return reportID;
     }
 }
