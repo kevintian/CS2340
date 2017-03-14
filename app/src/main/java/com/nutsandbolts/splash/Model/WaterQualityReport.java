@@ -47,7 +47,7 @@ public class WaterQualityReport implements Parcelable {
         mReportRef.child("contaminant-ppm").setValue(contaminantPPM);
         mReportRef.child("water-quality").setValue(waterQuality);
 
-        DatabaseReference mCountRef = mRootRef.child("total-source-reports");
+        DatabaseReference mCountRef = mRootRef.child("total-quality-reports");
         mCountRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -71,7 +71,7 @@ public class WaterQualityReport implements Parcelable {
      * Create a new WaterReport from a data snapshot
      *
      * @param dataSnapshot Firebase data snapshot from which to create water report
-     * @return Water Source Report built from snapshot
+     * @return Water Quality Report built from snapshot
      */
     public static WaterQualityReport buildWaterQualityReportFromSnapShot(DataSnapshot dataSnapshot) {
         //Get current report information
@@ -159,22 +159,42 @@ public class WaterQualityReport implements Parcelable {
         }
     };
 
+    /**
+     * Sets the latitude for this Water Quality Report
+     * @param latitude latitude as a double
+     */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
+    /**
+     * Sets the longitude for this Water Quality Report
+     * @param longitude longitude as a double
+     */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
+    /**
+     * Sets the virus parts per million for this Water Quality Report
+     * @param virusPPM int in parts per million
+     */
     public void setVirusPPM(int virusPPM) {
         this.virusPPM = virusPPM;
     }
 
+    /**
+     * Sets the contaminant parts per million for the Water Quality Report
+     * @param contaminantPPM int in parts per million
+     */
     public void setContaminantPPM(int contaminantPPM) {
         this.contaminantPPM = contaminantPPM;
     }
 
+    /**
+     * Sets the water quality for this Water Quality Report
+     * @param waterQuality as enum (SAFE, TREATABLE, UNSAFE)
+     */
     public void setWaterQuality(WaterQuality waterQuality) {
         this.waterQuality = waterQuality;
     }

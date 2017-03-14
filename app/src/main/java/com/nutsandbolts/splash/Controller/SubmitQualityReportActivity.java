@@ -28,6 +28,9 @@ import com.nutsandbolts.splash.R;
 
 import java.util.Date;
 
+/**
+ * Activity to submit Water Quality Reports
+ */
 public class SubmitQualityReportActivity extends AppCompatActivity implements LocationListener {
 
     /*
