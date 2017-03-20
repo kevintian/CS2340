@@ -40,6 +40,9 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView viewQualityReportsIcon;
     private ImageView viewMapIcon;
 
+    // TODO: switch to ImageView
+    private Button viewGraphButton;
+
 
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -114,6 +117,15 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewMap();
+            }
+        });
+
+        viewGraphButton = (Button) findViewById(R.id.view_graph_button);
+
+        viewGraphButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewGraph();
             }
         });
 
@@ -213,7 +225,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Brings user back to edit screen
+     * Brings user to edit screen
      */
     private void editProfile() {
         Intent editIntent = new Intent(HomeActivity.this, EditProfileActivity.class);
@@ -222,11 +234,20 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Brings user back to map
+     * Brings user to map
      */
     private void viewMap() {
         Intent viewMapIntent = new Intent(HomeActivity
                 .this, MapActivity.class);
         startActivity(viewMapIntent);
+    }
+
+    /**
+     * Brings user back to map
+     */
+    private void viewGraph() {
+        Intent viewGraphIntent = new Intent(HomeActivity
+                .this, GenerateGraphActivity.class);
+        startActivity(viewGraphIntent);
     }
 }
