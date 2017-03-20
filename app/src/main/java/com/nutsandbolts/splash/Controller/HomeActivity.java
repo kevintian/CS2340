@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,13 +32,13 @@ public class HomeActivity extends AppCompatActivity {
     /*
     Widgets we will need to define listeners for
     */
-    private Button signOutButton;
-    private Button editProfileButton;
-    private Button submitWaterReportButton;
-    private Button viewWaterReportsButton;
-    private Button submitQualityReportButton;
-    private Button viewQualityReportsButton;
-    private Button viewMapButton;
+    private ImageView signOutIcon;
+    private ImageView editProfileIcon;
+    private ImageView submitWaterReportIcon;
+    private ImageView viewWaterReportsIcon;
+    private ImageView submitQualityReportIcon;
+    private ImageView viewQualityReportsIcon;
+    private ImageView viewMapIcon;
 
 
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -48,9 +49,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        signOutButton = (Button) findViewById(R.id.sign_out_button);
+        signOutIcon = (ImageView) findViewById(R.id.sign_out_icon);
 
-        signOutButton.setOnClickListener(new View.OnClickListener() {
+        signOutIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
@@ -58,58 +59,58 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        editProfileButton = (Button) findViewById(R.id.edit_profile_button);
+        editProfileIcon = (ImageView) findViewById(R.id.edit_profile_icon);
 
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
+        editProfileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editProfile();
             }
         });
 
-        submitWaterReportButton = (Button) findViewById(R.id.submit_water_report_button);
+        submitWaterReportIcon = (ImageView) findViewById(R.id.submit_water_report_icon);
 
-        submitWaterReportButton.setOnClickListener(new View.OnClickListener() {
+        submitWaterReportIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitWaterReport();
             }
         });
 
-        viewWaterReportsButton = (Button) findViewById(R.id.view_water_reports_button);
+        viewWaterReportsIcon = (ImageView) findViewById(R.id.view_water_reports_icon);
 
-        viewWaterReportsButton.setOnClickListener(new View.OnClickListener() {
+        viewWaterReportsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewWaterReports();
             }
         });
 
-        submitQualityReportButton = (Button) findViewById(R.id.submit_quality_report_button);
+        submitQualityReportIcon = (ImageView) findViewById(R.id.submit_quality_report_icon);
 
-        submitQualityReportButton.setOnClickListener(new View.OnClickListener() {
+        submitQualityReportIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitWaterQualityReport();
             }
         });
 
-        submitQualityReportButton.setVisibility(View.GONE);
+        submitQualityReportIcon.setVisibility(View.GONE);
 
-        viewQualityReportsButton = (Button) findViewById(R.id.view_quality_reports_button);
+        viewQualityReportsIcon = (ImageView) findViewById(R.id.view_quality_report_icon);
 
-        viewQualityReportsButton.setOnClickListener(new View.OnClickListener() {
+        viewQualityReportsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewWaterQualityReports();
             }
         });
 
-        viewQualityReportsButton.setVisibility(View.GONE);
+        viewQualityReportsIcon.setVisibility(View.GONE);
 
-        viewMapButton = (Button) findViewById(R.id.view_map_button);
+        viewMapIcon = (ImageView) findViewById(R.id.view_map_icon);
 
-        viewMapButton.setOnClickListener(new View.OnClickListener() {
+        viewMapIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewMap();
@@ -152,10 +153,10 @@ public class HomeActivity extends AppCompatActivity {
                 String userType = dataSnapshot.getValue().toString();
                 Log.d("USERTYPE", userType);
                 if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {
-                    submitQualityReportButton.setVisibility(View.VISIBLE);
+                    submitQualityReportIcon.setVisibility(View.VISIBLE);
                 }
                 if ("MANAGER".equals(userType)) {
-                    viewQualityReportsButton.setVisibility(View.VISIBLE);
+                    viewQualityReportsIcon.setVisibility(View.VISIBLE);
                 }
             }
 
