@@ -1,8 +1,8 @@
 package com.nutsandbolts.splash.Controller;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,12 +15,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.nutsandbolts.splash.Model.WaterCondition;
 import com.nutsandbolts.splash.Model.WaterSourceReport;
-import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
-
-import java.util.Date;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
