@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.nutsandbolts.splash.Model.WaterSourceReport;
 import com.nutsandbolts.splash.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,8 +120,7 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
             //Get the report we are displaying
             WaterSourceReport report = sourceReports.get(position);
 
-            //Get the inflater and inflate the XML layout or each item
-            //get the inflater and inflate the XML layout for each item
+            //Get the inflater and inflate the XML layout for each item
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.water_source_report_layout, null);
 
@@ -131,7 +131,10 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
             TextView location = (TextView) view.findViewById(R.id.location);
 
             //Create the location text
-            String loc = report.getLatitude() + ",\n" + report.getLongitude();
+            //Four decimal place is accurate up to 11m -> used to identify parcels of land
+            DecimalFormat twoDecimalPlaces = new DecimalFormat("#.0000");
+            String loc = twoDecimalPlaces.format(report.getLatitude())
+                    + ",\n" + twoDecimalPlaces.format(report.getLongitude());
 
             //Set textviews
             reportID.setText("Report " + report.getReportID());

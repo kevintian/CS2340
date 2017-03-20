@@ -10,4 +10,134 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.nutsandbolts.splash.Controller.SubmitQualityReportActivity">
 
+    <TextView
+        android:id="@+id/submit_quality_report_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Submit Water Quality Report"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/water_quality_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/submit_quality_report_text"
+        android:padding="5dp"
+        android:text="Water Quality:"
+        android:textSize="15sp" />
+
+    <Spinner
+        android:id="@+id/water_quality_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/water_quality_label"
+        android:layout_toEndOf="@+id/water_quality_label" />
+
+    <TextView
+        android:id="@+id/water_virusPPM_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/water_quality_label"
+        android:padding="5dp"
+        android:text="Virus PPM:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/water_virusPPM_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/water_virusPPM_label"
+        android:layout_toEndOf="@+id/water_virusPPM_label"
+        android:ems="10"
+        android:hint="Enter virus PPM"
+        android:inputType="number"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/water_contaminantPPM_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/water_virusPPM_label"
+        android:padding="5dp"
+        android:text="Contaminant PPM:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/water_contaminantPPM_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/water_contaminantPPM_label"
+        android:layout_toEndOf="@+id/water_contaminantPPM_label"
+        android:ems="10"
+        android:hint="Enter contaminant PPM"
+        android:inputType="number"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/water_source_latitude_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/water_contaminantPPM_label"
+        android:padding="5dp"
+        android:text="Latitude:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/water_source_latitude_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/water_source_latitude_label"
+        android:layout_toEndOf="@+id/water_source_latitude_label"
+        android:hint="Enter Latitude"
+        android:inputType="numberDecimal"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/water_source_longitude_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/water_source_latitude_label"
+        android:padding="5dp"
+        android:text="Longitude:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/water_source_longitude_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/water_source_longitude_label"
+        android:layout_toEndOf="@+id/water_source_longitude_label"
+        android:ems="10"
+        android:hint="Enter Longitude"
+        android:inputType="numberDecimal"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/generate_from_gps_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/water_source_longitude_label"
+        android:layout_centerHorizontal="true"
+        android:text="Generate Coordinates From GPS" />
+
+
+    <Button
+        android:id="@+id/upload_water_report_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Submit" />
+
 </RelativeLayout>

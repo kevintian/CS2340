@@ -43,9 +43,12 @@ captures/
 #.idea/vcs.xml
 #app/libs/
 
-# Google Login, Maps API Key and Firebase Client IDs
+# Google Login and Firebase Client IDs
 /app/google-services.json
 /app/src/main/assets/OAuth.json
 /app/src/debug/google-services.json
+
+# Google Maps API Key
 /app/src/release/res/values/google_maps_api.xml
 /app/src/debug/res/values/google_maps_api.xml
+/app/src/main/res/values/google_maps_api.xml

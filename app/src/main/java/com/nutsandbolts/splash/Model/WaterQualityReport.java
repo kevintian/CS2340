@@ -26,7 +26,7 @@ public class WaterQualityReport implements Parcelable {
     private double longitude;
 
     private int virusPPM;
-    private int contaminantPPm;
+    private int contaminantPPM;
     private WaterQuality waterQuality;
 
     /**
@@ -40,12 +40,14 @@ public class WaterQualityReport implements Parcelable {
         mReportRef.child("latitude").setValue(latitude);
         mReportRef.child("longitude").setValue(longitude);
         mReportRef.child("reporter-name").setValue(reporterName);
-        mReportRef.child("virus-ppm").setValue(virusPPM);
-        mReportRef.child("contaminant-ppm").setValue(contaminantPPm);
-        mReportRef.child("water-quality").setValue(waterQuality);
-        mReportRef.child("report-id").setValue(reportID);
+        mReportRef.child("reporter-uid").setValue(reporterUID);
+        mReportRef.child("report-id").setValue(dateTime.getTime());
 
-        DatabaseReference mCountRef = mRootRef.child("total-source-reports");
+        mReportRef.child("virus-ppm").setValue(virusPPM);
+        mReportRef.child("contaminant-ppm").setValue(contaminantPPM);
+        mReportRef.child("water-quality").setValue(waterQuality);
+
+        DatabaseReference mCountRef = mRootRef.child("total-quality-reports");
         mCountRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -69,7 +71,7 @@ public class WaterQualityReport implements Parcelable {
      * Create a new WaterReport from a data snapshot
      *
      * @param dataSnapshot Firebase data snapshot from which to create water report
-     * @return Water Source Report built from snapshot
+     * @return Water Quality Report built from snapshot
      */
     public static WaterQualityReport buildWaterQualityReportFromSnapShot(DataSnapshot dataSnapshot) {
         //Get current report information
@@ -79,8 +81,8 @@ public class WaterQualityReport implements Parcelable {
         long reportID = (long) dataSnapshot.child("report-id").getValue();
         double latitude = convertDouble(dataSnapshot.child("latitude").getValue());
         double longitude = convertDouble(dataSnapshot.child("longitude").getValue());
-        int virusPPM = (int) dataSnapshot.child("virus-ppm").getValue();
-        int contaminantPPM = (int) dataSnapshot.child("contaminant-ppm").getValue();
+        int virusPPM = ((Long) dataSnapshot.child("virus-ppm").getValue()).intValue();
+        int contaminantPPM = ((Long) dataSnapshot.child("contaminant-ppm").getValue()).intValue();
         WaterQuality waterQuality = WaterQuality.valueOf((String) dataSnapshot.child("water-quality").getValue());
         return new WaterQualityReport(dateTime, reportID, reporterName,
                 reporterUID, latitude, longitude, virusPPM,
@@ -96,18 +98,18 @@ public class WaterQualityReport implements Parcelable {
      * @param latitude location of water
      * @param longitude location of water
      * @param virusPPM parts per million of viruses
-     * @param contaminantPPm parts per million of contaminants
+     * @param contaminantPPM parts per million of contaminants
      * @param waterQuality quality of water (Safe, treatable, unsafe)
      */
-    public WaterQualityReport(Date dateTime, long reportID, String reporterName, String reporterUID, double latitude, double longitude, int virusPPM, int contaminantPPm, WaterQuality waterQuality) {
+    public WaterQualityReport(Date dateTime, long reportID, String reporterName, String reporterUID, double latitude, double longitude, int virusPPM, int contaminantPPM, WaterQuality waterQuality) {
         this.dateTime = dateTime;
-        this.reportID = dateTime.getTime();
+        this.reportID = reportID;
         this.reporterName = reporterName;
         this.reporterUID = reporterUID;
         this.latitude = latitude;
         this.longitude = longitude;
         this.virusPPM = virusPPM;
-        this.contaminantPPm = contaminantPPm;
+        this.contaminantPPM = contaminantPPM;
         this.waterQuality = waterQuality;
     }
 
@@ -123,7 +125,7 @@ public class WaterQualityReport implements Parcelable {
         latitude = in.readDouble();
         longitude = in.readDouble();
         virusPPM = in.readInt();
-        contaminantPPm = in.readInt();
+        contaminantPPM = in.readInt();
         waterQuality = WaterQuality.valueOf(in.readString());
     }
 
@@ -136,7 +138,7 @@ public class WaterQualityReport implements Parcelable {
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
         dest.writeInt(virusPPM);
-        dest.writeInt(contaminantPPm);
+        dest.writeInt(contaminantPPM);
         dest.writeString(waterQuality.getQuality());
     }
 
@@ -156,4 +158,125 @@ public class WaterQualityReport implements Parcelable {
             return new WaterQualityReport[size];
         }
     };
+
+    /**
+     * Sets the latitude for this Water Quality Report
+     * @param latitude latitude as a double
+     */
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    /**
+     * Sets the longitude for this Water Quality Report
+     * @param longitude longitude as a double
+     */
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    /**
+     * Sets the virus parts per million for this Water Quality Report
+     * @param virusPPM int in parts per million
+     */
+    public void setVirusPPM(int virusPPM) {
+        this.virusPPM = virusPPM;
+    }
+
+    /**
+     * Sets the contaminant parts per million for the Water Quality Report
+     * @param contaminantPPM int in parts per million
+     */
+    public void setContaminantPPM(int contaminantPPM) {
+        this.contaminantPPM = contaminantPPM;
+    }
+
+    /**
+     * Sets the water quality for this Water Quality Report
+     * @param waterQuality as enum (SAFE, TREATABLE, UNSAFE)
+     */
+    public void setWaterQuality(WaterQuality waterQuality) {
+        this.waterQuality = waterQuality;
+    }
+
+    /**
+     * Gets the Date and Time of the Water Quality Report
+     *
+     * @return Date. returns the date and time of the water quality report
+     */
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    /**
+     * Gets the name of the User that wrote the Water Quality Report
+     *
+     * @return String of reporterName returns the name of the user that submitted the report
+     */
+    public String getReporterName() {
+        return reporterName;
+    }
+
+    /**
+     * returns the UID of the user that submitted the report
+     *
+     * @return String of reporterUID
+     */
+    public String getReporterUID() {
+        return reporterUID;
+    }
+
+    /**
+     * Gets the name of the latitude of the location
+     *
+     * @return double latitude of the location
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Gets the name of the longitude of the location
+     *
+     * @return double of longitude of the location
+     */
+    public double getLongitude() {
+        return longitude;
+    }
+
+    /**
+     * Gets the quality of water
+     *
+     * @return WaterQuality the quality of water reported
+     */
+    public WaterQuality getWaterQuality() {
+        return waterQuality;
+    }
+
+    /**
+     * Gets the virus ppm of water
+     *
+     * @return int returns the virus ppm of the water reported
+     */
+    public int getVirusPPM() {
+        return virusPPM;
+    }
+
+    /**
+     * Gets the contaminant ppm of water
+     *
+     * @return int returns the contaminant ppm of the water reported
+     */
+    public int getContaminantPPM() {
+        return contaminantPPM;
+    }
+
+    /**
+     * gets the id of the report
+     *
+     * @return long  returns the id of the report
+     */
+    public long getReportID() {
+        return reportID;
+    }
 }
