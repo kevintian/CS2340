@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,10 +40,9 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView submitQualityReportIcon;
     private ImageView viewQualityReportsIcon;
     private ImageView viewMapIcon;
-
-    // TODO: switch to ImageView
-    private Button viewGraphButton;
-
+    private ImageView viewGraphIcon;
+    private TextView submitQualityReportText;
+    private TextView viewQualityReportsText;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -91,6 +91,8 @@ public class HomeActivity extends AppCompatActivity {
 
         submitQualityReportIcon = (ImageView) findViewById(R.id.submit_quality_report_icon);
 
+        submitQualityReportText = (TextView) findViewById(R.id.submit_quality_report_text);
+
         submitQualityReportIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,8 +101,11 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         submitQualityReportIcon.setVisibility(View.GONE);
+//        submitQualityReportText.setVisibility(View.GONE);
 
         viewQualityReportsIcon = (ImageView) findViewById(R.id.view_quality_report_icon);
+
+        viewQualityReportsText = (TextView) findViewById(R.id.view_quality_reports_text);
 
         viewQualityReportsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +115,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         viewQualityReportsIcon.setVisibility(View.GONE);
+//        viewQualityReportsText.setVisibility(View.GONE);
 
         viewMapIcon = (ImageView) findViewById(R.id.view_map_icon);
 
@@ -120,9 +126,9 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        viewGraphButton = (Button) findViewById(R.id.view_graph_button);
+        viewGraphIcon = (ImageView) findViewById(R.id.view_graph_icon);
 
-        viewGraphButton.setOnClickListener(new View.OnClickListener() {
+        viewGraphIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 viewGraph();

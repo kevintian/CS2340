@@ -8,4 +8,5 @@
     <string name="view_quality_reports_text">View Water Quality Reports</string>
     <string name="view_map_text">View Map</string>
     <string name="title_activity_map">Map</string>
+    <string name="view_graph_text">View Graph</string>
 </resources>
