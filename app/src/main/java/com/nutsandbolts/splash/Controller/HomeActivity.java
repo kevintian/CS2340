@@ -185,11 +185,13 @@ public class HomeActivity extends AppCompatActivity {
                 if ("MANAGER".equals(userType)) {
                     viewQualityReportsIcon.setVisibility(View.VISIBLE);
                     viewQualityReportsText.setVisibility(View.VISIBLE);
-                }
-                if ("ADMINISTRATOR".equals(userType)) {
                     viewGraphIcon.setVisibility(View.VISIBLE);
                     viewGraphText.setVisibility(View.VISIBLE);
                 }
+//                if ("ADMINISTRATOR".equals(userType)) {
+//                    viewGraphIcon.setVisibility(View.VISIBLE);
+//                    viewGraphText.setVisibility(View.VISIBLE);
+//                }
             }
 
             @Override
