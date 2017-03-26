@@ -24,6 +24,8 @@ import com.nutsandbolts.splash.Model.WaterSourceReport;
 import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
+import org.w3c.dom.Text;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -43,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView viewGraphIcon;
     private TextView submitQualityReportText;
     private TextView viewQualityReportsText;
+    private TextView viewGraphText;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -101,7 +104,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         submitQualityReportIcon.setVisibility(View.GONE);
-//        submitQualityReportText.setVisibility(View.GONE);
+        submitQualityReportText.setVisibility(View.GONE);
 
         viewQualityReportsIcon = (ImageView) findViewById(R.id.view_quality_report_icon);
 
@@ -115,7 +118,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         viewQualityReportsIcon.setVisibility(View.GONE);
-//        viewQualityReportsText.setVisibility(View.GONE);
+        viewQualityReportsText.setVisibility(View.GONE);
 
         viewMapIcon = (ImageView) findViewById(R.id.view_map_icon);
 
@@ -128,12 +131,17 @@ public class HomeActivity extends AppCompatActivity {
 
         viewGraphIcon = (ImageView) findViewById(R.id.view_graph_icon);
 
+        viewGraphText = (TextView) findViewById(R.id.view_graph_text);
+
         viewGraphIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 viewGraph();
             }
         });
+
+        viewGraphIcon.setVisibility(View.GONE);
+        viewGraphText.setVisibility(View.GONE);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -172,9 +180,15 @@ public class HomeActivity extends AppCompatActivity {
                 Log.d("USERTYPE", userType);
                 if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {
                     submitQualityReportIcon.setVisibility(View.VISIBLE);
+                    submitQualityReportText.setVisibility(View.VISIBLE);
                 }
                 if ("MANAGER".equals(userType)) {
                     viewQualityReportsIcon.setVisibility(View.VISIBLE);
+                    viewQualityReportsText.setVisibility(View.VISIBLE);
+                }
+                if ("ADMINISTRATOR".equals(userType)) {
+                    viewGraphIcon.setVisibility(View.VISIBLE);
+                    viewGraphText.setVisibility(View.VISIBLE);
                 }
             }
 
