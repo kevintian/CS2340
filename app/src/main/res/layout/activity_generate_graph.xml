@@ -8,9 +8,113 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
+    <TextView
+        android:id="@+id/create_graph_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Generate Historical Report"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/graph_pollution_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/create_graph_title"
+        android:padding="5dp"
+        android:text="Pollution Type:"
+        android:textSize="15sp" />
+
+    <Spinner
+        android:id="@+id/pollution_type_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/graph_pollution_type"
+        android:layout_below="@+id/create_graph_title"
+        android:layout_toEndOf="@+id/graph_pollution_type" />
+
+    <TextView
+        android:id="@+id/graph_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/graph_pollution_type"
+        android:padding="5dp"
+        android:text="Year:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/graph_year_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/graph_year"
+        android:layout_toEndOf="@+id/graph_year"
+        android:hint="Enter Year"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/graph_latitude_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/graph_year_text"
+        android:padding="5dp"
+        android:text="Latitude:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/graph_latitude_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/graph_latitude_label"
+        android:layout_toEndOf="@+id/graph_latitude_label"
+        android:hint="Enter Latitude"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/graph_longitude_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/graph_latitude_label"
+        android:padding="5dp"
+        android:text="Longitude:"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/graph_longitude_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/graph_longitude_label"
+        android:layout_toEndOf="@+id/graph_longitude_label"
+        android:ems="10"
+        android:hint="Enter Longitude"
+        android:inputType="numberDecimal"
+        android:padding="5dp"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/generate_graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/graph_longitude_label"
+        android:layout_centerHorizontal="true"
+        android:text="Generate Graph" />
+
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
         android:layout_height="200dip"
+        android:layout_below="@+id/generate_graph"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
         android:id="@+id/graph" />
 
 </RelativeLayout>
