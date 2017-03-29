@@ -29,6 +29,7 @@ public class EditProfileActivity extends AppCompatActivity {
     Widgets we will need to define listeners for
     */
     private TextView welcomeText;
+    private TextView userTypeText;
     private EditText emailText;
     private EditText displayNameText;
     private EditText homeAddressText;
@@ -57,6 +58,7 @@ public class EditProfileActivity extends AppCompatActivity {
         /*
         Get widgets from view
          */
+        userTypeText = (TextView) findViewById(R.id.user_type_label);
         emailText = (EditText) findViewById(R.id.email_edit_text);
         displayNameText = (EditText) findViewById(R.id.display_name_edit_text);
         homeAddressText = (EditText) findViewById(R.id.home_address_edit_text);
@@ -141,6 +143,10 @@ public class EditProfileActivity extends AppCompatActivity {
                             homeAddressText.setText((CharSequence) dataSnapshot.child("home-address").getValue());
                             //DataSnapshot returns a native type -> cast it to string, parse as enum, and get ordinal position
                             userTypeSpinner.setSelection(UserType.valueOf((String)dataSnapshot.child("user-type").getValue()).ordinal());
+
+                            // Hide widgets so users cannot edit their type
+                            userTypeText.setVisibility(View.GONE);
+                            userTypeSpinner.setVisibility(View.GONE);
                         }
                     }
 
