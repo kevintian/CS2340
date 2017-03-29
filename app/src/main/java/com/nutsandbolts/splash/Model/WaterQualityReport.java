@@ -279,4 +279,19 @@ public class WaterQualityReport implements Parcelable {
     public long getReportID() {
         return reportID;
     }
+
+    @Override
+    public String toString() {
+        return "WaterQualityReport{" +
+                "dateTime=" + dateTime +
+                ", reportID=" + reportID +
+                ", reporterName='" + reporterName + '\'' +
+                ", reporterUID='" + reporterUID + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", virusPPM=" + virusPPM +
+                ", contaminantPPM=" + contaminantPPM +
+                ", waterQuality=" + waterQuality +
+                '}';
+    }
 }

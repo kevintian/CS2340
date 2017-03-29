@@ -1,29 +1,25 @@
 package com.nutsandbolts.splash.Controller;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.nutsandbolts.splash.Model.WaterQuality;
-import com.nutsandbolts.splash.Model.WaterType;
+import com.nutsandbolts.splash.Model.WaterQualityReport;
 import com.nutsandbolts.splash.R;
 
 import java.util.ArrayList;
@@ -38,21 +34,22 @@ public class GenerateGraphActivity extends AppCompatActivity {
     private EditText yearText;
     private EditText longitudeText;
     private EditText latitudeText;
+    private Spinner locationRadiusSpinner;
     private Button generateButton;
     private GraphView graph;
 
     /*
     Water quality report variables
-     */
+    */
     private String pollutionType;
     private int year;
     private double latitude;
     private double longitude;
-    private int contaminantPPM = 0;
+    private double radius;
 
 
     private DatabaseReference mWaterQualityReportsRef;
-    private ChildEventListener mWaterQualityReportsListener;
+    private ValueEventListener mWaterQualityReportsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +64,24 @@ public class GenerateGraphActivity extends AppCompatActivity {
         latitudeText = (EditText) findViewById(R.id.graph_latitude_text);
         longitudeText = (EditText) findViewById(R.id.graph_longitude_text);
         generateButton = (Button) findViewById(R.id.generate_graph);
+        locationRadiusSpinner = (Spinner) findViewById(R.id.location_radius_spinner);
         graph = (GraphView) findViewById(R.id.graph);
 
         /*
-          Set up the adapter to display the possible contaminant types in the spinner
+          Set up adapters to display the possible contaminant types in the  and possible radiuses
          */
         String[] pollutionTypes = {"Virus", "Contaminant"};
         ArrayAdapter<String> pollutionTypeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, pollutionTypes);
         pollutionTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         pollutionTypeSpinner.setAdapter(pollutionTypeAdapter);
 
+        String[] radiusDistances = {"10 miles", "25 miles", "50 miles"};
+        final ArrayAdapter<String> locationRadiusAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, radiusDistances);
+        locationRadiusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationRadiusSpinner.setAdapter(locationRadiusAdapter);
 
         generateButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 /*
@@ -100,64 +103,49 @@ public class GenerateGraphActivity extends AppCompatActivity {
                     return;
                 }
                 pollutionType = (String) pollutionTypeSpinner.getSelectedItem();
+                String radiusSelection = (String) locationRadiusSpinner.getSelectedItem();
+                //Replaces all non digits with empty string, leaving only the int value
+                radius = Double.parseDouble(radiusSelection.replaceAll("[\\D]", ""));
 
 
-                LineGraphSeries<DataPoint> graphPoints = generateDataPoints(pollutionType, year, latitude, longitude);
-                drawGraph(graphPoints);
+                generateGraph();
             }
         });
     }
 
-    private LineGraphSeries<DataPoint> generateDataPoints(String pollutionType, int year, double latitude, double longitude) {
+    private void generateGraph() {
         mWaterQualityReportsRef = FirebaseDatabase.getInstance().getReference().child("water-quality-reports");
-        mWaterQualityReportsListener = new ChildEventListener() {
+        final ArrayList<WaterQualityReport> allReports = new ArrayList<>();
 
+        mWaterQualityReportsListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                try {
-
-                } catch (NullPointerException e) {
-                    Log.d("Datasnapshot error", dataSnapshot.toString());
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot waterReportChildren : dataSnapshot.getChildren()) {
+                    WaterQualityReport report = WaterQualityReport.buildWaterQualityReportFromSnapShot(waterReportChildren);
+                    allReports.add(report);
                 }
+
+                double[] monthlyValues = parseReports(allReports);
+                drawGraph(new LineGraphSeries<>(new DataPoint[]{
+                        new DataPoint(1, monthlyValues[0]),
+                        new DataPoint(2, monthlyValues[1]),
+                        new DataPoint(3, monthlyValues[2]),
+                        new DataPoint(4, monthlyValues[3]),
+                        new DataPoint(5, monthlyValues[4]),
+                        new DataPoint(6, monthlyValues[5]),
+                        new DataPoint(7, monthlyValues[6]),
+                        new DataPoint(8, monthlyValues[7]),
+                        new DataPoint(9, monthlyValues[8]),
+                        new DataPoint(10, monthlyValues[9]),
+                        new DataPoint(11, monthlyValues[10]),
+                        new DataPoint(12, monthlyValues[11]),
+                }));
             }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         };
-
-        mWaterQualityReportsRef.addChildEventListener(mWaterQualityReportsListener);
-
-        return new LineGraphSeries<>(new DataPoint[]{
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6),
-                new DataPoint(5, 7),
-                new DataPoint(6, 6),
-                new DataPoint(7, 7),
-                new DataPoint(8, 6),
-                new DataPoint(9, 7),
-                new DataPoint(10, 6),
-                new DataPoint(11, 7),
-                new DataPoint(12, 6),
-        });
+        mWaterQualityReportsRef.addValueEventListener(mWaterQualityReportsListener);
     }
 
     private void drawGraph(LineGraphSeries<DataPoint> series) {
@@ -202,6 +190,55 @@ public class GenerateGraphActivity extends AppCompatActivity {
         });
 
         //Add in data
+        series.setDrawDataPoints(true);
+
+        graph.removeAllSeries();
         graph.addSeries(series);
+
     }
+
+    //Haversine formula to calculate distance - distance will be returned in miles
+    private double distFrom(double lat1, double lng1, double lat2, double lng2) {
+        double earthRadius = 3958.75; // miles (or 6371.0 kilometers)
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
+                * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double dist = earthRadius * c;
+
+        return dist;
+    }
+
+    private double[] parseReports(ArrayList<WaterQualityReport> allReports) {
+        //Array of size 12, where 0 = Jan, 1 = Feb, etc.
+        double[] monthlyValues = new double[12];
+
+        for (int i = 0; i < 12; i++) {
+            int numReports = 0;
+            double totalPPM = 0.0;
+            for (WaterQualityReport report : allReports) {
+                if (report.getDateTime().getMonth() == i
+                        && report.getDateTime().getYear() + 1900 == year
+                        && distFrom(report.getLatitude(), report.getLongitude(), latitude, longitude) <= radius ) {
+                    if (pollutionType.equals("Contaminant")) {
+                        totalPPM += report.getContaminantPPM();
+                    } else {
+                        totalPPM += report.getVirusPPM();
+                    }
+                    numReports++;
+                }
+            }
+
+            if (numReports == 0) {
+                monthlyValues[i] = 0;
+            } else {
+                monthlyValues[i] = totalPPM/numReports;
+            }
+        }
+        return monthlyValues;
+    }
+
 }
