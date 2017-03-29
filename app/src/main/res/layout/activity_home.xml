@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="136dp"
-        android:layout_height="129dp"
+        android:layout_width="220dp"
+        android:layout_height="208dp"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
@@ -19,8 +19,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="0dp"
+        android:src="@drawable/logo"
         app:layout_constraintBottom_toTopOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.251" />
+        app:layout_constraintVertical_bias="0.258" />
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/gridLayout"
@@ -32,7 +33,7 @@
         app:rowCount="6"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="32dp">
+        android:layout_marginBottom="16dp">
 
         <!-- Row 1-->
         <ImageButton
@@ -53,7 +54,6 @@
         <!-- Row 2 -->
         <TextView
             android:layout_width="wrap_content"
-            android:layout_marginBottom="15dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/view_water_reports_text"
             android:textSize="12sp"
@@ -61,7 +61,6 @@
             app:layout_gravity="center_horizontal" />
 
         <TextView
-            android:layout_marginBottom="15dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/submit_water_report_text"
             android:textSize="12sp"
@@ -69,7 +68,6 @@
             app:layout_gravity="center_horizontal" />
 
         <TextView
-            android:layout_marginBottom="15dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/view_map_text"
             android:textSize="12sp"
