@@ -320,19 +320,22 @@ public class WaterSourceReport implements Parcelable {
 
     /**
      * Checks if the value is a long -> if so, converts to double
+     * This function is necessary due to the way Firebase stores data
      *
      * @param longValue - an object that is thought to be a long
      * @return double A double that is converted form the long param
      */
     static double convertDouble(Object longValue) {
-        double valueTwo = -1; // whatever to state invalid!
+        double result; // whatever to state invalid!
 
         if (longValue instanceof Long) {
-            valueTwo = ((Long) longValue).doubleValue();
+            result = ((Long) longValue).doubleValue();
         } else if (longValue instanceof Double) {
-            valueTwo = (double) longValue;
+            result = (double) longValue;
+        } else {
+            throw new IllegalArgumentException("Object passed in must be either a double or a long");
         }
 
-        return valueTwo;
+        return result;
     }
 }
