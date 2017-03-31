@@ -325,8 +325,8 @@ public class WaterSourceReport implements Parcelable {
      * @param longValue - an object that is thought to be a long
      * @return double A double that is converted form the long param
      */
-    static double convertDouble(Object longValue) {
-        double result; // whatever to state invalid!
+    public static double convertDouble(Object longValue) {
+        double result; // return value
 
         if (longValue instanceof Long) {
             result = ((Long) longValue).doubleValue();
