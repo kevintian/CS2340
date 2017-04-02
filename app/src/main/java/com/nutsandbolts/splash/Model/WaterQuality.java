@@ -1,10 +1,13 @@
 package com.nutsandbolts.splash.Model;
 
 /**
- * Created by Suprabhat on 3/8/17.
+ * Enum to describe the 3 types of water quality.
  */
-
 public enum WaterQuality {
+    /**
+     * Code inspection will show these as unused declarations, but they are necessary for the
+     * spinners to work properly.
+     */
     SAFE("Safe"),
     TREATABLE("Treatable"),
     UNSAFE("Unsafe");
