@@ -3,6 +3,7 @@ package com.nutsandbolts.splash.Controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,6 +18,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nutsandbolts.splash.Model.WaterSourceReport;
 import com.nutsandbolts.splash.R;
+
+/**
+ * This activity will take in a manager's input and return a graph showing the average
+ * PPM values of the chosen pollutant for the chosen year.
+ *
+ * @author Deb Banerji
+ */
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -35,8 +43,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        FragmentManager fragManager = getSupportFragmentManager();
+        SupportMapFragment mapFragment = (SupportMapFragment)fragManager.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
@@ -55,8 +63,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mMap = googleMap;
 
         // Add move the camera to Georgia Tech
-        LatLng sydney = new LatLng(33.7756, -84.3963);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        final LatLng GT_LOCATION = new LatLng(33.7756, -84.3963);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(GT_LOCATION));
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -70,14 +78,26 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             }
         });
 
-        mWaterSourceReportsRef = FirebaseDatabase.getInstance().getReference().child("water-source-reports");
+        FirebaseDatabase splashDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference rootNode = splashDatabase.getReference();
+        mWaterSourceReportsRef = rootNode.child("water-source-reports");
         mWaterSourceReportsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 //Add to arraylist
-                WaterSourceReport waterSourceReport = WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
-                LatLng waterSourceReportPosition = new LatLng(waterSourceReport.getLatitude(), waterSourceReport.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(waterSourceReportPosition).title(waterSourceReport.getWaterType() + ", " + waterSourceReport.getWaterCondition()));
+                WaterSourceReport waterSourceReport =
+                        WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
+                double latitude = waterSourceReport.getLatitude();
+                double longitude = waterSourceReport.getLongitude();
+                LatLng waterSourceReportPosition = new LatLng(latitude, longitude);
+
+                //Create the marketOptions object and customize it
+                MarkerOptions options = new MarkerOptions();
+                options = options.position(waterSourceReportPosition);
+                options = options.title(waterSourceReport.getWaterType()
+                        + ", " + waterSourceReport.getWaterCondition());
+
+                mMap.addMarker(options);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(waterSourceReportPosition));
             }
 
