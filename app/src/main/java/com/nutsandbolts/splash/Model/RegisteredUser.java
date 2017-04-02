@@ -15,7 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class RegisteredUser implements Parcelable {
 
     private String displayName;
-    private String id;
+    private final String id;
     private String emailAddress;
     private String homeAddress;
     private UserType userType;
@@ -39,17 +39,26 @@ public class RegisteredUser implements Parcelable {
     }
 
     /**
-     * Write's the user's data to the database
+     * Writes the user's data to the database
      */
     public void writeToDatabase() {
-        DatabaseReference mRootRef = FirebaseDatabase.getInstance()
-                .getReference();
-        DatabaseReference mUserRef = mRootRef.child("registered-users")
-                .child(id);
-        mUserRef.child("display-name").setValue(displayName);
-        mUserRef.child("email-address").setValue(emailAddress);
-        mUserRef.child("home-address").setValue(homeAddress);
-        mUserRef.child("user-type").setValue(userType);
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference mRootRef = db.getReference();
+
+        DatabaseReference userRef = mRootRef.child("registered-users");
+        DatabaseReference mUserRef = userRef.child(id);
+
+        DatabaseReference displayNameChild = mUserRef.child("display-name");
+        displayNameChild.setValue(displayName);
+
+        DatabaseReference emailChild = mUserRef.child("email-address");
+        emailChild.setValue(emailAddress);
+
+        DatabaseReference addressChild = mUserRef.child("home-address");
+        addressChild.setValue(homeAddress);
+
+        DatabaseReference typeChild = mUserRef.child("user-type");
+        typeChild.setValue(userType);
     }
 
     /* **********************
@@ -60,39 +69,12 @@ public class RegisteredUser implements Parcelable {
     // are registered using Google
 
     /**
-     * Get ID of user
-     *
-     * @return String This returns the ID of the registered user
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Get display name of user
-     *
-     * @return String This returns the user's display name
-     */
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    /**
      * Sets display name of user
      *
      * @param displayName The user's display name
      */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    /**
-     * Get email address of user
-     *
-     * @return String This returns the user's email address
-     */
-    public String getEmailAddress() {
-        return emailAddress;
     }
 
 
@@ -106,30 +88,12 @@ public class RegisteredUser implements Parcelable {
     }
 
     /**
-     * Get home address of user
-     *
-     * @return String This returns the user's home address
-     */
-    public String getHomeAddress() {
-        return homeAddress;
-    }
-
-    /**
      * Sets home address of user
      *
      * @param homeAddress The user's home address
      */
     public void setHomeAddress(String homeAddress) {
         this.homeAddress = homeAddress;
-    }
-
-    /**
-     * Gets usertype of user
-     *
-     * @return The user's usertype
-     */
-    public UserType getUserType() {
-        return userType;
     }
 
     /**
@@ -183,10 +147,12 @@ public class RegisteredUser implements Parcelable {
 
     public static final Parcelable.Creator<RegisteredUser> CREATOR
             = new Parcelable.Creator<RegisteredUser>() {
+                @Override
                 public RegisteredUser createFromParcel(Parcel in) {
                     return new RegisteredUser(in);
                 }
 
+                @Override
                 public RegisteredUser[] newArray(int size) {
                     return new RegisteredUser[size];
                 }
