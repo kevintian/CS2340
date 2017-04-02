@@ -20,8 +20,7 @@ import com.nutsandbolts.splash.Model.WaterSourceReport;
 import com.nutsandbolts.splash.R;
 
 /**
- * This activity will take in a manager's input and return a graph showing the average
- * PPM values of the chosen pollutant for the chosen year.
+ * This activity will display a map showing the locations of nearby water sources
  *
  * @author Deb Banerji
  */
@@ -96,9 +95,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 options = options.position(waterSourceReportPosition);
                 options = options.title(waterSourceReport.getWaterType()
                         + ", " + waterSourceReport.getWaterCondition());
-
                 mMap.addMarker(options);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(waterSourceReportPosition));
+//                mMap.moveCamera(CameraUpdateFactory.newLatLng(waterSourceReportPosition));
             }
 
             @Override
