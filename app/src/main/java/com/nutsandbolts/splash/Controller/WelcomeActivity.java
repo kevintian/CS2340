@@ -27,9 +27,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nutsandbolts.splash.Model.WaterCondition;
-import com.nutsandbolts.splash.Model.WaterSourceReport;
-import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
 import org.json.JSONException;
@@ -37,15 +34,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 
+/**
+ * This activity allows the user to sign in to the application using their Google account
+ *
+ * @author Deb Banerji
+ */
 public class WelcomeActivity extends AppCompatActivity
     implements GoogleApiClient.OnConnectionFailedListener {
-
-    /*
-    Widgets we will need to define listeners for
-    */
-    private SignInButton googleButton;
 
     /*
     Google API Client
@@ -82,7 +78,7 @@ public class WelcomeActivity extends AppCompatActivity
         /*
         Get widgets from view
          */
-        googleButton = (SignInButton) findViewById(R
+        SignInButton googleButton = (SignInButton) findViewById(R
             .id.sign_in_with_google_button);
 
         // Configure Google Sign In
