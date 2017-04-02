@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,10 +28,9 @@ import com.nutsandbolts.splash.R;
 import java.util.Date;
 
 public class SubmitWaterReportActivity extends AppCompatActivity implements LocationListener {
-
     /*
-   Widgets we will need to define listeners for
-   */
+           Widgets we will need to define listeners for
+           */
     private EditText latitudeText;
     private EditText longitudeText;
     private Button gpsButton;
@@ -125,31 +125,22 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
          */
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Date date = new Date(System.currentTimeMillis());
-        waterSourceReport = new WaterSourceReport(date, System.currentTimeMillis(), firebaseUser.getDisplayName(), firebaseUser.getUid(), latitude, longitude, waterType, waterCondition);
-
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    latitude = Double.parseDouble(latitudeText.getText().toString());
-                    longitude = Double.parseDouble(longitudeText.getText().toString());
+                    submitWaterReport();
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Enter Valid Latitude and Longitude", Toast.LENGTH_SHORT).show();
+                    Toast t = Toast.makeText(getApplicationContext(),
+                            "Enter Valid Latitude and Longitude", Toast.LENGTH_SHORT);
+                    t.show();
+                    return;
+                } catch (IllegalArgumentException e2) {
+                    Toast t = Toast.makeText(getApplicationContext(),
+                            "Latitude or Longitude is out of range.", Toast.LENGTH_SHORT);
+                    t.show();
                     return;
                 }
-
-                waterType = (WaterType) waterTypeSpinner.getSelectedItem();
-                waterCondition = (WaterCondition) waterConditionSpinner.getSelectedItem();
-
-                Date date = new Date(System.currentTimeMillis());
-                waterSourceReport.setDateTime(date);
-                waterSourceReport.setLatitude(latitude);
-                waterSourceReport.setLongitude(longitude);
-                waterSourceReport.setWaterCondition(waterCondition);
-                waterSourceReport.setWaterType(waterType);
-                waterSourceReport.writeToDatabase();
                 Intent homeIntent = new Intent(SubmitWaterReportActivity.this, HomeActivity.class);
                 startActivity(homeIntent);
             }
@@ -179,6 +170,31 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
         } catch (SecurityException e) {
             //            Toast.makeText(getBaseContext(), "Security exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Validates data required for a water source report and submits it to the database.
+     * @throws IllegalArgumentException if latitude or longitude is out of range.
+     * @throws NumberFormatException if latitude or longitude are not in proper format.
+     */
+    public void submitWaterReport() throws IllegalArgumentException {
+        Editable latEditable= latitudeText.getText();
+        Editable longEditable= longitudeText.getText();
+        latitude = Double.parseDouble(latEditable.toString());
+        longitude = Double.parseDouble(longEditable.toString());
+        if ((Math.abs(latitude) > WaterSourceReport.MAX_LATITUDE)
+                | (Math.abs(longitude) > WaterSourceReport.MAX_LONGITUDE)) {
+            throw new IllegalArgumentException("Latitude or Longitude is out of range.");
+        }
+
+        waterType = (WaterType) waterTypeSpinner.getSelectedItem();
+        waterCondition = (WaterCondition) waterConditionSpinner.getSelectedItem();
+
+        long currentTime = System.currentTimeMillis();
+        Date date = new Date(currentTime);
+        waterSourceReport = new WaterSourceReport(date, currentTime, firebaseUser.getDisplayName(),
+                firebaseUser.getUid(), latitude, longitude, waterType, waterCondition);
+        waterSourceReport.writeToDatabase();
     }
 
     @Override

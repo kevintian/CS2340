@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
 import java.util.Date;
+import java.util.IllegalFormatCodePointException;
 
 /**
  * Activity to submit Water Quality Reports
@@ -123,39 +125,20 @@ public class SubmitQualityReportActivity extends AppCompatActivity implements Lo
          */
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Date date = new Date(System.currentTimeMillis());
-        waterQualityReport = new WaterQualityReport(date, System.currentTimeMillis(), firebaseUser.getDisplayName(), firebaseUser.getUid(), latitude, longitude, virusPPM, contaminantPPM, waterQuality);
+
 
         submitButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 try {
-                    latitude = Double.parseDouble(latitudeText.getText().toString());
-                    longitude = Double.parseDouble(longitudeText.getText().toString());
-                } catch (NumberFormatException e) {
+                    submitQualityReport();
+                } catch (IllegalArgumentException e) {
                     Toast.makeText(getApplicationContext(),
-                            "Enter Valid Latitude and Longitude", Toast.LENGTH_SHORT).show();
+                            e.getMessage(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                try {
-                    virusPPM = Integer.parseInt(virusPPMText.getText().toString());
-                    contaminantPPM = Integer.parseInt(contaminantPPMText.getText().toString());
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Invalid PPM", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                waterQuality = (WaterQuality) waterQualitySpinner.getSelectedItem();
-
-                waterQualityReport.setLatitude(latitude);
-                waterQualityReport.setLongitude(longitude);
-                waterQualityReport.setWaterQuality(waterQuality);
-                waterQualityReport.setVirusPPM(virusPPM);
-                waterQualityReport.setContaminantPPM(contaminantPPM);
-                waterQualityReport.writeToDatabase();
                 Intent homeIntent = new Intent(SubmitQualityReportActivity.this, HomeActivity.class);
                 startActivity(homeIntent);
             }
@@ -185,6 +168,45 @@ public class SubmitQualityReportActivity extends AppCompatActivity implements Lo
         } catch (SecurityException e) {
             //            Toast.makeText(getBaseContext(), "Security exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Validates data required for a water quality report and submits it to the database.
+     * @throws IllegalArgumentException if any of the arguments are invalid
+     */
+    public void submitQualityReport() throws IllegalArgumentException {
+        Editable latEditable= latitudeText.getText();
+        Editable longEditable= longitudeText.getText();
+        try {
+            latitude = Double.parseDouble(latEditable.toString());
+            longitude = Double.parseDouble(longEditable.toString());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Enter Valid Latitude and Longitude");
+        }
+
+        if ((Math.abs(latitude) > WaterSourceReport.MAX_LATITUDE)
+                | (Math.abs(longitude) > WaterSourceReport.MAX_LONGITUDE)) {
+            throw new IllegalArgumentException("Latitude or Longitude is out of range.");
+        }
+
+        Editable virusEditable = virusPPMText.getText();
+        Editable contaminantEditable = contaminantPPMText.getText();
+
+        try {
+            virusPPM = Integer.parseInt(virusEditable.toString());
+            contaminantPPM = Integer.parseInt(contaminantEditable.toString());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Enter valid PPM values");
+        }
+
+        waterQuality = (WaterQuality) waterQualitySpinner.getSelectedItem();
+
+        long currentTime = System.currentTimeMillis();
+        Date date = new Date(currentTime);
+        waterQualityReport = new WaterQualityReport(date, currentTime,
+                firebaseUser.getDisplayName(), firebaseUser.getUid(), latitude, longitude, virusPPM,
+                contaminantPPM, waterQuality);
+        waterQualityReport.writeToDatabase();
     }
 
     @Override

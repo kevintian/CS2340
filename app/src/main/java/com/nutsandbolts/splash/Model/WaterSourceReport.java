@@ -26,6 +26,9 @@ public class WaterSourceReport implements Parcelable {
     private WaterType waterType;
     private WaterCondition waterCondition;
 
+    public static final int MAX_LATITUDE = 90;
+    public static final int MAX_LONGITUDE = 180;
+
     /**
      * Write's the water report to the database
      */
