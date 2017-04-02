@@ -1,10 +1,13 @@
 package com.nutsandbolts.splash.Model;
 
 /**
- * Created by supra on 2/23/17.
+ * Enum to describe the types of water.
  */
-
 public enum WaterType {
+    /**
+     * Code inspection will show these as unused declarations, but they are necessary for the
+     * spinners to work properly.
+     */
     BOTTLED("Bottled"),
     WELL("Well"),
     STREAM("Stream"),
@@ -26,7 +29,7 @@ public enum WaterType {
     /**
      * Returns a string representation of the water's water type
      *
-     * @return  The water's watertype
+     * @return  The water's type
      */
     public String getType() {
         return type;
