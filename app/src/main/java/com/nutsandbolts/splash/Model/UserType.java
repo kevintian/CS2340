@@ -13,19 +13,19 @@ public enum UserType {
     MANAGER ("Manager"),
     ADMINISTRATOR ("Administrator");
 
-    private final String name;
+    private final String userType;
 
     /**
      * Make a new UserType enum
      *
-     * @param name  The user's usertype
+     * @param userType  The user's usertype
      */
-    UserType(String name) {
-        this.name = name;
+    UserType(String userType) {
+        this.userType = userType;
     }
 
     @Override
     public String toString() {
-        return name;
+        return userType;
     }
 }
