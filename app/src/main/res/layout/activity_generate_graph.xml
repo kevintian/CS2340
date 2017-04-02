@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Generate Historical Report"
+        android:text="@string/generate_historical_report_text"
         android:textSize="24sp" />
 
     <TextView
@@ -24,7 +24,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/create_graph_title"
         android:padding="5dp"
-        android:text="Pollution Type:"
+        android:text="@string/pollution_type_text"
         android:textSize="15sp" />
 
     <Spinner
@@ -42,7 +42,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/graph_pollution_type"
         android:padding="5dp"
-        android:text="Year:"
+        android:text="@string/year_text"
         android:textSize="15sp" />
 
     <EditText
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/graph_year"
         android:layout_toEndOf="@+id/graph_year"
-        android:hint="Enter Year"
+        android:hint="@string/enter_year_hint"
         android:inputType="numberDecimal"
         android:ems="10"
         android:padding="5dp"
@@ -64,7 +64,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/graph_year_text"
         android:padding="5dp"
-        android:text="Latitude:"
+        android:text="@string/latitude_text"
         android:textSize="15sp" />
 
     <EditText
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/graph_latitude_label"
         android:layout_toEndOf="@+id/graph_latitude_label"
-        android:hint="Enter Latitude"
+        android:hint="@string/enter_latitude_hint"
         android:inputType="numberDecimal"
         android:ems="10"
         android:padding="5dp"
@@ -86,7 +86,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/graph_latitude_label"
         android:padding="5dp"
-        android:text="Longitude:"
+        android:text="@string/longitude_text"
         android:textSize="15sp" />
 
     <EditText
@@ -96,7 +96,7 @@
         android:layout_alignTop="@id/graph_longitude_label"
         android:layout_toEndOf="@+id/graph_longitude_label"
         android:ems="10"
-        android:hint="Enter Longitude"
+        android:hint="@string/enter_longitude_hint"
         android:inputType="numberDecimal"
         android:padding="5dp"
         android:textSize="15sp" />
@@ -108,7 +108,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/graph_longitude_label"
         android:padding="5dp"
-        android:text="Radius:"
+        android:text="@string/radius_text"
         android:textSize="15sp" />
 
     <Spinner
@@ -125,7 +125,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/location_radius_label"
         android:layout_centerHorizontal="true"
-        android:text="Generate Graph" />
+        android:text="@string/generate_graph_text" />
 
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"

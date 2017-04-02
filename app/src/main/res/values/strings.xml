@@ -1,4 +1,6 @@
 <resources>
+
+    <!--Homepage Strings-->
     <string name="app_name">Splash</string>
     <string name="sign_out_text">Sign Out</string>
     <string name="edit_profile_text">Edit Profile</string>
@@ -9,4 +11,18 @@
     <string name="view_map_text">View Map</string>
     <string name="title_activity_map">Map</string>
     <string name="view_graph_text">View Graph</string>
+
+
+    <!--Generate Graph Strings-->
+    <string name="generate_historical_report_text">Generate Historical Report</string>
+    <string name="pollution_type_text">Pollution Type:</string>
+    <string name="year_text">Year:</string>
+    <string name="enter_year_hint">Enter Year</string>
+    <string name="latitude_text">Latitude:</string>
+    <string name="enter_latitude_hint">Enter Latitude</string>
+    <string name="longitude_text">Longitude:</string>
+    <string name="enter_longitude_hint">Enter Longitude</string>
+    <string name="radius_text">Radius:</string>
+    <string name="generate_graph_text">Generate Graph</string>
+
 </resources>

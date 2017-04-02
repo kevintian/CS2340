@@ -2,6 +2,7 @@ package com.nutsandbolts.splash.Controller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,13 +18,22 @@ import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.nutsandbolts.splash.Model.WaterQualityReport;
 import com.nutsandbolts.splash.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 
+/**
+ * This activity will take in a manager's input and return a graph showing the average
+ * PPM values of the chosen pollutant for the chosen year.
+ *
+ * @author Kevin Tian
+ */
 
 public class GenerateGraphActivity extends AppCompatActivity {
 
@@ -35,7 +45,6 @@ public class GenerateGraphActivity extends AppCompatActivity {
     private EditText longitudeText;
     private EditText latitudeText;
     private Spinner locationRadiusSpinner;
-    private Button generateButton;
     private GraphView graph;
 
     /*
@@ -46,10 +55,6 @@ public class GenerateGraphActivity extends AppCompatActivity {
     private double latitude;
     private double longitude;
     private double radius;
-
-
-    private DatabaseReference mWaterQualityReportsRef;
-    private ValueEventListener mWaterQualityReportsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,7 @@ public class GenerateGraphActivity extends AppCompatActivity {
         yearText = (EditText) findViewById(R.id.graph_year_text);
         latitudeText = (EditText) findViewById(R.id.graph_latitude_text);
         longitudeText = (EditText) findViewById(R.id.graph_longitude_text);
-        generateButton = (Button) findViewById(R.id.generate_graph);
+        Button generateButton = (Button) findViewById(R.id.generate_graph);
         locationRadiusSpinner = (Spinner) findViewById(R.id.location_radius_spinner);
         graph = (GraphView) findViewById(R.id.graph);
 
@@ -71,13 +76,16 @@ public class GenerateGraphActivity extends AppCompatActivity {
           Set up adapters to display the possible contaminant types in the  and possible radiuses
          */
         String[] pollutionTypes = {"Virus", "Contaminant"};
-        ArrayAdapter<String> pollutionTypeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, pollutionTypes);
+        ArrayAdapter<String> pollutionTypeAdapter
+                = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pollutionTypes);
         pollutionTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         pollutionTypeSpinner.setAdapter(pollutionTypeAdapter);
 
         String[] radiusDistances = {"10 miles", "25 miles", "50 miles"};
-        final ArrayAdapter<String> locationRadiusAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, radiusDistances);
-        locationRadiusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final ArrayAdapter<String> locationRadiusAdapter
+                = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, radiusDistances);
+        locationRadiusAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationRadiusSpinner.setAdapter(locationRadiusAdapter);
 
         generateButton.setOnClickListener(new View.OnClickListener() {
@@ -88,18 +96,23 @@ public class GenerateGraphActivity extends AppCompatActivity {
                 Get info from widgets
                 */
                 try {
-                    year = Integer.parseInt(yearText.getText().toString());
+                    Editable yearInput = yearText.getText();
+                    year = Integer.parseInt(yearInput.toString());
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Enter Valid Year", Toast.LENGTH_SHORT).show();
+                    Toast yearError = Toast.makeText(getApplicationContext(),
+                            "Enter Valid Year", Toast.LENGTH_SHORT);
+                    yearError.show();
                     return;
                 }
                 try {
-                    latitude = Double.parseDouble(latitudeText.getText().toString());
-                    longitude = Double.parseDouble(longitudeText.getText().toString());
+                    Editable latitudeInput = latitudeText.getText();
+                    latitude = Double.parseDouble(latitudeInput.toString());
+                    Editable longitudeInput = longitudeText.getText();
+                    longitude = Double.parseDouble(longitudeInput.toString());
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Enter Valid Latitude and Longitude", Toast.LENGTH_SHORT).show();
+                    Toast locationError = Toast.makeText(getApplicationContext(),
+                            "Enter Valid Latitude and Longitude", Toast.LENGTH_SHORT);
+                    locationError.show();
                     return;
                 }
                 pollutionType = (String) pollutionTypeSpinner.getSelectedItem();
@@ -114,33 +127,39 @@ public class GenerateGraphActivity extends AppCompatActivity {
     }
 
     private void generateGraph() {
-        mWaterQualityReportsRef = FirebaseDatabase.getInstance().getReference().child("water-quality-reports");
-        final ArrayList<WaterQualityReport> allReports = new ArrayList<>();
+        FirebaseDatabase splashDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference rootNode = splashDatabase.getReference();
+        DatabaseReference mWaterQualityReportsRef = rootNode.child("water-quality-reports");
+        final Collection<WaterQualityReport> allReports = new ArrayList<>();
 
-        mWaterQualityReportsListener = new ValueEventListener() {
+        ValueEventListener mWaterQualityReportsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot waterReportChildren : dataSnapshot.getChildren()) {
-                    WaterQualityReport report = WaterQualityReport.buildWaterQualityReportFromSnapShot(waterReportChildren);
+                    WaterQualityReport report = WaterQualityReport
+                            .buildWaterQualityReportFromSnapShot(waterReportChildren);
                     allReports.add(report);
                 }
 
                 double[] monthlyValues = parseReports(allReports);
+
                 drawGraph(new LineGraphSeries<>(new DataPoint[]{
-                        new DataPoint(1, monthlyValues[0]),
-                        new DataPoint(2, monthlyValues[1]),
-                        new DataPoint(3, monthlyValues[2]),
-                        new DataPoint(4, monthlyValues[3]),
-                        new DataPoint(5, monthlyValues[4]),
-                        new DataPoint(6, monthlyValues[5]),
-                        new DataPoint(7, monthlyValues[6]),
-                        new DataPoint(8, monthlyValues[7]),
-                        new DataPoint(9, monthlyValues[8]),
-                        new DataPoint(10, monthlyValues[9]),
-                        new DataPoint(11, monthlyValues[10]),
-                        new DataPoint(12, monthlyValues[11]),
+                        //Add 1 because the calendar enum uses 0 for January
+                        new DataPoint(Calendar.JANUARY + 1, monthlyValues[Calendar.JANUARY]),
+                        new DataPoint(Calendar.FEBRUARY + 1, monthlyValues[Calendar.FEBRUARY]),
+                        new DataPoint(Calendar.MARCH + 1, monthlyValues[Calendar.MARCH]),
+                        new DataPoint(Calendar.APRIL + 1, monthlyValues[Calendar.APRIL]),
+                        new DataPoint(Calendar.MAY + 1, monthlyValues[Calendar.MAY]),
+                        new DataPoint(Calendar.JUNE + 1, monthlyValues[Calendar.JUNE]),
+                        new DataPoint(Calendar.JULY + 1, monthlyValues[Calendar.JULY]),
+                        new DataPoint(Calendar.AUGUST + 1, monthlyValues[Calendar.AUGUST]),
+                        new DataPoint(Calendar.SEPTEMBER + 1, monthlyValues[Calendar.SEPTEMBER]),
+                        new DataPoint(Calendar.OCTOBER + 1, monthlyValues[Calendar.OCTOBER]),
+                        new DataPoint(Calendar.NOVEMBER + 1, monthlyValues[Calendar.NOVEMBER]),
+                        new DataPoint(Calendar.DECEMBER + 1, monthlyValues[Calendar.DECEMBER]),
                 }));
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -160,17 +179,18 @@ public class GenerateGraphActivity extends AppCompatActivity {
         glr.setHorizontalAxisTitle("Month");
 
         //This ensures that increments are by 1
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(1);
-        graph.getViewport().setMaxX(5);
+        Viewport graphSettings = graph.getViewport();
+        graphSettings.setXAxisBoundsManual(true);
+        graphSettings.setMinX(1);
+        graphSettings.setMaxX(5);
         glr.setNumHorizontalLabels(5);
 
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(10);
+        graphSettings.setYAxisBoundsManual(true);
+        graphSettings.setMinY(0);
+        graphSettings.setMaxY(10);
 
-        graph.getViewport().setScrollable(true); // enables horizontal scrolling
-        graph.getViewport().setScrollableY(true); // enables vertical scrolling
+        graphSettings.setScrollable(true); // enables horizontal scrolling
+        graphSettings.setScrollableY(true); // enables vertical scrolling
 
         // custom label formatter to show months
         glr.setLabelFormatter(new DefaultLabelFormatter() {
@@ -184,7 +204,7 @@ public class GenerateGraphActivity extends AppCompatActivity {
                     return months[(int) value - 1];
                 } else {
                     // show normal y values
-                    return super.formatLabel(value, isValueX);
+                    return super.formatLabel(value, false);
                 }
             }
         });
@@ -197,47 +217,40 @@ public class GenerateGraphActivity extends AppCompatActivity {
 
     }
 
-    //Haversine formula to calculate distance - distance will be returned in miles
-    private double distFrom(double lat1, double lng1, double lat2, double lng2) {
-        double earthRadius = 3958.75; // miles (or 6371.0 kilometers)
-        double dLat = Math.toRadians(lat2-lat1);
-        double dLng = Math.toRadians(lng2-lng1);
-        double sindLat = Math.sin(dLat / 2);
-        double sindLng = Math.sin(dLng / 2);
-        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
-                * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double dist = earthRadius * c;
 
-        return dist;
-    }
-
-    private double[] parseReports(ArrayList<WaterQualityReport> allReports) {
+    private double[] parseReports(Iterable<WaterQualityReport> allReports) {
         //Array of size 12, where 0 = Jan, 1 = Feb, etc.
-        double[] monthlyValues = new double[12];
+        final int monthsInAYear = 12;
+        double[] monthlyValues = new double[monthsInAYear];
+        int[] dataPointsInEachMonth = new int[monthsInAYear];
 
-        for (int i = 0; i < 12; i++) {
-            int numReports = 0;
-            double totalPPM = 0.0;
-            for (WaterQualityReport report : allReports) {
-                if (report.getDateTime().getMonth() == i
-                        && report.getDateTime().getYear() + 1900 == year
-                        && distFrom(report.getLatitude(), report.getLongitude(), latitude, longitude) <= radius ) {
-                    if (pollutionType.equals("Contaminant")) {
-                        totalPPM += report.getContaminantPPM();
-                    } else {
-                        totalPPM += report.getVirusPPM();
-                    }
-                    numReports++;
+        for (WaterQualityReport report : allReports) {
+            if (report.isWithinBounds(year, latitude, longitude, radius)) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(report.getDateTime());
+
+                //Java calendar has jan = 0
+                int month = cal.get(Calendar.MONTH);
+
+                if (("Contaminant").equals(pollutionType)) {
+                    monthlyValues[month] += report.getContaminantPPM();
+                } else {
+                    monthlyValues[month] += report.getVirusPPM();
                 }
-            }
 
-            if (numReports == 0) {
-                monthlyValues[i] = 0;
-            } else {
-                monthlyValues[i] = totalPPM/numReports;
+                dataPointsInEachMonth[month]++;
             }
         }
+
+        //Divide sum by total number of data points to get the average for that month
+        for (int i = 0; i < monthsInAYear; i++) {
+            if (dataPointsInEachMonth[i] != 0) {
+                monthlyValues[i] = monthlyValues[i]/dataPointsInEachMonth[i];
+            } else {
+                monthlyValues[i] = 0;
+            }
+        }
+
         return monthlyValues;
     }
 

@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.nutsandbolts.splash.Model.WaterSourceReport.convertDouble;
@@ -113,6 +114,7 @@ public class WaterQualityReport implements Parcelable {
         this.waterQuality = waterQuality;
     }
 
+
     /**
      * Creates a WaterQualityReport object from a Parcel
      * @param in
@@ -158,6 +160,29 @@ public class WaterQualityReport implements Parcelable {
             return new WaterQualityReport[size];
         }
     };
+
+    public boolean isWithinBounds(int year, double latitude, double longitude, double radius) {
+        //Create a calendar
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateTime);
+        int reportYear = cal.get(Calendar.YEAR);
+
+        return (reportYear == year)
+                && (distFrom(this.latitude, this.longitude, latitude, longitude) <= radius);
+    }
+
+    //Haversine formula to calculate distance - distance will be returned in miles
+    private double distFrom(double lat1, double lng1, double lat2, double lng2) {
+        final double EARTH_RADIUS = 3958.75; // miles (or 6371.0 kilometers)
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+        double a = Math.pow(sindLat, 2) + (Math.pow(sindLng, 2)
+                * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return EARTH_RADIUS * c;
+    }
 
     /**
      * Sets the latitude for this Water Quality Report
