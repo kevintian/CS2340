@@ -176,7 +176,7 @@ public class HomeActivity extends AppCompatActivity {
         mUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                changeVisibility(dataSnapshot);
+                changeVisibility(dataSnapshot.getValue());
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -187,11 +187,10 @@ public class HomeActivity extends AppCompatActivity {
 
     /**
      * Changes display for home activity depending on user type
-     * @param dataSnapshot DataSnapshot object where we can get the user type from
+     * @param dataSnapshotValue value of DataSnapshot where we can get the user type from
      */
-    public void changeVisibility(DataSnapshot dataSnapshot) {
-        Object value = dataSnapshot.getValue();
-        String userType = value.toString();
+    public void changeVisibility(Object dataSnapshotValue) {
+        String userType = dataSnapshotValue.toString();
         Log.d("USERTYPE", userType);
         if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {
             submitQualityReportIcon.setVisibility(View.VISIBLE);
