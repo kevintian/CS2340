@@ -24,6 +24,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This shows the water reports list
+ *
+ * @author Jinni Xia
+ */
 public class ViewWaterReportsActivity extends AppCompatActivity {
 
     private DatabaseReference mWaterSourceReportsRef;
@@ -41,10 +46,11 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_water_reports);
 
-
-        mWaterSourceReportsRef = FirebaseDatabase.getInstance().getReference().child("water-source-reports");
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference fireBaseRef = db.getReference();
+        mWaterSourceReportsRef = fireBaseRef.child("water-source-reports");
         final ListView listView = (ListView) findViewById(R.id.report_list);
-        final ArrayList<WaterSourceReport> reports = new ArrayList<WaterSourceReport>();
+        final ArrayList<WaterSourceReport> reports = new ArrayList<>();
 
         mArrayAdapter = new WaterSourceArrayAdapter(ViewWaterReportsActivity.this, 0, reports);
         listView.setAdapter(mArrayAdapter);
@@ -54,7 +60,8 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 try {
-                    WaterSourceReport waterSourceReport = WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
+                    WaterSourceReport waterSourceReport =
+                            WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
                     reports.add(waterSourceReport);
                     mArrayAdapter.notifyDataSetChanged();
                 } catch (NullPointerException e) {
@@ -88,9 +95,9 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
 
 
     //Create a custom array adapter class to use the xml layout we created
-    private class WaterSourceArrayAdapter extends ArrayAdapter<WaterSourceReport> {
-        private Context context;
-        private List<WaterSourceReport> sourceReports;
+    private final class WaterSourceArrayAdapter extends ArrayAdapter<WaterSourceReport> {
+        final Context context;
+        final List<WaterSourceReport> sourceReports;
 
         /**
          * Constructor, called on creation
@@ -99,8 +106,8 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
          * @param resource An int representation of the amount of water sources
          * @param objects  An Array List of all of the Water Source reports
          */
-        public WaterSourceArrayAdapter(Context context, int resource,
-                                       ArrayList<WaterSourceReport> objects) {
+        private WaterSourceArrayAdapter(Context context, int resource,
+                                       List<WaterSourceReport> objects) {
             super(context, resource, objects);
 
             this.context = context;
@@ -121,7 +128,8 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
             WaterSourceReport report = sourceReports.get(position);
 
             //Get the inflater and inflate the XML layout for each item
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater)
+                    context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.water_source_report_layout, null);
 
             TextView reportID = (TextView) view.findViewById(R.id.report_id);
