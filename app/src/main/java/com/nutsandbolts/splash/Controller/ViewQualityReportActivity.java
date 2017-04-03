@@ -3,6 +3,7 @@ package com.nutsandbolts.splash.Controller;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for view quality reports screen
+ */
 public class ViewQualityReportActivity extends AppCompatActivity {
 
     private DatabaseReference mWaterQualityReportsRef;
@@ -42,7 +46,9 @@ public class ViewQualityReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_water_reports);
 
 
-        mWaterQualityReportsRef = FirebaseDatabase.getInstance().getReference().child("water-quality-reports");
+        final FirebaseDatabase instance = FirebaseDatabase.getInstance();
+        final DatabaseReference reference = instance.getReference();
+        mWaterQualityReportsRef = reference.child("water-quality-reports");
         final ListView listView = (ListView) findViewById(R.id.report_list);
         final ArrayList<WaterQualityReport> reports = new ArrayList<WaterQualityReport>();
 
@@ -53,13 +59,14 @@ public class ViewQualityReportActivity extends AppCompatActivity {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                try {
-                    WaterQualityReport waterQualityReport = WaterQualityReport.buildWaterQualityReportFromSnapShot(dataSnapshot);
-                    reports.add(waterQualityReport);
-                    mArrayAdapter.notifyDataSetChanged();
-                } catch (NullPointerException e) {
-                    Log.d("Datasnapshot error", dataSnapshot.toString());
-                }
+//                try {
+                WaterQualityReport waterQualityReport = WaterQualityReport
+                        .buildWaterQualityReportFromSnapShot(dataSnapshot);
+                reports.add(waterQualityReport);
+                mArrayAdapter.notifyDataSetChanged();
+//                } catch (NullPointerException e) {
+//                    Log.d("Datasnapshot error", dataSnapshot.toString());
+//                }
             }
 
             @Override
@@ -89,8 +96,8 @@ public class ViewQualityReportActivity extends AppCompatActivity {
 
     //Create a custom array adapter class to use the xml layout we created
     private class WaterQualityArrayAdapter extends ArrayAdapter<WaterQualityReport> {
-        private Context context;
-        private List<WaterQualityReport> qualityReports;
+        private final Context context;
+        private final List<WaterQualityReport> qualityReports;
 
         /**
          * Constructor, called on creation
@@ -99,8 +106,8 @@ public class ViewQualityReportActivity extends AppCompatActivity {
          * @param resource An int representation of the amount of water quality reports
          * @param objects  An Array List of all of the Water quality reports
          */
-        public WaterQualityArrayAdapter(Context context, int resource,
-                                       ArrayList<WaterQualityReport> objects) {
+        WaterQualityArrayAdapter(Context context, int resource,
+                                 List<WaterQualityReport> objects) {
             super(context, resource, objects);
 
             this.context = context;
@@ -116,12 +123,13 @@ public class ViewQualityReportActivity extends AppCompatActivity {
          * @param parents     a ViewGroup that contains other views
          * @return view
          */
-        public View getView(int position, View convertView, ViewGroup parents) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parents) {
             //Get the report we are displaying
             WaterQualityReport report = qualityReports.get(position);
 
             //Get the inflater and inflate the XML layout for each item
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity
+                    .LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.water_quality_report_layout, null);
 
             TextView reportID = (TextView) view.findViewById(R.id.report_id);
