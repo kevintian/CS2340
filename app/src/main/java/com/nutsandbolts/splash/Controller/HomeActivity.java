@@ -176,26 +176,33 @@ public class HomeActivity extends AppCompatActivity {
         mUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Object value = dataSnapshot.getValue();
-                String userType = value.toString();
-                Log.d("USERTYPE", userType);
-                if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {
-                    submitQualityReportIcon.setVisibility(View.VISIBLE);
-                    submitQualityReportText.setVisibility(View.VISIBLE);
-                }
-                if ("MANAGER".equals(userType)) {
-                    viewQualityReportsIcon.setVisibility(View.VISIBLE);
-                    viewQualityReportsText.setVisibility(View.VISIBLE);
-                    viewGraphIcon.setVisibility(View.VISIBLE);
-                    viewGraphText.setVisibility(View.VISIBLE);
-                }
+                changeVisibility(dataSnapshot);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+    }
+
+    /**
+     * Changes display for home activity depending on user type
+     * @param dataSnapshot DataSnapshot object where we can get the user type from
+     */
+    public void changeVisibility(DataSnapshot dataSnapshot) {
+        Object value = dataSnapshot.getValue();
+        String userType = value.toString();
+        Log.d("USERTYPE", userType);
+        if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {
+            submitQualityReportIcon.setVisibility(View.VISIBLE);
+            submitQualityReportText.setVisibility(View.VISIBLE);
+        }
+        if ("MANAGER".equals(userType)) {
+            viewQualityReportsIcon.setVisibility(View.VISIBLE);
+            viewQualityReportsText.setVisibility(View.VISIBLE);
+            viewGraphIcon.setVisibility(View.VISIBLE);
+            viewGraphText.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
