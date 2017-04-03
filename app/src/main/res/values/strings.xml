@@ -25,4 +25,8 @@
     <string name="radius_text">Radius:</string>
     <string name="generate_graph_text">Generate Graph</string>
 
+    <!--Edit Profile Strings-->
+    <string name="editing_profile_text">Editing Profile</string>
+    <string name="update_profile_text">Update Profile</string>
+
 </resources>
