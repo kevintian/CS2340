@@ -6,48 +6,44 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nutsandbolts.splash.Model.RegisteredUser;
-import com.nutsandbolts.splash.Model.UserType;
-import com.nutsandbolts.splash.Model.WaterCondition;
-import com.nutsandbolts.splash.Model.WaterSourceReport;
-import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
-import org.w3c.dom.Text;
-
-import java.util.Date;
-import java.util.Objects;
-
+/**
+ * This activity shows up after signing in and sets up the interface for users to
+ * navigate the app
+ *
+ * @author Jinni Xia
+ */
 public class HomeActivity extends AppCompatActivity {
 
 
     /*
     Widgets we will need to define listeners for
     */
-    private ImageView signOutIcon;
-    private ImageView editProfileIcon;
-    private ImageView submitWaterReportIcon;
-    private ImageView viewWaterReportsIcon;
-    private ImageView submitQualityReportIcon;
-    private ImageView viewQualityReportsIcon;
-    private ImageView viewMapIcon;
-    private ImageView viewGraphIcon;
-    private TextView submitQualityReportText;
-    private TextView viewQualityReportsText;
-    private TextView viewGraphText;
+    ImageView signOutIcon;
+    ImageView editProfileIcon;
+    ImageView submitWaterReportIcon;
+    ImageView viewWaterReportsIcon;
+    ImageView submitQualityReportIcon;
+    ImageView viewQualityReportsIcon;
+    ImageView viewMapIcon;
+    ImageView viewGraphIcon;
+    TextView submitQualityReportText;
+    TextView viewQualityReportsText;
+    TextView viewGraphText;
 
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    FirebaseAuth.AuthStateListener mAuthListener;
 
 
     @Override
@@ -60,7 +56,8 @@ public class HomeActivity extends AppCompatActivity {
         signOutIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.signOut();
                 returnToWelcomeScreen();
             }
         });
@@ -143,7 +140,8 @@ public class HomeActivity extends AppCompatActivity {
         viewGraphIcon.setVisibility(View.GONE);
         viewGraphText.setVisibility(View.GONE);
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
 
         showQualityReportControls(firebaseUser);
 
@@ -168,15 +166,18 @@ public class HomeActivity extends AppCompatActivity {
     /**
      * Shows controls for water quality report if user is a worker/manager
      */
-    private void showQualityReportControls(FirebaseUser user) {
-        DatabaseReference mRootRef = FirebaseDatabase.getInstance()
-                .getReference();
-        DatabaseReference mUserRef = mRootRef.child("registered-users")
-                .child(user.getUid()).child("user-type");
+    private void showQualityReportControls(UserInfo user) {
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference mRootRef = db.getReference();
+
+        DatabaseReference referenceUsers = mRootRef.child("registered-users");
+        DatabaseReference referenceId = referenceUsers.child(user.getUid());
+        DatabaseReference mUserRef = referenceId.child("user-type");
         mUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String userType = dataSnapshot.getValue().toString();
+                Object value = dataSnapshot.getValue();
+                String userType = value.toString();
                 Log.d("USERTYPE", userType);
                 if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {
                     submitQualityReportIcon.setVisibility(View.VISIBLE);
