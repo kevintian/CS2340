@@ -8,8 +8,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,18 +27,24 @@ import com.nutsandbolts.splash.Model.WaterType;
 import com.nutsandbolts.splash.R;
 
 import java.util.Date;
+import java.util.Locale;
 
+import static junit.framework.Assert.assertNotNull;
+
+/**
+ * Controller class for submit water report screen
+ */
 public class SubmitWaterReportActivity extends AppCompatActivity implements LocationListener {
 
+    public static final int SDK_TWENTY_THREE = 23;
+    public static final int MIN_TIME_INTERVAL = 500;
     /*
-   Widgets we will need to define listeners for
-   */
+           Widgets we will need to define listeners for
+           */
     private EditText latitudeText;
     private EditText longitudeText;
-    private Button gpsButton;
     private Spinner waterTypeSpinner;
     private Spinner waterConditionSpinner;
-    private Button submitButton;
 
 
     /*
@@ -58,12 +66,6 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
     private boolean signalFound;
     private double gpsLatitude;
     private double gpsLongitude;
-    private LocationManager locationManager;
-
-    /*
-    FirebaseUser object to get credentials of user when submitting
-     */
-    private FirebaseUser firebaseUser;
 
     private static final String[] INITIAL_PERMS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -71,6 +73,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
     private static final int INITIAL_REQUEST = 1337;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,19 +83,17 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
         /*
         Request GPS Permissions
          */
-        if (Build.VERSION.SDK_INT >= 23 && PackageManager.PERMISSION_GRANTED != checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
-        }
+        requestPermissions();
 
         /*
         Get widgets from view
          */
         latitudeText = (EditText) findViewById(R.id.water_source_latitude_edit_text);
         longitudeText = (EditText) findViewById(R.id.water_source_longitude_edit_text);
-        gpsButton = (Button) findViewById(R.id.generate_from_gps_button);
+        Button gpsButton = (Button) findViewById(R.id.generate_from_gps_button);
         waterTypeSpinner = (Spinner) findViewById(R.id.water_source_type_spinner);
         waterConditionSpinner = (Spinner) findViewById(R.id.water_source_condition_spinner);
-        submitButton = (Button) findViewById(R.id.upload_water_report_button);
+        Button submitButton = (Button) findViewById(R.id.upload_water_report_button);
 
         /*
         Get latitude and longitude if report was created from MapActivity
@@ -101,55 +102,82 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
 
         if (intent != null) {
             latitude = intent.getDoubleExtra("latitude", 0);
-            latitudeText.setText(Double.toString(latitude));
+            latitudeText.setText(String.format(Locale.getDefault(), "%1$,f", latitude));
             longitude = intent.getDoubleExtra("longitude", 0);
-            longitudeText.setText(Double.toString(longitude));
+            longitudeText.setText(String.format(Locale.getDefault(), "%1$,f", longitude));
         }
 
         /*
           Set up the adapter to display the allowable water types in the spinner
          */
-        ArrayAdapter<String> waterTypeAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, WaterType.values());
+        ArrayAdapter<WaterType> waterTypeAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, WaterType.values());
         waterTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         waterTypeSpinner.setAdapter(waterTypeAdapter);
 
         /*
           Set up the adapter to display the allowable water conditions in the spinner
          */
-        ArrayAdapter<String> waterConditionAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, WaterCondition.values());
-        waterConditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<WaterCondition> waterConditionAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, WaterCondition.values());
+        waterConditionAdapter.setDropDownViewResource(android.R.layout
+                .simple_spinner_dropdown_item);
         waterConditionSpinner.setAdapter(waterConditionAdapter);
 
         /*
         Get RegisteredUser Data
          */
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseAuth instance = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = instance.getCurrentUser();
 
         Date date = new Date(System.currentTimeMillis());
-        waterSourceReport = new WaterSourceReport(date, System.currentTimeMillis(), firebaseUser.getDisplayName(), firebaseUser.getUid(), latitude, longitude, waterType, waterCondition);
+        assertNotNull(firebaseUser);
+        waterSourceReport = new WaterSourceReport(date, System.currentTimeMillis(),
+                firebaseUser.getDisplayName(), firebaseUser.getUid(),
+                latitude, longitude, waterType, waterCondition);
 
+        setUpButtons(gpsButton, submitButton);
+
+        // setting up LocationManager
+        setUpLocationManager();
+    }
+
+    private void setUpLocationManager() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context
+                .LOCATION_SERVICE);
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    MIN_TIME_INTERVAL,   // Interval in milliseconds
+                    10, this);
+        } catch (SecurityException e) {
+            final Toast toast = Toast.makeText(getBaseContext(), "Security exception: "
+                            + e.getMessage(),
+                    Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
+
+    private void setUpButtons(Button gpsButton, Button submitButton) {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    latitude = Double.parseDouble(latitudeText.getText().toString());
-                    longitude = Double.parseDouble(longitudeText.getText().toString());
+                    final Editable latitudeString = latitudeText.getText();
+                    latitude = Double.parseDouble(latitudeString.toString());
+                    final Editable longitudeString = longitudeText.getText();
+                    longitude = Double.parseDouble(longitudeString.toString());
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Enter Valid Latitude and Longitude", Toast.LENGTH_SHORT).show();
+                    final Toast toast = Toast.makeText(getApplicationContext(),
+                            "Enter Valid Latitude and Longitude", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                } catch (IllegalArgumentException e2) {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Latitude or Longitude is out of range.", Toast.LENGTH_SHORT);
+                    toast.show();
                     return;
                 }
-
-                waterType = (WaterType) waterTypeSpinner.getSelectedItem();
-                waterCondition = (WaterCondition) waterConditionSpinner.getSelectedItem();
-
-                Date date = new Date(System.currentTimeMillis());
-                waterSourceReport.setDateTime(date);
-                waterSourceReport.setLatitude(latitude);
-                waterSourceReport.setLongitude(longitude);
-                waterSourceReport.setWaterCondition(waterCondition);
-                waterSourceReport.setWaterType(waterType);
-                waterSourceReport.writeToDatabase();
+                submitWaterReport();
                 Intent homeIntent = new Intent(SubmitWaterReportActivity.this, HomeActivity.class);
                 startActivity(homeIntent);
             }
@@ -161,24 +189,52 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
                 if (signalFound) {
                     latitude = gpsLatitude;
                     longitude = gpsLongitude;
-                    latitudeText.setText(Double.toString(latitude));
-                    longitudeText.setText(Double.toString(longitude));
+                    latitudeText.setText(String.format(Locale.getDefault(), "%1$,f", latitude));
+                    longitudeText.setText(String.format(Locale.getDefault(), "%1$,f", longitude));
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            "GPS Signal Not Found", Toast.LENGTH_SHORT).show();
+                    final Toast toast = Toast.makeText(getApplicationContext(),
+                            "GPS Signal Not Found", Toast.LENGTH_SHORT);
+                    toast.show();
                 }
             }
         });
+    }
 
-        //getting setting up LocationManager
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    500,   // Interval in milliseconds
-                    10, this);
-        } catch (SecurityException e) {
-            //            Toast.makeText(getBaseContext(), "Security exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void requestPermissions() {
+        if ((Build.VERSION.SDK_INT >= SDK_TWENTY_THREE) && (PackageManager.PERMISSION_GRANTED
+                != checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION))) {
+            requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
         }
+    }
+
+    /**
+     * Validates data required for a water source report and submits it to the database.
+     *
+     * @throws IllegalArgumentException if latitude or longitude is out of range.
+     * @throws NumberFormatException    if latitude or longitude are not in proper format.
+     */
+    public void submitWaterReport() throws IllegalArgumentException {
+        Editable latEditable = latitudeText.getText();
+        Editable longEditable = longitudeText.getText();
+        latitude = Double.parseDouble(latEditable.toString());
+        longitude = Double.parseDouble(longEditable.toString());
+        if ((Math.abs(latitude) > WaterSourceReport.MAX_LATITUDE)
+                | (Math.abs(longitude) > WaterSourceReport.MAX_LONGITUDE)) {
+            throw new IllegalArgumentException("Latitude or Longitude is out of range.");
+        }
+
+        waterType = (WaterType) waterTypeSpinner.getSelectedItem();
+        waterCondition = (WaterCondition) waterConditionSpinner.getSelectedItem();
+
+        long currentTime = System.currentTimeMillis();
+        Date date = new Date(currentTime);
+        final FirebaseAuth instance = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = instance.getCurrentUser();
+        assertNotNull(firebaseUser);
+        waterSourceReport = new WaterSourceReport(date, currentTime, firebaseUser.getDisplayName(),
+                firebaseUser.getUid(), latitude, longitude, waterType, waterCondition);
+        waterSourceReport.writeToDatabase();
     }
 
     @Override
@@ -195,12 +251,13 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
 
     @Override
     public void onProviderEnabled(String provider) {
-        Toast.makeText(getBaseContext(), "Gps turned on", Toast.LENGTH_SHORT).show();
-
+        final Toast toast = Toast.makeText(getBaseContext(), "Gps turned on", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(getBaseContext(), "Gps turned off", Toast.LENGTH_SHORT).show();
+        final Toast toast = Toast.makeText(getBaseContext(), "Gps turned off", Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

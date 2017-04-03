@@ -70,7 +70,7 @@
         android:layout_alignTop="@id/water_source_latitude_label"
         android:layout_toEndOf="@+id/water_source_latitude_label"
         android:hint="Enter Latitude"
-        android:inputType="numberDecimal"
+        android:inputType="numberDecimal|numberSigned"
         android:padding="5dp"
         android:textSize="15sp" />
 
@@ -92,7 +92,7 @@
         android:layout_toEndOf="@+id/water_source_longitude_label"
         android:ems="10"
         android:hint="Enter Longitude"
-        android:inputType="numberDecimal"
+        android:inputType="numberDecimal|numberSigned"
         android:padding="5dp"
         android:textSize="15sp" />
 

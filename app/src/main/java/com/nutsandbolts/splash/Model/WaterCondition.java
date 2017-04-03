@@ -1,10 +1,13 @@
 package com.nutsandbolts.splash.Model;
 
 /**
- * Created by supra on 2/23/17.
+ * Enum to describe the 4 water conditions.
  */
-
 public enum WaterCondition {
+    /**
+     * Code inspection will show these as unused declarations, but they are necessary for the
+     * spinners to work properly.
+     */
     WASTE("Waste"),
     TREATABLE_CLEAR("Treatable-Clear"),
     TREATABLE_MUDDY("Treatable-Muddy"),
