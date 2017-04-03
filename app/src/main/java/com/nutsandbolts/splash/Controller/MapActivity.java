@@ -27,6 +27,8 @@ import com.nutsandbolts.splash.R;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private WaterSourceReport waterSourceReport;
+
     private GoogleMap mMap;
     private ChildEventListener mWaterSourceReportsChildEventListener;
     private DatabaseReference mWaterSourceReportsRef;
@@ -84,7 +86,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 //Add to arraylist
-                WaterSourceReport waterSourceReport =
+                waterSourceReport =
                         WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
                 double latitude = waterSourceReport.getLatitude();
                 double longitude = waterSourceReport.getLongitude();
