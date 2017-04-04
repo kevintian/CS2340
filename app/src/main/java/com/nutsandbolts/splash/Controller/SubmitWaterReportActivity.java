@@ -36,8 +36,8 @@ import static junit.framework.Assert.assertNotNull;
  */
 public class SubmitWaterReportActivity extends AppCompatActivity implements LocationListener {
 
-    public static final int SDK_TWENTY_THREE = 23;
-    public static final int MIN_TIME_INTERVAL = 500;
+    private static final int SDK_TWENTY_THREE = 23;
+    private static final int MIN_TIME_INTERVAL = 500;
     /*
            Widgets we will need to define listeners for
            */
@@ -214,7 +214,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
      * @throws IllegalArgumentException if latitude or longitude is out of range.
      * @throws NumberFormatException    if latitude or longitude are not in proper format.
      */
-    public void submitWaterReport() throws IllegalArgumentException {
+    private void submitWaterReport() throws IllegalArgumentException {
         Editable latEditable = latitudeText.getText();
         Editable longEditable = longitudeText.getText();
         latitude = Double.parseDouble(latEditable.toString());
