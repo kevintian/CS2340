@@ -50,7 +50,7 @@ public class ViewQualityReportActivity extends AppCompatActivity {
         final DatabaseReference reference = instance.getReference();
         mWaterQualityReportsRef = reference.child("water-quality-reports");
         final ListView listView = (ListView) findViewById(R.id.report_list);
-        final ArrayList<WaterQualityReport> reports = new ArrayList<WaterQualityReport>();
+        final ArrayList<WaterQualityReport> reports = new ArrayList<>();
 
         mArrayAdapter = new WaterQualityArrayAdapter(ViewQualityReportActivity.this, 0, reports);
         listView.setAdapter(mArrayAdapter);

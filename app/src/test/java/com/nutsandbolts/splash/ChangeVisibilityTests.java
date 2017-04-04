@@ -29,12 +29,12 @@ public class ChangeVisibilityTests {
 
     @Test(timeout = TIMEOUT)
     public void testUserSubmitQualityIcon() throws Exception {
-        String dataSnapshotValue = "USER";
+//        String dataSnapshotValue = "USER";
         Class cls = HomeActivity.class;
         Object instance = cls.newInstance();
         ((Activity)instance).onCreate(null, null);
         //activity.changeVisibility(dataSnapshotValue);
-        Field[] fields = cls.getDeclaredFields();
+//        Field[] fields = cls.getDeclaredFields();
 
 //        for (Field f:fields) {
 //            System.out.println(f.getName());

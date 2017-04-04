@@ -73,7 +73,7 @@ public class GenerateGraphActivity extends AppCompatActivity {
         graph = (GraphView) findViewById(R.id.graph);
 
         /*
-          Set up adapters to display the possible contaminant types in the  and possible radiuses
+          Set up adapters to display the possible contaminant types in the  and possible radii
          */
         String[] pollutionTypes = {"Virus", "Contaminant"};
         ArrayAdapter<String> pollutionTypeAdapter
