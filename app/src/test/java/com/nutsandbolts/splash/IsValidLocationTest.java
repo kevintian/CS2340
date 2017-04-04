@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 /**
