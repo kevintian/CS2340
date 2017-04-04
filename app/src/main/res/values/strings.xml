@@ -68,4 +68,9 @@
     <string name="user_type">User Type:</string>
     <string name="register">Register</string>
 
+    <!--Water Source Report Layout Strings-->
+    <string name="report_id">Report ID</string>
+    <string name="reporter_name">Reporter Name</string>
+    <!--Water type and condition already declared above-->
+    <string name="location">Latitude\nLongitude</string>
 </resources>

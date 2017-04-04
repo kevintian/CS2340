@@ -7,9 +7,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
- * Created by Deb Banerji on 12-Feb-17.
- * <p>
  * Represents a single user in the model
+ * @author Deb Banerji
  */
 
 public class RegisteredUser implements Parcelable {
