@@ -219,10 +219,6 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
         Editable longEditable = longitudeText.getText();
         latitude = Double.parseDouble(latEditable.toString());
         longitude = Double.parseDouble(longEditable.toString());
-        if ((Math.abs(latitude) > WaterSourceReport.MAX_LATITUDE)
-                | (Math.abs(longitude) > WaterSourceReport.MAX_LONGITUDE)) {
-            throw new IllegalArgumentException("Latitude or Longitude is out of range.");
-        }
 
         waterType = (WaterType) waterTypeSpinner.getSelectedItem();
         waterCondition = (WaterCondition) waterConditionSpinner.getSelectedItem();
@@ -234,6 +230,9 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
         assertNotNull(firebaseUser);
         waterSourceReport = new WaterSourceReport(date, currentTime, firebaseUser.getDisplayName(),
                 firebaseUser.getUid(), latitude, longitude, waterType, waterCondition);
+        if (!waterSourceReport.isValidLocation()) {
+            throw new IllegalArgumentException("Latitude or Longitude is out of range.");
+        }
         waterSourceReport.writeToDatabase();
     }
 

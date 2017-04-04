@@ -302,4 +302,21 @@ public class WaterSourceReport implements Parcelable {
 
         return result;
     }
+
+    /**
+     * Checks if the entered latitude and longitude are valid.
+     * @return true if they are, false if not
+     */
+    public boolean isValidLocation() {
+        boolean isValid = true;
+        if (Math.abs(latitude) > MAX_LATITUDE) {
+            isValid = false;
+        }
+
+        if (Math.abs(longitude) > MAX_LONGITUDE) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
 }
