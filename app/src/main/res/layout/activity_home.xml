@@ -20,7 +20,8 @@
         android:layout_marginBottom="0dp"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toTopOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.258" />
+        app:layout_constraintVertical_bias="0.258"
+        android:contentDescription="@string/app_logo_description" />
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/gridLayout"
@@ -38,17 +39,20 @@
         <ImageButton
             android:id="@+id/view_water_reports_icon"
             android:src="@drawable/ic_local_drink_black_24dp"
-            app:layout_columnWeight="1" />
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/view_water_reports_icon" />
 
         <ImageButton
             android:id="@+id/submit_water_report_icon"
             android:src="@drawable/ic_add_location_black_24dp"
-            app:layout_columnWeight="1" />
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/submit_water_report_icon" />
 
         <ImageButton
             android:id="@+id/view_map_icon"
             android:src="@drawable/ic_map_black_24dp"
-            app:layout_columnWeight="1" />
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/view_map_icon" />
 
         <!-- Row 2 -->
         <TextView
@@ -79,19 +83,22 @@
             android:layout_marginTop="16dp"
             android:adjustViewBounds="false"
             android:src="@drawable/ic_check_black_24dp"
-            app:layout_columnWeight="1" />
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/view_quality_report_icon" />
 
         <ImageButton
             android:id="@+id/submit_quality_report_icon"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_rate_review_black_24dp"
-            app:layout_columnWeight="1" />
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/submit_quality_report_icon" />
 
         <ImageButton
             android:id="@+id/edit_profile_icon"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_person_black_24dp"
-            app:layout_columnWeight="1" />
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/edit_profile_icon" />
 
         <!-- Row 4 -->
         <TextView
@@ -123,16 +130,19 @@
             android:layout_marginTop="16dp"
             android:adjustViewBounds="false"
             android:src="@drawable/ic_assessment_black_24dp"
-            app:layout_columnWeight="1" />
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/view_graph_icon" />
 
         <ImageButton
             android:id="@+id/sign_out_icon"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_exit_to_app_black_24dp"
-            app:layout_columnWeight="1" />
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/sign_out_icon" />
 
         <ImageView
-            app:layout_columnWeight="1"/>
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/placeholder" />
 
 
         <!-- Row 6 -->

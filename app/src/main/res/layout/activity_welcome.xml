@@ -18,7 +18,8 @@
         android:layout_marginRight="8dp"
         android:src="@drawable/logo"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/app_logo_description" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_with_google_button"

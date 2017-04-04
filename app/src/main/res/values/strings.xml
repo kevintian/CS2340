@@ -11,6 +11,15 @@
     <string name="view_map_text">View Map</string>
     <string name="title_activity_map">Map</string>
     <string name="view_graph_text">View Graph</string>
+    <string name="view_water_reports_icon">View Water Reports Icon</string>
+    <string name="submit_water_report_icon">Submit Water Report Icon</string>
+    <string name="view_map_icon">View Map Icon</string>
+    <string name="view_quality_report_icon">View Quality Report Icon</string>
+    <string name="submit_quality_report_icon">Submit Quality Report Icon</string>
+    <string name="edit_profile_icon">Edit Profile Icon</string>
+    <string name="view_graph_icon">View Graph Icon</string>
+    <string name="sign_out_icon">Sign Out Icon</string>
+    <string name="placeholder">Placeholder</string>
 
 
     <!--Generate Graph Strings-->
@@ -43,5 +52,8 @@
     <string name="submit_water_source_report">Submit Water Source Report</string>
     <string name="water_type">Water Type:</string>
     <string name="water_condition">Water Condition:</string>
+
+    <!--Activity Welcome Strings-->
+    <string name="app_logo_description">App Logo</string>
 
 </resources>

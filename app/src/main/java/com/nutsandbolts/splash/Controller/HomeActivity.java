@@ -45,7 +45,6 @@ public class HomeActivity extends AppCompatActivity {
 
     FirebaseAuth.AuthStateListener mAuthListener;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

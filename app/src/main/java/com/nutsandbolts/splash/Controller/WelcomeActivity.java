@@ -1,6 +1,7 @@
 package com.nutsandbolts.splash.Controller;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -67,7 +69,7 @@ public class WelcomeActivity extends AppCompatActivity
     /*
     Reference to self in order to allow for Toast messages within listeners
      */
-    private WelcomeActivity self = this;
+    private final WelcomeActivity self = this;
 
 
     @Override
@@ -91,11 +93,12 @@ public class WelcomeActivity extends AppCompatActivity
             toast.show();
         } else {
             Log.d("WEBAUTH", webAuth);
-            GoogleSignInOptions gso = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build();
+            GoogleSignInOptions.Builder gsoBuilder = new
+                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN);
+            GoogleSignInOptions.Builder token =
+                    gsoBuilder.requestIdToken(getString(R.string.default_web_client_id));
+            GoogleSignInOptions.Builder email = token.requestEmail();
+            GoogleSignInOptions gsoBuild = email.build();
 
 
             // Build a GoogleApiClient with
@@ -104,7 +107,7 @@ public class WelcomeActivity extends AppCompatActivity
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .enableAutoManage(this /* FragmentActivity */,
                         this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gsoBuild)
                     .build();
 
             /*
@@ -115,8 +118,8 @@ public class WelcomeActivity extends AppCompatActivity
             /*
         Get Firebase Database 'registered-users' reference
          */
-            mRegisteredUserRef = FirebaseDatabase.getInstance()
-                .getReference("registered-users");
+            FirebaseDatabase db = FirebaseDatabase.getInstance();
+            mRegisteredUserRef = db.getReference("registered-users");
 
 
             mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -185,7 +188,8 @@ public class WelcomeActivity extends AppCompatActivity
                 .GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         } else {
-            FirebaseAuth.getInstance().signOut();
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            auth.signOut();
         }
     }
 
@@ -202,7 +206,8 @@ public class WelcomeActivity extends AppCompatActivity
             firebaseAuthWithGoogle(acct);
         } else {
             // Signed out, show unauthenticated UI.
-            Log.d("Authentication", result.getStatus().toString());
+            Status status = result.getStatus();
+            Log.d("Authentication", status.toString());
 //            Toast.makeText(this, "Login Canceled", Toast.LENGTH_SHORT).show();
         }
     }
@@ -217,8 +222,8 @@ public class WelcomeActivity extends AppCompatActivity
 
         AuthCredential credential = GoogleAuthProvider
             .getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this,
+        Task<AuthResult> signIn = mAuth.signInWithCredential(credential);
+        signIn.addOnCompleteListener(this,
                     new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -235,8 +240,9 @@ public class WelcomeActivity extends AppCompatActivity
                                 Log.w("Authentication",
                                     "signInWithCredential",
                                         task.getException());
-                                Toast.makeText(self, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast text = Toast.makeText(self, "Authentication failed.",
+                                        Toast.LENGTH_SHORT);
+                                text.show();
                                 // Toast.makeText()
                             } else {
                                 authenticationDone();
@@ -250,7 +256,10 @@ public class WelcomeActivity extends AppCompatActivity
      * Method that is run after user has logged in
      */
     private void authenticationDone() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        assert user != null;
+        String uid = user.getUid();
 //        Log.d("UID", uid);
         DatabaseReference mThisUserRef = mRegisteredUserRef.child(uid);
         mThisUserRef.addValueEventListener(new ValueEventListener() {
@@ -279,14 +288,16 @@ public class WelcomeActivity extends AppCompatActivity
      * @return String This returns a string of the web authorization
      */
     private String getWebOAuth() {
-        String json = null;
+        String json;
         String oauth = null;
         try {
-            InputStream is = getAssets().open("OAuth.json");
-            int size = is.available();
+
+            AssetManager is = getAssets();
+            InputStream file = is.open("OAuth.json");
+            int size = file.available();
             byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
+            //file.read(buffer);
+            file.close();
             json = new String(buffer, "UTF-8");
         } catch (IOException ex) {
             ex.printStackTrace();
