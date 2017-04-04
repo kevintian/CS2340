@@ -55,5 +55,7 @@
 
     <!--Activity Welcome Strings-->
     <string name="app_logo_description">App Logo</string>
+    <string name="edit_profile_welcome_text">Editing Profile</string>
+    <string name="edit_profile_button_text">Update Profile</string>
 
 </resources>

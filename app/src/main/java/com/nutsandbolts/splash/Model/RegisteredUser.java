@@ -78,6 +78,21 @@ public class RegisteredUser implements Parcelable {
     }
 
 
+    /** Updates values and writes report to database
+     * @param emailAddress email address
+     * @param displayName display name
+     * @param homeAddress home address
+     * @param userType user type
+     */
+    public void updateValues(String emailAddress, String displayName,
+                             String homeAddress, UserType userType) {
+        setEmailAddress(emailAddress);
+        setDisplayName(displayName);
+        setHomeAddress(homeAddress);
+        setUserType(userType);
+        writeToDatabase();
+    }    
+    
     /**
      * Set email address of user
      *

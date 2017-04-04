@@ -75,8 +75,8 @@ public class EditProfileActivity extends AppCompatActivity {
         /*
           Set up the adapter to display the allowable user types in the spinner
          */
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,
-                UserType.values());
+        ArrayAdapter<UserType> adapter = new ArrayAdapter<>(this,android.R.layout
+                .simple_spinner_item, UserType.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userTypeSpinner.setAdapter(adapter);
 
@@ -124,30 +124,39 @@ public class EditProfileActivity extends AppCompatActivity {
                             "Enter Email Address", Toast.LENGTH_SHORT);
                     tText.show();
                 } else if (registeredUser != null) {
-                    registeredUser.setEmailAddress(emailAddress);
-                    registeredUser.setDisplayName(displayName);
-                    registeredUser.setHomeAddress(homeAddress);
-                    registeredUser.setUserType(userType);
-                    registeredUser.writeToDatabase();
+//                    registeredUser.setEmailAddress(emailAddress);
+//                    registeredUser.setDisplayName(displayName);
+//                    registeredUser.setHomeAddress(homeAddress);
+//                    registeredUser.setUserType(userType);
+//                    registeredUser.writeToDatabase();
+                    registeredUser.updateValues(emailAddress, displayName, homeAddress, userType);
                     Intent homeIntent = new Intent(EditProfileActivity.this, HomeActivity.class);
                     startActivity(homeIntent);
                 }
             }
         });
+        updateUI(auth);
 
-        /*
-        Code for altering the UI if the user is already registered
-         */
+
+    }
+
+    /**
+     * alter the UI if the user is already registered
+     * @param auth FirebaseAuth object according to which UI is altered
+     */
+    private void updateUI(FirebaseAuth auth) {
+
         Intent intent = this.getIntent();
         if (intent != null) {
             Bundle extras = intent.getExtras();
             Boolean isEdit = extras.getBoolean("isEdit");
             if (isEdit) {
                 // user is already registered; editing profile
-                welcomeText.setText("Editing Profile");
-                registerButton.setText("Update Profile");
+                welcomeText.setText(R.string.edit_profile_welcome_text);
+                registerButton.setText(R.string.edit_profile_button_text);
 
                 FirebaseUser currUser = auth.getCurrentUser();
+                assert currUser != null;
                 String uid = currUser.getUid();
 
                 FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -190,7 +199,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
             Log.d("ISEDIT", Boolean.toString(isEdit));
         }
-
     }
 
 }
