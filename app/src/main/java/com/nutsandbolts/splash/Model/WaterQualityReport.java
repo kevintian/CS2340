@@ -130,6 +130,8 @@ public class WaterQualityReport implements Parcelable {
     public WaterQualityReport(Date dateTime, long reportID, String reporterName, String reporterUID,
                               double latitude, double longitude, int virusPPM, int contaminantPPM,
                               WaterQuality waterQuality) {
+        // The water quality report has to be instantiated
+        // in this way as this information is required
         this.dateTime = dateTime;
         this.reportID = reportID;
         this.reporterName = reporterName;

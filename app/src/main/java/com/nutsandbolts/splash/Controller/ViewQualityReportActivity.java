@@ -123,6 +123,8 @@ public class ViewQualityReportActivity extends AppCompatActivity {
          * @param parents     a ViewGroup that contains other views
          * @return view
          */
+        @NonNull
+        @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parents) {
             //Get the report we are displaying
             WaterQualityReport report = qualityReports.get(position);

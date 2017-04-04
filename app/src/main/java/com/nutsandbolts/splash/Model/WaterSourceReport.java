@@ -114,6 +114,8 @@ public class WaterSourceReport implements Parcelable {
     public WaterSourceReport(Date dateTime, long reportID, String reporterName, String reporterUID,
                              double latitude, double longitude, WaterType waterType,
                              WaterCondition waterCondition) {
+        // The water source report has to be instantiated
+        // in this way as this information is required
         this.dateTime = dateTime;
         this.reportID = reportID;
         this.reporterName = reporterName;
@@ -164,6 +166,7 @@ public class WaterSourceReport implements Parcelable {
 
     /**
      * Return a marker corresponding to this report
+     *
      * @return MarkerOptions object corresponding to this report
      */
     public MarkerOptions getMarkerOptions() {
@@ -288,7 +291,7 @@ public class WaterSourceReport implements Parcelable {
     public static double convertDouble(Object longValue) {
         double result; // return value
 
-        if (longValue instanceof Long) {
+        if (longValue instanceof Long) { // Necessary due to the way Firebase stores data
             result = ((Long) longValue).doubleValue();
         } else if (longValue instanceof Double) {
             result = (double) longValue;

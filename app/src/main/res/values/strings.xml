@@ -57,5 +57,15 @@
     <string name="app_logo_description">App Logo</string>
     <string name="edit_profile_welcome_text">Editing Profile</string>
     <string name="edit_profile_button_text">Update Profile</string>
+    <string name="welcome_to_splash_let_s_get_you_registered">
+        Welcome to Splash! Let\'s get you registered</string>
+    <string name="email_address">Email Address:</string>
+    <string name="enter_email_address">Enter Email Address</string>
+    <string name="display_name">Display Name:</string>
+    <string name="enter_display_name">Enter Display Name</string>
+    <string name="home_address">Home Address:</string>
+    <string name="enter_home_address">Enter Home Address</string>
+    <string name="user_type">User Type:</string>
+    <string name="register">Register</string>
 
 </resources>
