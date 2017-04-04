@@ -15,38 +15,50 @@ import java.util.Date;
 import static com.nutsandbolts.splash.Model.WaterSourceReport.convertDouble;
 
 /**
- * Created by Suprabhat Gurrala on 3/8/17.
+ * Class to represent a WaterQualityReport
  */
-
 public class WaterQualityReport implements Parcelable {
-    private Date dateTime;
-    private long reportID;
-    private String reporterName;
-    private String reporterUID;
-    private double latitude;
-    private double longitude;
+    private final Date dateTime;
+    private final long reportID;
+    private final String reporterName;
+    private final String reporterUID;
+    private final double latitude;
+    private final double longitude;
 
-    private int virusPPM;
-    private int contaminantPPM;
-    private WaterQuality waterQuality;
+    private final int virusPPM;
+    private final int contaminantPPM;
+    private final WaterQuality waterQuality;
 
     /**
      * Writes this water report to the database.
      */
     public void writeToDatabase() {
-        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-        String key = mRootRef.child("posts").push().getKey();
-        final DatabaseReference mReportRef = mRootRef.child("water-quality-reports").child(key);
-        mReportRef.child("date-time").setValue(dateTime.getTime());
-        mReportRef.child("latitude").setValue(latitude);
-        mReportRef.child("longitude").setValue(longitude);
-        mReportRef.child("reporter-name").setValue(reporterName);
-        mReportRef.child("reporter-uid").setValue(reporterUID);
-        mReportRef.child("report-id").setValue(dateTime.getTime());
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mRootRef = firebaseDatabase.getReference();
+        DatabaseReference postsChild = mRootRef.child("posts");
+        DatabaseReference push = postsChild.push();
+        String key = push.getKey();
+        DatabaseReference waterQualityReportsChild = mRootRef.child("water-quality-reports");
+        final DatabaseReference mReportRef = waterQualityReportsChild.child(key);
+        DatabaseReference dateChild = mReportRef.child("date-time");
+        dateChild.setValue(dateTime.getTime());
+        DatabaseReference latitudeChild = mReportRef.child("latitude");
+        latitudeChild.setValue(this.latitude);
+        DatabaseReference longitudeChild = mReportRef.child("longitude");
+        longitudeChild.setValue(this.longitude);
+        DatabaseReference reporterNameChild = mReportRef.child("reporter-name");
+        reporterNameChild.setValue(reporterName);
+        DatabaseReference reporterUIDChild = mReportRef.child("reporter-uid");
+        reporterUIDChild.setValue(reporterUID);
+        final DatabaseReference reportIdChild = mReportRef.child("report-id");
+        reportIdChild.setValue(dateTime.getTime());
 
-        mReportRef.child("virus-ppm").setValue(virusPPM);
-        mReportRef.child("contaminant-ppm").setValue(contaminantPPM);
-        mReportRef.child("water-quality").setValue(waterQuality);
+        DatabaseReference virusPPMChild = mReportRef.child("virus-ppm");
+        virusPPMChild.setValue(virusPPM);
+        DatabaseReference contaminantPPMChild = mReportRef.child("contaminant-ppm");
+        contaminantPPMChild.setValue(contaminantPPM);
+        DatabaseReference waterQualityChild = mReportRef.child("water-quality");
+        waterQualityChild.setValue(waterQuality);
 
         DatabaseReference mCountRef = mRootRef.child("total-quality-reports");
         mCountRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -57,8 +69,9 @@ public class WaterQualityReport implements Parcelable {
                     nextReportID = (long) dataSnapshot.getValue();
                 }
                 nextReportID = nextReportID + 1;
-                dataSnapshot.getRef().setValue(nextReportID);
-                mReportRef.child("report-id").setValue(nextReportID);
+                DatabaseReference dataSnapshotRef = dataSnapshot.getRef();
+                dataSnapshotRef.setValue(nextReportID);
+                reportIdChild.setValue(nextReportID);
             }
 
             @Override
@@ -71,20 +84,29 @@ public class WaterQualityReport implements Parcelable {
     /**
      * Create a new WaterReport from a data snapshot
      *
-     * @param dataSnapshot Firebase data snapshot from which to create water report
+     * @param dataSnap Firebase data snapshot from which to create water report
      * @return Water Quality Report built from snapshot
      */
-    public static WaterQualityReport buildWaterQualityReportFromSnapShot(DataSnapshot dataSnapshot) {
+    public static WaterQualityReport buildWaterQualityReportFromSnapShot(DataSnapshot dataSnap) {
         //Get current report information
-        Date dateTime = new Date((long) dataSnapshot.child("date-time").getValue());
-        String reporterName = (String) dataSnapshot.child("reporter-name").getValue();
-        String reporterUID = (String) dataSnapshot.child("reporter-uid").getValue();
-        long reportID = (long) dataSnapshot.child("report-id").getValue();
-        double latitude = convertDouble(dataSnapshot.child("latitude").getValue());
-        double longitude = convertDouble(dataSnapshot.child("longitude").getValue());
-        int virusPPM = ((Long) dataSnapshot.child("virus-ppm").getValue()).intValue();
-        int contaminantPPM = ((Long) dataSnapshot.child("contaminant-ppm").getValue()).intValue();
-        WaterQuality waterQuality = WaterQuality.valueOf((String) dataSnapshot.child("water-quality").getValue());
+        DataSnapshot dateChild = dataSnap.child("date-time");
+        Date dateTime = new Date((long) dateChild.getValue());
+        DataSnapshot reporterNameChild = dataSnap.child("reporter-name");
+        String reporterName = (String) reporterNameChild.getValue();
+        DataSnapshot reporterUIDChild = dataSnap.child("reporter-uid");
+        String reporterUID = (String) reporterUIDChild.getValue();
+        DataSnapshot reportIdChild = dataSnap.child("report-id");
+        long reportID = (long) reportIdChild.getValue();
+        DataSnapshot latitudeChild = dataSnap.child("latitude");
+        double latitude = convertDouble(latitudeChild.getValue());
+        DataSnapshot longitudeChild = dataSnap.child("longitude");
+        double longitude = convertDouble(longitudeChild.getValue());
+        DataSnapshot virusPPMChild = dataSnap.child("virus-ppm");
+        int virusPPM = ((Long) virusPPMChild.getValue()).intValue();
+        DataSnapshot contaminantPPMChild = dataSnap.child("contaminant-ppm");
+        int contaminantPPM = ((Long) contaminantPPMChild.getValue()).intValue();
+        DataSnapshot waterQualityChild = dataSnap.child("water-quality");
+        WaterQuality waterQuality = WaterQuality.valueOf((String) waterQualityChild.getValue());
         return new WaterQualityReport(dateTime, reportID, reporterName,
                 reporterUID, latitude, longitude, virusPPM,
                 contaminantPPM, waterQuality);
@@ -92,6 +114,9 @@ public class WaterQualityReport implements Parcelable {
 
     /**
      * Create a new WaterQualityReport
+     *
+     * This constructor must have 9 params in order to represent all the data in WaterQualityReport
+     *
      * @param dateTime time the report was created
      * @param reportID report number
      * @param reporterName name of person who submits the report
@@ -102,7 +127,9 @@ public class WaterQualityReport implements Parcelable {
      * @param contaminantPPM parts per million of contaminants
      * @param waterQuality quality of water (Safe, treatable, unsafe)
      */
-    public WaterQualityReport(Date dateTime, long reportID, String reporterName, String reporterUID, double latitude, double longitude, int virusPPM, int contaminantPPM, WaterQuality waterQuality) {
+    public WaterQualityReport(Date dateTime, long reportID, String reporterName, String reporterUID,
+                              double latitude, double longitude, int virusPPM, int contaminantPPM,
+                              WaterQuality waterQuality) {
         this.dateTime = dateTime;
         this.reportID = reportID;
         this.reporterName = reporterName;
@@ -117,9 +144,9 @@ public class WaterQualityReport implements Parcelable {
 
     /**
      * Creates a WaterQualityReport object from a Parcel
-     * @param in
+     * @param in parcel to create the Report from
      */
-    protected WaterQualityReport(Parcel in) {
+    private WaterQualityReport(Parcel in) {
         dateTime = new Date(in.readLong());
         reportID = in.readLong();
         reporterName = in.readString();
@@ -161,6 +188,13 @@ public class WaterQualityReport implements Parcelable {
         }
     };
 
+    /**
+     * @param year bound for year
+     * @param latitude bound for latitude
+     * @param longitude bound for longitude
+     * @param radius bound for radius
+     * @return true if report is within bounds
+     */
     public boolean isWithinBounds(int year, double latitude, double longitude, double radius) {
         //Create a calendar
         Calendar cal = Calendar.getInstance();
@@ -176,52 +210,12 @@ public class WaterQualityReport implements Parcelable {
         final double EARTH_RADIUS = 3958.75; // miles (or 6371.0 kilometers)
         double dLat = Math.toRadians(lat2 - lat1);
         double dLng = Math.toRadians(lng2 - lng1);
-        double sindLat = Math.sin(dLat / 2);
-        double sindLng = Math.sin(dLng / 2);
-        double a = Math.pow(sindLat, 2) + (Math.pow(sindLng, 2)
+        double sinDeltaLat = Math.sin(dLat / 2);
+        double sinDeltaLong = Math.sin(dLng / 2);
+        double a = Math.pow(sinDeltaLat, 2) + (Math.pow(sinDeltaLong, 2)
                 * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)));
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return EARTH_RADIUS * c;
-    }
-
-    /**
-     * Sets the latitude for this Water Quality Report
-     * @param latitude latitude as a double
-     */
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    /**
-     * Sets the longitude for this Water Quality Report
-     * @param longitude longitude as a double
-     */
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    /**
-     * Sets the virus parts per million for this Water Quality Report
-     * @param virusPPM int in parts per million
-     */
-    public void setVirusPPM(int virusPPM) {
-        this.virusPPM = virusPPM;
-    }
-
-    /**
-     * Sets the contaminant parts per million for the Water Quality Report
-     * @param contaminantPPM int in parts per million
-     */
-    public void setContaminantPPM(int contaminantPPM) {
-        this.contaminantPPM = contaminantPPM;
-    }
-
-    /**
-     * Sets the water quality for this Water Quality Report
-     * @param waterQuality as enum (SAFE, TREATABLE, UNSAFE)
-     */
-    public void setWaterQuality(WaterQuality waterQuality) {
-        this.waterQuality = waterQuality;
     }
 
     /**
@@ -240,15 +234,6 @@ public class WaterQualityReport implements Parcelable {
      */
     public String getReporterName() {
         return reporterName;
-    }
-
-    /**
-     * returns the UID of the user that submitted the report
-     *
-     * @return String of reporterUID
-     */
-    public String getReporterUID() {
-        return reporterUID;
     }
 
     /**
