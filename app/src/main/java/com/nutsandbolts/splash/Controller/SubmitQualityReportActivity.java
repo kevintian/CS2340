@@ -34,8 +34,8 @@ import java.util.Locale;
  */
 public class SubmitQualityReportActivity extends AppCompatActivity implements LocationListener {
 
-    public static final int MIN_TIME_INTERVAL = 500;
-    public static final int SDK_TWENTY_THREE = 23;
+    private static final int MIN_TIME_INTERVAL = 500;
+    private static final int SDK_TWENTY_THREE = 23;
     /*
            Widgets we will need to define listeners for
            */
@@ -179,7 +179,7 @@ public class SubmitQualityReportActivity extends AppCompatActivity implements Lo
      *
      * @throws IllegalArgumentException if any of the arguments are invalid
      */
-    public void submitQualityReport() throws IllegalArgumentException {
+    private void submitQualityReport() throws IllegalArgumentException {
         Editable latEditable = latitudeText.getText();
         Editable longEditable = longitudeText.getText();
         try {
