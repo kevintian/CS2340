@@ -104,11 +104,13 @@ public class WelcomeActivity extends AppCompatActivity
             // Build a GoogleApiClient with
             // access to the Google Sign-In API and the
             // options specified by gso.
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
+            GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this);
+            GoogleApiClient.Builder builder1 = builder
                     .enableAutoManage(this /* FragmentActivity */,
-                        this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gsoBuild)
-                    .build();
+                            this /* OnConnectionFailedListener */);
+            GoogleApiClient.Builder builder2 = builder1
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gsoBuild);
+            mGoogleApiClient = builder2.build();
 
             /*
         Get Firebase mAuth instance
@@ -296,7 +298,10 @@ public class WelcomeActivity extends AppCompatActivity
             InputStream file = is.open("OAuth.json");
             int size = file.available();
             byte[] buffer = new byte[size];
-            file.read(buffer);
+            final int read = file.read(buffer);
+            if (read < 0) {
+                throw new IOException();
+            }
             file.close();
             json = new String(buffer, "UTF-8");
         } catch (IOException ex) {

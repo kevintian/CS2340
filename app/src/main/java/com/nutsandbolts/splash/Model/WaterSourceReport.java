@@ -3,6 +3,8 @@ package com.nutsandbolts.splash.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -158,6 +160,23 @@ public class WaterSourceReport implements Parcelable {
      */
     public String getReporterName() {
         return reporterName;
+    }
+
+    /**
+     * Return a marker corresponding to this report
+     * @return MarkerOptions object corresponding to this report
+     */
+    public MarkerOptions getMarkerOptions() {
+        double latitude = getLatitude();
+        double longitude = getLongitude();
+        LatLng waterSourceReportPosition = new LatLng(latitude, longitude);
+
+        //Create the marketOptions object and customize it
+        MarkerOptions options = new MarkerOptions();
+        options = options.position(waterSourceReportPosition);
+        options = options.title(getWaterType()
+                + ", " + getWaterCondition());
+        return options;
     }
 
     /**

@@ -88,15 +88,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 //Add to arraylist
                 waterSourceReport =
                         WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
-                double latitude = waterSourceReport.getLatitude();
-                double longitude = waterSourceReport.getLongitude();
-                LatLng waterSourceReportPosition = new LatLng(latitude, longitude);
-
-                //Create the marketOptions object and customize it
-                MarkerOptions options = new MarkerOptions();
-                options = options.position(waterSourceReportPosition);
-                options = options.title(waterSourceReport.getWaterType()
-                        + ", " + waterSourceReport.getWaterCondition());
+                MarkerOptions options = waterSourceReport.getMarkerOptions();
                 mMap.addMarker(options);
 //                mMap.moveCamera(CameraUpdateFactory.newLatLng(waterSourceReportPosition));
             }
