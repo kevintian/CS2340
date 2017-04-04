@@ -28,5 +28,20 @@
     <!--Edit Profile Strings-->
     <string name="editing_profile_text">Editing Profile</string>
     <string name="update_profile_text">Update Profile</string>
+    <string name="submit_water_quality_report">Submit Water Quality Report</string>
+    <string name="water_quality">Water Quality:</string>
+    <string name="virus_ppm">Virus PPM:</string>
+    <string name="enter_virus_ppm">Enter virus PPM</string>
+    <string name="contaminant_ppm">Contaminant PPM:</string>
+    <string name="enter_contaminant_ppm">Enter contaminant PPM</string>
+    <string name="latitude">Latitude:</string>
+    <string name="enter_latitude">Enter Latitude</string>
+    <string name="longitude">Longitude:</string>
+    <string name="enter_longitude">Enter Longitude</string>
+    <string name="generate_coordinates_from_gps">Generate Coordinates From GPS</string>
+    <string name="submit">Submit</string>
+    <string name="submit_water_source_report">Submit Water Source Report</string>
+    <string name="water_type">Water Type:</string>
+    <string name="water_condition">Water Condition:</string>
 
 </resources>

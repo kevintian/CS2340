@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Submit Water Quality Report"
+        android:text="@string/submit_water_quality_report"
         android:textSize="24sp" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/submit_quality_report_text"
         android:padding="5dp"
-        android:text="Water Quality:"
+        android:text="@string/water_quality"
         android:textSize="15sp" />
 
     <Spinner
@@ -43,7 +43,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/water_quality_label"
         android:padding="5dp"
-        android:text="Virus PPM:"
+        android:text="@string/virus_ppm"
         android:textSize="15sp" />
 
     <EditText
@@ -53,7 +53,7 @@
         android:layout_alignTop="@id/water_virusPPM_label"
         android:layout_toEndOf="@+id/water_virusPPM_label"
         android:ems="10"
-        android:hint="Enter virus PPM"
+        android:hint="@string/enter_virus_ppm"
         android:inputType="number"
         android:padding="5dp"
         android:textSize="15sp" />
@@ -65,7 +65,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/water_virusPPM_label"
         android:padding="5dp"
-        android:text="Contaminant PPM:"
+        android:text="@string/contaminant_ppm"
         android:textSize="15sp" />
 
     <EditText
@@ -75,7 +75,7 @@
         android:layout_alignTop="@id/water_contaminantPPM_label"
         android:layout_toEndOf="@+id/water_contaminantPPM_label"
         android:ems="10"
-        android:hint="Enter contaminant PPM"
+        android:hint="@string/enter_contaminant_ppm"
         android:inputType="number"
         android:padding="5dp"
         android:textSize="15sp" />
@@ -87,7 +87,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/water_contaminantPPM_label"
         android:padding="5dp"
-        android:text="Latitude:"
+        android:text="@string/latitude"
         android:textSize="15sp" />
 
     <EditText
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/water_source_latitude_label"
         android:layout_toEndOf="@+id/water_source_latitude_label"
-        android:hint="Enter Latitude"
+        android:hint="@string/enter_latitude"
         android:inputType="numberDecimal|numberSigned"
         android:padding="5dp"
         android:textSize="15sp" />
@@ -108,7 +108,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/water_source_latitude_label"
         android:padding="5dp"
-        android:text="Longitude:"
+        android:text="@string/longitude"
         android:textSize="15sp" />
 
     <EditText
@@ -118,7 +118,7 @@
         android:layout_alignTop="@id/water_source_longitude_label"
         android:layout_toEndOf="@+id/water_source_longitude_label"
         android:ems="10"
-        android:hint="Enter Longitude"
+        android:hint="@string/enter_longitude"
         android:inputType="numberDecimal|numberSigned"
         android:padding="5dp"
         android:textSize="15sp" />
@@ -129,7 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/water_source_longitude_label"
         android:layout_centerHorizontal="true"
-        android:text="Generate Coordinates From GPS" />
+        android:text="@string/generate_coordinates_from_gps" />
 
 
     <Button
@@ -138,6 +138,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Submit" />
+        android:text="@string/submit" />
 
 </RelativeLayout>
