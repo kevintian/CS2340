@@ -296,7 +296,7 @@ public class WelcomeActivity extends AppCompatActivity
             InputStream file = is.open("OAuth.json");
             int size = file.available();
             byte[] buffer = new byte[size];
-            //file.read(buffer);
+            file.read(buffer);
             file.close();
             json = new String(buffer, "UTF-8");
         } catch (IOException ex) {
