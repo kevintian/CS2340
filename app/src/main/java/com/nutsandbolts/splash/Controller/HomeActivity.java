@@ -45,6 +45,8 @@ public class HomeActivity extends AppCompatActivity {
 
     FirebaseAuth.AuthStateListener mAuthListener;
 
+    //onCreate method is too long, cannot really be fixed because most of it
+    // is setting up icons/text views that do something when clicked
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
