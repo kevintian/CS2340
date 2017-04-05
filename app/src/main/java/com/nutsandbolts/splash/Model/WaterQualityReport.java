@@ -29,6 +29,9 @@ public class WaterQualityReport implements Parcelable {
     private final int contaminantPPM;
     private final WaterQuality waterQuality;
 
+    public static final int MAX_LATITUDE = 90;
+    public static final int MAX_LONGITUDE = 180;
+
     /**
      * Writes this water report to the database.
      */
@@ -198,6 +201,11 @@ public class WaterQualityReport implements Parcelable {
      * @return true if report is within bounds
      */
     public boolean isWithinBounds(int year, double latitude, double longitude, double radius) {
+        if ((radius <= 0)
+                || (Math.abs(latitude) > MAX_LATITUDE)
+                || (Math.abs(longitude) > MAX_LONGITUDE)) {
+            return false;
+        }
         //Create a calendar
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateTime);
@@ -291,6 +299,8 @@ public class WaterQualityReport implements Parcelable {
     public long getReportID() {
         return reportID;
     }
+
+
 
     @Override
     public String toString() {

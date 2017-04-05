@@ -40,7 +40,7 @@ public class RegisteredUser implements Parcelable {
     /**
      * Writes the user's data to the database
      */
-    public void writeToDatabase() {
+    private void writeToDatabase() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference mRootRef = db.getReference();
 
@@ -60,23 +60,8 @@ public class RegisteredUser implements Parcelable {
         typeChild.setValue(userType);
     }
 
-    /* **********************
-     * Getters and setters
-     */
-
     // RegisteredUser's ids cannot be changed as they
     // are registered using Google
-
-    /**
-     * Sets display name of user
-     *
-     * @param displayName The user's display name
-     */
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-
     /** Updates values and writes report to database
      * @param emailAddress email address
      * @param displayName display name
@@ -85,38 +70,11 @@ public class RegisteredUser implements Parcelable {
      */
     public void updateValues(String emailAddress, String displayName,
                              String homeAddress, UserType userType) {
-        setEmailAddress(emailAddress);
-        setDisplayName(displayName);
-        setHomeAddress(homeAddress);
-        setUserType(userType);
-        writeToDatabase();
-    }    
-    
-    /**
-     * Set email address of user
-     *
-     * @param emailAddress The user's email address
-     */
-    public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
-    }
-
-    /**
-     * Sets home address of user
-     *
-     * @param homeAddress The user's home address
-     */
-    public void setHomeAddress(String homeAddress) {
+        this.displayName = displayName;
         this.homeAddress = homeAddress;
-    }
-
-    /**
-     * Sets usertype of user
-     *
-     * @param userType  The user's usertype
-     */
-    public void setUserType(UserType userType) {
         this.userType = userType;
+        writeToDatabase();
     }
 
     /**
