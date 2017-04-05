@@ -34,7 +34,11 @@ public class ViewQualityReportActivity extends AppCompatActivity {
     private ChildEventListener mWaterQualityReportsListener;
     private ArrayAdapter<WaterQualityReport> mArrayAdapter;
 
-    @Override
+
+
+    /**
+     * looks for when back is pressed
+     */
     public void onBackPressed() {
         mWaterQualityReportsRef.removeEventListener(mWaterQualityReportsListener);
         super.onBackPressed();
@@ -65,29 +69,11 @@ public class ViewQualityReportActivity extends AppCompatActivity {
                 reports.add(waterQualityReport);
                 mArrayAdapter.notifyDataSetChanged();
 //                } catch (NullPointerException e) {
-//                    Log.d("Datasnapshot error", dataSnapshot.toString());
+//                    Log.d("DataSnapshot error", dataSnapshot.toString());
 //                }
             }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
         };
         mWaterQualityReportsRef.addChildEventListener(mWaterQualityReportsListener);
 
@@ -147,10 +133,10 @@ public class ViewQualityReportActivity extends AppCompatActivity {
             String loc = twoDecimalPlaces.format(report.getLatitude())
                     + ",\n" + twoDecimalPlaces.format(report.getLongitude());
 
-            //Set textviews
+            //Set text views
             reportID.setText("Report " + report.getReportID());
             reporterName.setText("Reported by: " + report.getReporterName());
-            waterQuality.setText("Water Type: " + report.getWaterQuality().toString());
+            waterQuality.setText("Water Type: " + report.getWaterQuality());
             virusPPM.setText("Virus PPM: " + report.getVirusPPM());
             contaminantPPM.setText("Contaminant PPM: " + report.getContaminantPPM());
 
