@@ -18,6 +18,12 @@ import static org.junit.Assert.*;
  * Created by Jinni Xia on 4/2/17
  *
  * Tests the changeVisibility function in HomeActivity
+ *
+ * At all times 2 of these tests should be failing, depending on which user you are signed in as.
+ * You should always be passing checkUniversalVisibilities test
+ * Contributors/admins should be passing checkContributorAdminVisibilities
+ * Workers should be passing checkWorkerVisibilities
+ * Managers should be passing checkManagerVisibilities
  */
 public class ChangeVisibilityTests {
 
@@ -25,13 +31,6 @@ public class ChangeVisibilityTests {
 
     @Rule
     public ActivityTestRule<HomeActivity> mActivityRule = new ActivityTestRule(HomeActivity.class);
-
-//    @Test(expected = AssertionFailedError.class)
-//    public void checkContributerVsibilities() {
-//        //this should pass when you're a user and the submit quality report icon doesn't appear
-//        onView(withId(R.id.submit_quality_report_icon)).check(matches(isDisplayed()));
-//        fail();
-//    }
 
     /**
      * You should pass this test if you are logged in as a contributor or admin and the submit
