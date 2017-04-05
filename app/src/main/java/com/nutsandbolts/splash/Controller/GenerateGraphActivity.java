@@ -218,6 +218,11 @@ public class GenerateGraphActivity extends AppCompatActivity {
     }
 
 
+    /*This method is marked as "feature envy"
+    This method should remain inside of GenerateGraph activity as it is only used to generate graph
+    information. The feature envy comes from repeated use of the getter methods, which is due to the
+    large amount of information that must be retrieved to draw the graph.
+    */
     private double[] parseReports(Iterable<WaterQualityReport> allReports) {
         //Array of size 12, where 0 = Jan, 1 = Feb, etc.
         final int monthsInAYear = 12;

@@ -73,9 +73,9 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/graph_latitude_label"
         android:layout_toEndOf="@+id/graph_latitude_label"
-        android:hint="@string/enter_latitude_hint"
-        android:inputType="numberDecimal"
         android:ems="10"
+        android:hint="@string/enter_latitude_hint"
+        android:inputType="numberSigned|numberDecimal"
         android:padding="5dp"
         android:textSize="15sp" />
 
@@ -97,7 +97,7 @@
         android:layout_toEndOf="@+id/graph_longitude_label"
         android:ems="10"
         android:hint="@string/enter_longitude_hint"
-        android:inputType="numberDecimal"
+        android:inputType="numberSigned|numberDecimal"
         android:padding="5dp"
         android:textSize="15sp" />
 
@@ -133,7 +133,8 @@
         android:layout_below="@+id/generate_graph"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
-        android:id="@+id/graph" />
+        android:id="@+id/graph"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
 
