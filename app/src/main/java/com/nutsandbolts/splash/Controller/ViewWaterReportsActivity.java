@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
 import com.nutsandbolts.splash.Model.WaterSourceReport;
 import com.nutsandbolts.splash.R;
 
@@ -36,7 +32,10 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
     private ChildEventListener mWaterSourceReportsListener;
     private ArrayAdapter<WaterSourceReport> mArrayAdapter;
 
-    @Override
+    /**
+     * looks for when back is pressed
+     * Code inspection
+     */
     public void onBackPressed() {
         mWaterSourceReportsRef.removeEventListener(mWaterSourceReportsListener);
         super.onBackPressed();
@@ -60,35 +59,15 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                try {
-                    WaterSourceReport waterSourceReport =
-                            WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
-                    reports.add(waterSourceReport);
-                    mArrayAdapter.notifyDataSetChanged();
-                } catch (NullPointerException e) {
-                    Log.d("Datasnapshot error", dataSnapshot.toString());
-                }
-            }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                WaterSourceReport waterSourceReport =
+                        WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
+                reports.add(waterSourceReport);
+                mArrayAdapter.notifyDataSetChanged();
 
             }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
         };
         mWaterSourceReportsRef.addChildEventListener(mWaterSourceReportsListener);
 
@@ -147,11 +126,11 @@ public class ViewWaterReportsActivity extends AppCompatActivity {
             String loc = twoDecimalPlaces.format(report.getLatitude())
                     + ",\n" + twoDecimalPlaces.format(report.getLongitude());
 
-            //Set textviews
+            //Set text views
             reportID.setText("Report " + report.getReportID());
             reporterName.setText("Reported by: " + report.getReporterName());
-            waterType.setText("Water Type: " + report.getWaterType().toString());
-            waterCondition.setText("Water Condition: " + report.getWaterCondition().toString());
+            waterType.setText("Water Type: " + report.getWaterType());
+            waterCondition.setText("Water Condition: " + report.getWaterCondition());
             location.setText(loc);
 
             return view;
