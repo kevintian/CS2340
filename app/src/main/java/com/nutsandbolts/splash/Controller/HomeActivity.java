@@ -192,7 +192,7 @@ public class HomeActivity extends AppCompatActivity {
      */
     public void changeVisibility(Object dataSnapshotValue) {
         String userType = dataSnapshotValue.toString();
-        Log.d("USERTYPE", userType);
+//        Log.d("USERTYPE", userType);
         if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {
             submitQualityReportIcon.setVisibility(View.VISIBLE);
             submitQualityReportText.setVisibility(View.VISIBLE);
