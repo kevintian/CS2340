@@ -1,7 +1,11 @@
 package com.nutsandbolts.splash;
 
 /**
- * Created by Kevin Tian on 4/4/2017.
+ * This test checks if the isWithInBounds method of WaterQualityReport is valid. All tests should
+ * be passing at all times.
+ *
+ * @author Kevin Tian
+ *
  */
 
 import com.nutsandbolts.splash.Model.WaterQuality;

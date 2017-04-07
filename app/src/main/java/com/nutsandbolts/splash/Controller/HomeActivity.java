@@ -31,19 +31,12 @@ public class HomeActivity extends AppCompatActivity {
     /*
     Widgets we will need to define listeners for
     */
-    ImageView signOutIcon;
-    ImageView editProfileIcon;
-    ImageView submitWaterReportIcon;
-    ImageView viewWaterReportsIcon;
-    ImageView submitQualityReportIcon;
-    ImageView viewQualityReportsIcon;
-    ImageView viewMapIcon;
-    ImageView viewGraphIcon;
-    TextView submitQualityReportText;
-    TextView viewQualityReportsText;
-    TextView viewGraphText;
-
-    FirebaseAuth.AuthStateListener mAuthListener;
+    private ImageView submitQualityReportIcon;
+    private ImageView viewQualityReportsIcon;
+    private ImageView viewGraphIcon;
+    private TextView submitQualityReportText;
+    private TextView viewQualityReportsText;
+    private TextView viewGraphText;
 
     //onCreate method is too long, cannot really be fixed because most of it
     // is setting up icons/text views that do something when clicked
@@ -52,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        signOutIcon = (ImageView) findViewById(R.id.sign_out_icon);
+        ImageView signOutIcon = (ImageView) findViewById(R.id.sign_out_icon);
 
         signOutIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        editProfileIcon = (ImageView) findViewById(R.id.edit_profile_icon);
+        ImageView editProfileIcon = (ImageView) findViewById(R.id.edit_profile_icon);
 
         editProfileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        submitWaterReportIcon = (ImageView) findViewById(R.id.submit_water_report_icon);
+        ImageView submitWaterReportIcon = (ImageView) findViewById(R.id.submit_water_report_icon);
 
         submitWaterReportIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +74,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        viewWaterReportsIcon = (ImageView) findViewById(R.id.view_water_reports_icon);
+        ImageView viewWaterReportsIcon = (ImageView) findViewById(R.id.view_water_reports_icon);
 
         viewWaterReportsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +111,7 @@ public class HomeActivity extends AppCompatActivity {
         viewQualityReportsIcon.setVisibility(View.GONE);
         viewQualityReportsText.setVisibility(View.GONE);
 
-        viewMapIcon = (ImageView) findViewById(R.id.view_map_icon);
+        ImageView viewMapIcon = (ImageView) findViewById(R.id.view_map_icon);
 
         viewMapIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
 
         showQualityReportControls(firebaseUser);
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -190,7 +183,7 @@ public class HomeActivity extends AppCompatActivity {
      * Changes display for home activity depending on user type
      * @param dataSnapshotValue value of DataSnapshot where we can get the user type from
      */
-    public void changeVisibility(Object dataSnapshotValue) {
+    private void changeVisibility(Object dataSnapshotValue) {
         String userType = dataSnapshotValue.toString();
 //        Log.d("USERTYPE", userType);
         if ("WORKER".equals(userType) || "MANAGER".equals(userType)) {

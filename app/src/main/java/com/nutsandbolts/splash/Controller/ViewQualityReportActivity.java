@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +38,7 @@ public class ViewQualityReportActivity extends AppCompatActivity {
     /**
      * looks for when back is pressed
      */
+    @Override
     public void onBackPressed() {
         mWaterQualityReportsRef.removeEventListener(mWaterQualityReportsListener);
         super.onBackPressed();

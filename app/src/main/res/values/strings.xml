@@ -35,8 +35,6 @@
     <string name="generate_graph_text">Generate Graph</string>
 
     <!--Edit Profile Strings-->
-    <string name="editing_profile_text">Editing Profile</string>
-    <string name="update_profile_text">Update Profile</string>
     <string name="submit_water_quality_report">Submit Water Quality Report</string>
     <string name="water_quality">Water Quality:</string>
     <string name="virus_ppm">Virus PPM:</string>

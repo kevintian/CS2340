@@ -25,6 +25,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //    compile 'com.google.android.gms:play-services:10.2.0'
+    //Version remain unchanged to maintain compatibility - changing one would mean changing almost
+    //all of the others, which means also changing the version of our google maps plugin
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.google.firebase:firebase-auth:10.2.0'
     compile 'com.google.android.gms:play-services-auth:10.2.0'

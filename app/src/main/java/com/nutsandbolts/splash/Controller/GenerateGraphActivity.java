@@ -194,7 +194,7 @@ public class GenerateGraphActivity extends AppCompatActivity {
 
         // custom label formatter to show months
         glr.setLabelFormatter(new DefaultLabelFormatter() {
-            String[] months = {"Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun."
+            final String[] months = {"Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun."
                     , "Jul.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."};
 
             @Override

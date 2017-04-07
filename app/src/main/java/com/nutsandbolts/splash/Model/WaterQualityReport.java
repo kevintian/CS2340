@@ -29,8 +29,8 @@ public class WaterQualityReport implements Parcelable {
     private final int contaminantPPM;
     private final WaterQuality waterQuality;
 
-    public static final int MAX_LATITUDE = 90;
-    public static final int MAX_LONGITUDE = 180;
+    private static final int MAX_LATITUDE = 90;
+    private static final int MAX_LONGITUDE = 180;
 
     /**
      * Writes this water report to the database.

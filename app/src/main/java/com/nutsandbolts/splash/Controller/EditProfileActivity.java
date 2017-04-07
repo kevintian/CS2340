@@ -34,13 +34,13 @@ public class EditProfileActivity extends AppCompatActivity {
     /*
     Widgets we will need to define listeners for
     */
-    TextView welcomeText;
-    TextView userTypeText;
-    EditText emailText;
-    EditText displayNameText;
-    EditText homeAddressText;
-    Spinner userTypeSpinner;
-    Button registerButton;
+    private TextView welcomeText;
+    private TextView userTypeText;
+    private EditText emailText;
+    private EditText displayNameText;
+    private EditText homeAddressText;
+    private Spinner userTypeSpinner;
+    private Button registerButton;
 
     /*
     RegisteredUser model
