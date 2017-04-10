@@ -85,7 +85,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mWaterSourceReportsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //Add to arraylist
+                //Add to array list
                 waterSourceReport =
                         WaterSourceReport.buildWaterSourceReportFromSnapShot(dataSnapshot);
                 MarkerOptions options = waterSourceReport.getMarkerOptions();

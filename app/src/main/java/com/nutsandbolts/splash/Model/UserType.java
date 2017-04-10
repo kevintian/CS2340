@@ -18,7 +18,7 @@ public enum UserType {
     /**
      * Make a new UserType enum
      *
-     * @param userType  The user's usertype
+     * @param userType  The user's user type
      */
     UserType(String userType) {
         this.userType = userType;

@@ -114,6 +114,7 @@ public class ViewQualityReportActivity extends AppCompatActivity {
          */
         WaterQualityArrayAdapter(Context context, int resource,
                                  List<WaterQualityReport> objects) {
+            //We keep resource as a variable for clarity's sake and for future code edits
             super(context, resource, objects);
 
             this.context = context;

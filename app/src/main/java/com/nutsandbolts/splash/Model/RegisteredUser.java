@@ -34,6 +34,8 @@ public class RegisteredUser implements Parcelable {
         this.displayName = displayName;
         this.emailAddress = emailAddress;
         this.homeAddress = homeAddress;
+        /*We keep this for clarity's sake and for future code edits -> don't want to just initialize
+        this as "CONTRIBUTOR" even though it is always contributor right now.*/
         this.userType = userType;
     }
 
