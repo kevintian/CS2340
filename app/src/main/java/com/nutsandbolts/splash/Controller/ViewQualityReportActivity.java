@@ -125,6 +125,10 @@ public class ViewQualityReportActivity extends AppCompatActivity {
         /**
          * Called when rendering the list, gets the View displayed
          *
+         * Marked "feature envy," but should not be fixed because it comes from repeated use
+         * of getter method, which is due to the large amount of information that must be
+         * retrieved
+         *
          * @param position    int representation of which report in the quality reports
          * @param convertView a View used to convert display
          * @param parents     a ViewGroup that contains other views
