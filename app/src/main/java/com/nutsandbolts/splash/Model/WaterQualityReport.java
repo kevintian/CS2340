@@ -49,7 +49,7 @@ public class WaterQualityReport implements Parcelable {
         latitudeChild.setValue(this.latitude);
         DatabaseReference longitudeChild = mReportRef.child("longitude");
         longitudeChild.setValue(this.longitude);
-        DatabaseReference reporterNameChild = mReportRef.child("reporter-name");
+        DatabaseReference reporterNameChild = mReportRef.child("reporter-type");
         reporterNameChild.setValue(reporterName);
         DatabaseReference reporterUIDChild = mReportRef.child("reporter-uid");
         reporterUIDChild.setValue(reporterUID);
@@ -94,7 +94,7 @@ public class WaterQualityReport implements Parcelable {
         //Get current report information
         DataSnapshot dateChild = dataSnap.child("date-time");
         Date dateTime = new Date((long) dateChild.getValue());
-        DataSnapshot reporterNameChild = dataSnap.child("reporter-name");
+        DataSnapshot reporterNameChild = dataSnap.child("reporter-type");
         String reporterName = (String) reporterNameChild.getValue();
         DataSnapshot reporterUIDChild = dataSnap.child("reporter-uid");
         String reporterUID = (String) reporterUIDChild.getValue();
@@ -122,7 +122,7 @@ public class WaterQualityReport implements Parcelable {
      *
      * @param dateTime time the report was created
      * @param reportID report number
-     * @param reporterName name of person who submits the report
+     * @param reporterName type of person who submits the report
      * @param reporterUID id of person who submits report
      * @param latitude location of water
      * @param longitude location of water
@@ -238,16 +238,16 @@ public class WaterQualityReport implements Parcelable {
     }
 
     /**
-     * Gets the name of the User that wrote the Water Quality Report
+     * Gets the type of the User that wrote the Water Quality Report
      *
-     * @return String of reporterName returns the name of the user that submitted the report
+     * @return String of reporterName returns the type of the user that submitted the report
      */
     public String getReporterName() {
         return reporterName;
     }
 
     /**
-     * Gets the name of the latitude of the location
+     * Gets the type of the latitude of the location
      *
      * @return double latitude of the location
      */
@@ -256,7 +256,7 @@ public class WaterQualityReport implements Parcelable {
     }
 
     /**
-     * Gets the name of the longitude of the location
+     * Gets the type of the longitude of the location
      *
      * @return double of longitude of the location
      */

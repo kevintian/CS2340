@@ -17,7 +17,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nutsandbolts.splash.Model.SecurityLogEntry;
+import com.nutsandbolts.splash.Model.SecurityLogType;
 import com.nutsandbolts.splash.R;
+
+import java.util.Date;
 
 /**
  * This activity shows up after signing in and sets up the interface for users to
@@ -51,6 +55,13 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth auth = FirebaseAuth.getInstance();
+                final FirebaseUser currentUser = auth.getCurrentUser();
+                SecurityLogEntry logEntry = new SecurityLogEntry(
+                        new Date(System.currentTimeMillis()),
+                        SecurityLogType.LOGIN,
+                        currentUser.getUid(),
+                        "Succesful logout.");
+                logEntry.writeToDatabase();
                 auth.signOut();
                 returnToWelcomeScreen();
             }

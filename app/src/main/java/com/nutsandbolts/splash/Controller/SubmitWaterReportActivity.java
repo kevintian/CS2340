@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.nutsandbolts.splash.Model.SecurityLogEntry;
+import com.nutsandbolts.splash.Model.SecurityLogType;
 import com.nutsandbolts.splash.Model.WaterCondition;
 import com.nutsandbolts.splash.Model.WaterSourceReport;
 import com.nutsandbolts.splash.Model.WaterType;
@@ -230,10 +232,17 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
         assertNotNull(firebaseUser);
         waterSourceReport = new WaterSourceReport(date, currentTime, firebaseUser.getDisplayName(),
                 firebaseUser.getUid(), latitude, longitude, waterType, waterCondition);
+        SecurityLogEntry logEntry = new SecurityLogEntry(
+                new Date(System.currentTimeMillis()),
+                SecurityLogType.CREATE_REPORT,
+                firebaseUser.getUid(),
+                "Succesful water source report submission.");
         if (!waterSourceReport.isValidLocation()) {
+            logEntry.setDetails("Invalid location entered by user.");
             throw new IllegalArgumentException("Latitude or Longitude is out of range.");
         }
         waterSourceReport.writeToDatabase();
+        logEntry.writeToDatabase();
     }
 
     @Override

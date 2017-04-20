@@ -22,7 +22,7 @@ public class RegisteredUser implements Parcelable {
     /**
      * Make a new user
      *
-     * @param displayName  The user's display name
+     * @param displayName  The user's display type
      * @param id The user's id
      * @param emailAddress The user's email address
      * @param homeAddress  The user's home address
@@ -49,7 +49,7 @@ public class RegisteredUser implements Parcelable {
         DatabaseReference userRef = mRootRef.child("registered-users");
         DatabaseReference mUserRef = userRef.child(id);
 
-        DatabaseReference displayNameChild = mUserRef.child("display-name");
+        DatabaseReference displayNameChild = mUserRef.child("display-type");
         displayNameChild.setValue(displayName);
 
         DatabaseReference emailChild = mUserRef.child("email-address");
@@ -66,7 +66,7 @@ public class RegisteredUser implements Parcelable {
     // are registered using Google
     /** Updates values and writes report to database
      * @param emailAddress email address
-     * @param displayName display name
+     * @param displayName display type
      * @param homeAddress home address
      * @param userType user type
      */

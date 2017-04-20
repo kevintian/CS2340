@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.nutsandbolts.splash.Model.SecurityLogEntry;
+import com.nutsandbolts.splash.Model.SecurityLogType;
 import com.nutsandbolts.splash.Model.WaterQuality;
 import com.nutsandbolts.splash.Model.WaterQualityReport;
 import com.nutsandbolts.splash.Model.WaterSourceReport;
@@ -182,15 +184,22 @@ public class SubmitQualityReportActivity extends AppCompatActivity implements Lo
     private void submitQualityReport() throws IllegalArgumentException {
         Editable latEditable = latitudeText.getText();
         Editable longEditable = longitudeText.getText();
+        SecurityLogEntry logEntry = new SecurityLogEntry(
+                new Date(System.currentTimeMillis()),
+                SecurityLogType.CREATE_REPORT,
+                firebaseUser.getUid(),
+                "Succesful water quality report submission.");
         try {
             latitude = Double.parseDouble(latEditable.toString());
             longitude = Double.parseDouble(longEditable.toString());
         } catch (NumberFormatException e) {
+            logEntry.setDetails("Unable to parse latitude/longitude.");
             throw new IllegalArgumentException("Enter Valid Latitude and Longitude");
         }
 
         if ((Math.abs(latitude) > WaterSourceReport.MAX_LATITUDE)
                 | (Math.abs(longitude) > WaterSourceReport.MAX_LONGITUDE)) {
+            logEntry.setDetails("Latitude/longitude is out of range.");
             throw new IllegalArgumentException("Latitude or Longitude is out of range.");
         }
 
@@ -203,6 +212,7 @@ public class SubmitQualityReportActivity extends AppCompatActivity implements Lo
             virusPPM = Integer.parseInt(virusEditable.toString());
             contaminantPPM = Integer.parseInt(contaminantEditable.toString());
         } catch (NumberFormatException e) {
+            logEntry.setDetails("Unable to parse PPM values.");
             throw new IllegalArgumentException("Enter valid PPM values");
         }
 
@@ -214,6 +224,7 @@ public class SubmitQualityReportActivity extends AppCompatActivity implements Lo
                 firebaseUser.getDisplayName(), firebaseUser.getUid(), latitude, longitude, virusPPM,
                 contaminantPPM, waterQuality);
         waterQualityReport.writeToDatabase();
+        logEntry.writeToDatabase();
     }
 
     @Override

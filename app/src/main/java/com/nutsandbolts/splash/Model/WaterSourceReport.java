@@ -47,7 +47,7 @@ public class WaterSourceReport implements Parcelable {
         latitudeChild.setValue(this.latitude);
         DatabaseReference longitudeChild = mReportRef.child("longitude");
         longitudeChild.setValue(this.longitude);
-        DatabaseReference reporterNameChild = mReportRef.child("reporter-name");
+        DatabaseReference reporterNameChild = mReportRef.child("reporter-type");
         reporterNameChild.setValue(reporterName);
         DatabaseReference reporterUidChild = mReportRef.child("reporter-uid");
         reporterUidChild.setValue(reporterUID);
@@ -82,12 +82,12 @@ public class WaterSourceReport implements Parcelable {
         DatabaseReference registeredUsersChild = mRootRef.child("registered-users");
         DatabaseReference reporterUIDChild = registeredUsersChild.child(reporterUID);
         DatabaseReference mReporterRef = reporterUIDChild
-                .child("display-name");
+                .child("display-type");
         mReporterRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String displayName = (String) dataSnapshot.getValue();
-                DatabaseReference reporterNameChild = mReportRef.child("reporter-name");
+                DatabaseReference reporterNameChild = mReportRef.child("reporter-type");
                 reporterNameChild.setValue(displayName);
             }
 
@@ -104,7 +104,7 @@ public class WaterSourceReport implements Parcelable {
      *
      * @param dateTime       time the report was created
      * @param reportID       id of the report
-     * @param reporterName   the name of the user who created this report
+     * @param reporterName   the type of the user who created this report
      * @param reporterUID    the UID of the user who created this report
      * @param latitude       latitude of the location of the water
      * @param longitude      longitude of the location of the water
@@ -136,7 +136,7 @@ public class WaterSourceReport implements Parcelable {
         //Get current report information
         DataSnapshot dateChild = dataSnapshot.child("date-time");
         Date date = new Date((long) dateChild.getValue());
-        DataSnapshot reporterNameChild = dataSnapshot.child("reporter-name");
+        DataSnapshot reporterNameChild = dataSnapshot.child("reporter-type");
         String reporterName = (String) reporterNameChild.getValue();
         DataSnapshot reporterUIDChild = dataSnapshot.child("reporter-uid");
         String reporterUID = (String) reporterUIDChild.getValue();
@@ -156,9 +156,9 @@ public class WaterSourceReport implements Parcelable {
     }
 
     /**
-     * Gets the name of the User that wrote the Water Source Report
+     * Gets the type of the User that wrote the Water Source Report
      *
-     * @return String of reporterName returns the name of the user that submitted the report
+     * @return String of reporterName returns the type of the user that submitted the report
      */
     public String getReporterName() {
         return reporterName;
@@ -183,7 +183,7 @@ public class WaterSourceReport implements Parcelable {
     }
 
     /**
-     * Gets the name of the latitude of the location
+     * Gets the type of the latitude of the location
      *
      * @return double latitude of the location
      */
@@ -192,7 +192,7 @@ public class WaterSourceReport implements Parcelable {
     }
 
     /**
-     * Gets the name of the longitude of the location
+     * Gets the type of the longitude of the location
      *
      * @return double of longitude of the location
      */

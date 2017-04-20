@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nutsandbolts.splash.Model.SecurityLogEntry;
+import com.nutsandbolts.splash.Model.SecurityLogType;
 import com.nutsandbolts.splash.R;
 
 import org.json.JSONException;
@@ -36,6 +38,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 /**
  * This activity allows the user to sign in to the application using their Google account
@@ -221,6 +224,7 @@ public class WelcomeActivity extends AppCompatActivity
      */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d("Authentication", "firebaseAuthWithGoogle:" + acct.getId());
+        final String details = "firebaseAuthWithGoogle:" + acct.getId();
 
         AuthCredential credential = GoogleAuthProvider
             .getCredential(acct.getIdToken(), null);
@@ -245,6 +249,12 @@ public class WelcomeActivity extends AppCompatActivity
                                 Toast text = Toast.makeText(self, "Authentication failed.",
                                         Toast.LENGTH_SHORT);
                                 text.show();
+                                SecurityLogEntry logEntry = new SecurityLogEntry(
+                                        new Date(System.currentTimeMillis()),
+                                        SecurityLogType.LOGIN,
+                                        "",
+                                        "Failed login. " + details);
+                                logEntry.writeToDatabase();
                                 // Toast.makeText()
                             } else {
                                 authenticationDone();
@@ -263,6 +273,12 @@ public class WelcomeActivity extends AppCompatActivity
         assert user != null;
         String uid = user.getUid();
 //        Log.d("UID", uid);
+        SecurityLogEntry logEntry = new SecurityLogEntry(
+                new Date(System.currentTimeMillis()),
+                SecurityLogType.LOGIN,
+                uid,
+                "Succesful login.");
+        logEntry.writeToDatabase();
         DatabaseReference mThisUserRef = mRegisteredUserRef.child(uid);
         mThisUserRef.addValueEventListener(new ValueEventListener() {
             @Override
