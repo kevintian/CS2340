@@ -71,4 +71,10 @@
     <string name="reporter_name">Reporter Name</string>
     <!--Water type and condition already declared above-->
     <string name="location">Latitude\nLongitude</string>
+
+    <!--Log Strings-->
+    <string name="timestamp">Timestamp:</string>
+    <string name="type">Type:</string>
+    <string name="user_uid">User UID:</string>
+    <string name="details">Details:</string>
 </resources>

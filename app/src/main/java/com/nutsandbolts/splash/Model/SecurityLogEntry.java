@@ -3,9 +3,11 @@ package com.nutsandbolts.splash.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -48,17 +50,17 @@ public class SecurityLogEntry implements Parcelable{
         DatabaseReference posts = mRootRef.child("posts");
         DatabaseReference push = posts.push();
         String key = push.getKey();
-        DatabaseReference waterSourceReportsChild = mRootRef.child("security-log");
-        final DatabaseReference mReportRef = waterSourceReportsChild.child(key);
+        DatabaseReference logsChild = mRootRef.child("security-log");
+        final DatabaseReference mReportRef = logsChild.child(key);
         DatabaseReference dateTimeChild = mReportRef.child("time");
         dateTimeChild.setValue(timestamp.getTime());
 
-        DatabaseReference reporterUidChild = mReportRef.child("user-uid");
-        reporterUidChild.setValue(userUID);
-        DatabaseReference waterConditionChild = mReportRef.child("details");
-        waterConditionChild.setValue(details);
-        DatabaseReference waterTypeChild = mReportRef.child("type");
-        waterTypeChild.setValue(type);
+        DatabaseReference userUIDChild = mReportRef.child("user-uid");
+        userUIDChild.setValue(userUID);
+        DatabaseReference logDetailsChild = mReportRef.child("details");
+        logDetailsChild.setValue(details);
+        DatabaseReference logTypeChild = mReportRef.child("type");
+        logTypeChild.setValue(type);
     }
 
     /**
@@ -71,6 +73,55 @@ public class SecurityLogEntry implements Parcelable{
         details = in.readString();
         userUID = in.readString();
         type = SecurityLogType.valueOf(in.readString());
+    }
+
+    public SecurityLogEntry(DataSnapshot snapshot) {
+        DataSnapshot dateChild = snapshot.child("time");
+        this.timestamp = new Date((long) dateChild.getValue());
+
+        DataSnapshot typeChild = snapshot.child("type");
+        this.type = SecurityLogType.valueOf((String) typeChild.getValue());
+
+        DataSnapshot userUIDChild = snapshot.child("user-uid");
+        this.userUID = (String) userUIDChild.getValue();
+
+        DataSnapshot detailsChild = snapshot.child("details");
+        this.details = (String) detailsChild.getValue();
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public SecurityLogType getType() {
+        return type;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public String getUserUID() {
+        return userUID;
+    }
+
+    /**
+     * Formats the date to a readable String
+     * @return timestamp formatted as a string.
+     */
+    public String getTimestampString() {
+        DateFormat formatter = DateFormat.getDateTimeInstance(
+                DateFormat.SHORT,
+                DateFormat.LONG);
+        return formatter.format(timestamp);
+    }
+
+    /**
+     * Formats the log type as a String
+     * @return log type as a String
+     */
+    public String getTypeString() {
+        return type.getType();
     }
 
     @Override
