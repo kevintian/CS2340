@@ -20,14 +20,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nutsandbolts.splash.Model.SecurityLogEntry;
-import com.nutsandbolts.splash.Model.SecurityLogType;
-import com.nutsandbolts.splash.Model.WaterSourceReport;
 import com.nutsandbolts.splash.R;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,8 +30,8 @@ import java.util.List;
  */
 public class ViewLogActivity extends AppCompatActivity {
 
-    private DatabaseReference mWaterSourceReportsRef;
-    private ChildEventListener mWaterSourceReportsListener;
+    private DatabaseReference mLogRef;
+    private ChildEventListener mLogListener;
     private ArrayAdapter<SecurityLogEntry> mArrayAdapter;
 
     /**
@@ -45,31 +40,31 @@ public class ViewLogActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        mWaterSourceReportsRef.removeEventListener(mWaterSourceReportsListener);
+        mLogRef.removeEventListener(mLogListener);
         super.onBackPressed();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_water_reports);
+        setContentView(R.layout.activity_view_log);
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference fireBaseRef = db.getReference();
-        mWaterSourceReportsRef = fireBaseRef.child("security-log");
+        mLogRef = fireBaseRef.child("security-log");
         final ListView listView = (ListView) findViewById(R.id.log_list);
-        final ArrayList<SecurityLogEntry> reports = new ArrayList<>();
+        final ArrayList<SecurityLogEntry> logEntries = new ArrayList<>();
 
-        mArrayAdapter = new LogArrayAdapter(ViewLogActivity.this, 0, reports);
+        mArrayAdapter = new LogArrayAdapter(ViewLogActivity.this, 0, logEntries);
         listView.setAdapter(mArrayAdapter);
 
-        mWaterSourceReportsListener = new ChildEventListener() {
+        mLogListener = new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 SecurityLogEntry logEntry = new SecurityLogEntry(dataSnapshot);
-                reports.add(logEntry);
+                logEntries.add(logEntry);
                 mArrayAdapter.notifyDataSetChanged();
 
             }
@@ -96,7 +91,7 @@ public class ViewLogActivity extends AppCompatActivity {
 
 
         };
-        mWaterSourceReportsRef.addChildEventListener(mWaterSourceReportsListener);
+        mLogRef.addChildEventListener(mLogListener);
 
     }
 
@@ -109,7 +104,7 @@ public class ViewLogActivity extends AppCompatActivity {
         /**
          * Constructor, called on creation
          *
-         * @param context  An Context object of current state of the application/object
+         * @param context  A Context object of current state of the application/object
          * @param resource An int representation of the amount of water sources
          * @param objects  An Array List of all of the Water Source reports
          */
