@@ -20,6 +20,7 @@
     <string name="view_graph_icon">View Graph Icon</string>
     <string name="sign_out_icon">Sign Out Icon</string>
     <string name="placeholder">Placeholder</string>
+    <string name="view_log_icon">View Log Icon</string>
 
 
     <!--Generate Graph Strings-->

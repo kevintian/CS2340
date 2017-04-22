@@ -134,15 +134,18 @@
             android:contentDescription="@string/view_graph_icon" />
 
         <ImageButton
+            android:id="@+id/view_log_icon"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_assignment_black_24dp"
+            app:layout_columnWeight="1"
+            android:contentDescription="@string/view_log_icon" />
+
+        <ImageButton
             android:id="@+id/sign_out_icon"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_exit_to_app_black_24dp"
             app:layout_columnWeight="1"
             android:contentDescription="@string/sign_out_icon" />
-
-        <ImageView
-            app:layout_columnWeight="1"
-            android:contentDescription="@string/placeholder" />
 
 
         <!-- Row 6 -->
@@ -157,13 +160,18 @@
 
         <TextView
             android:fontFamily="sans-serif-light"
-            android:text="@string/sign_out_text"
+            android:text="View Log"
             android:textSize="12sp"
+            android:id="@+id/view_log_text"
             app:layout_columnWeight="1"
             app:layout_gravity="center_horizontal" />
 
         <TextView
-            app:layout_columnWeight="1"/>
+            android:fontFamily="sans-serif-light"
+            android:text="@string/sign_out_text"
+            android:textSize="12sp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="center_horizontal" />
 
     </android.support.v7.widget.GridLayout>
 

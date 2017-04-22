@@ -38,6 +38,8 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView submitQualityReportIcon;
     private ImageView viewQualityReportsIcon;
     private ImageView viewGraphIcon;
+    private ImageView viewLogIcon;
+    private TextView viewLogText;
     private TextView submitQualityReportText;
     private TextView viewQualityReportsText;
     private TextView viewGraphText;
@@ -107,6 +109,17 @@ public class HomeActivity extends AppCompatActivity {
 
         submitQualityReportIcon.setVisibility(View.GONE);
         submitQualityReportText.setVisibility(View.GONE);
+
+        viewLogIcon = (ImageView) findViewById(R.id.view_log_icon);
+        viewLogText = (TextView) findViewById(R.id.view_log_text);
+        viewLogIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewLog();
+            }
+        });
+        viewLogIcon.setVisibility(View.GONE);
+        viewLogText.setVisibility(View.GONE);
 
         viewQualityReportsIcon = (ImageView) findViewById(R.id.view_quality_report_icon);
 
@@ -206,6 +219,10 @@ public class HomeActivity extends AppCompatActivity {
             viewGraphIcon.setVisibility(View.VISIBLE);
             viewGraphText.setVisibility(View.VISIBLE);
         }
+        if ("ADMINISTRATOR".equals(userType)) {
+            viewLogIcon.setVisibility(View.VISIBLE);
+            viewLogText.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -215,6 +232,15 @@ public class HomeActivity extends AppCompatActivity {
         Intent welcomeIntent = new Intent(HomeActivity
                 .this, WelcomeActivity.class);
         startActivity(welcomeIntent);
+    }
+
+    /**
+     * Brings user to submit water source report screen
+     */
+    private void viewLog() {
+        Intent viewLogIntent = new Intent(HomeActivity
+                .this, ViewLogActivity.class);
+        startActivity(viewLogIntent);
     }
 
     /**
