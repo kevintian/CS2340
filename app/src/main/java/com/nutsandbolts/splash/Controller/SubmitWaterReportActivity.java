@@ -272,6 +272,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
         final FirebaseAuth instance = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = instance.getCurrentUser();
         assertNotNull(firebaseUser);
+        Log.d("REPORT", firebaseUser.getDisplayName());
         waterSourceReport = new WaterSourceReport(date, currentTime, firebaseUser.getDisplayName(),
                 firebaseUser.getUid(), latitude, longitude, waterType, waterCondition);
         SecurityLogEntry logEntry = new SecurityLogEntry(
@@ -283,6 +284,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
             logEntry.setDetails("Invalid location entered by user.");
             throw new IllegalArgumentException("Latitude or Longitude is out of range.");
         }
+        Log.d("REPORT", waterSourceReport.toString());
         waterSourceReport.writeToDatabase();
         logEntry.writeToDatabase();
     }

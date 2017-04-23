@@ -49,7 +49,7 @@ public class WaterQualityReport implements Parcelable {
         latitudeChild.setValue(this.latitude);
         DatabaseReference longitudeChild = mReportRef.child("longitude");
         longitudeChild.setValue(this.longitude);
-        DatabaseReference reporterNameChild = mReportRef.child("reporter-type");
+        DatabaseReference reporterNameChild = mReportRef.child("reporter-name");
         reporterNameChild.setValue(reporterName);
         DatabaseReference reporterUIDChild = mReportRef.child("reporter-uid");
         reporterUIDChild.setValue(reporterUID);
@@ -94,7 +94,7 @@ public class WaterQualityReport implements Parcelable {
         //Get current report information
         DataSnapshot dateChild = dataSnap.child("date-time");
         Date dateTime = new Date((long) dateChild.getValue());
-        DataSnapshot reporterNameChild = dataSnap.child("reporter-type");
+        DataSnapshot reporterNameChild = dataSnap.child("reporter-name");
         String reporterName = (String) reporterNameChild.getValue();
         DataSnapshot reporterUIDChild = dataSnap.child("reporter-uid");
         String reporterUID = (String) reporterUIDChild.getValue();
