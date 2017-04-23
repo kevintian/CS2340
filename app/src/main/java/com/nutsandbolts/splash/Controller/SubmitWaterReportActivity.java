@@ -12,6 +12,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,7 +40,7 @@ import static junit.framework.Assert.assertNotNull;
 public class SubmitWaterReportActivity extends AppCompatActivity implements LocationListener {
 
     private static final int SDK_TWENTY_THREE = 23;
-    private static final int MIN_TIME_INTERVAL = 500;
+    private static final int MIN_TIME_INTERVAL = 5000;
     /*
            Widgets we will need to define listeners for
            */
@@ -85,7 +86,14 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
         /*
         Request GPS Permissions
          */
-        requestPermissions();
+//        requestPermissions();
+        if ((Build.VERSION.SDK_INT >= SDK_TWENTY_THREE) && (PackageManager.PERMISSION_GRANTED
+                != checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION))) {
+            Log.e("GPS", "Requesting Permissions");
+            requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
+        }
+//        requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
+
 
         /*
         Get widgets from view
@@ -139,12 +147,13 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
                 latitude, longitude, waterType, waterCondition);
 
         setUpButtons(gpsButton, submitButton);
+//        setUpLocationManager();
 
-        // setting up LocationManager
-        setUpLocationManager();
+
     }
 
     private void setUpLocationManager() {
+        // setting up LocationManager
         LocationManager locationManager = (LocationManager) getSystemService(Context
                 .LOCATION_SERVICE);
         try {
@@ -152,6 +161,7 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
                     MIN_TIME_INTERVAL,   // Interval in milliseconds
                     10, this);
         } catch (SecurityException e) {
+            Log.e("GPS", e.getMessage());
             final Toast toast = Toast.makeText(getBaseContext(), "Security exception: "
                             + e.getMessage(),
                     Toast.LENGTH_LONG);
@@ -204,11 +214,43 @@ public class SubmitWaterReportActivity extends AppCompatActivity implements Loca
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void requestPermissions() {
+        Log.e("GPS", "A");
+
         if ((Build.VERSION.SDK_INT >= SDK_TWENTY_THREE) && (PackageManager.PERMISSION_GRANTED
                 != checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION))) {
+            Log.e("GPS", "Requesting Permissions");
             requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
         }
     }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case INITIAL_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Log.e("GPS", "REQUESTRESULT");
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    setUpLocationManager();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
 
     /**
      * Validates data required for a water source report and submits it to the database.
