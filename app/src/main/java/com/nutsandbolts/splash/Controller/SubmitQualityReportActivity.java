@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -154,18 +155,6 @@ public class SubmitQualityReportActivity extends AppCompatActivity implements Lo
             }
         });
 
-        //getting setting up LocationManager
-        LocationManager locationManager = (LocationManager) getSystemService(Context
-                .LOCATION_SERVICE);
-        try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    MIN_TIME_INTERVAL,   // Interval in milliseconds
-                    10, this);
-        } catch (SecurityException e) {
-            final Toast toast = Toast.makeText(getBaseContext(),
-                    "Security exception: " + e.getMessage(), Toast.LENGTH_LONG);
-            toast.show();
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -175,6 +164,52 @@ public class SubmitQualityReportActivity extends AppCompatActivity implements Lo
             requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
         }
     }
+
+    private void setUpLocationManager() {
+        // setting up LocationManager
+        LocationManager locationManager = (LocationManager) getSystemService(Context
+                .LOCATION_SERVICE);
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    MIN_TIME_INTERVAL,   // Interval in milliseconds
+                    10, this);
+        } catch (SecurityException e) {
+            Log.e("GPS", e.getMessage());
+            final Toast toast = Toast.makeText(getBaseContext(), "Security exception: "
+                            + e.getMessage(),
+                    Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case INITIAL_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Log.e("GPS", "REQUESTRESULT");
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    setUpLocationManager();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
 
     /**
      * Validates data required for a water quality report and submits it to the database.

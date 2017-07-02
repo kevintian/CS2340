@@ -2,6 +2,7 @@ package com.nutsandbolts.splash.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -47,7 +48,8 @@ public class WaterSourceReport implements Parcelable {
         latitudeChild.setValue(this.latitude);
         DatabaseReference longitudeChild = mReportRef.child("longitude");
         longitudeChild.setValue(this.longitude);
-        DatabaseReference reporterNameChild = mReportRef.child("reporter-type");
+        DatabaseReference reporterNameChild = mReportRef.child("reporter-name");
+        Log.d("REPORT", "ABC" + reporterName);
         reporterNameChild.setValue(reporterName);
         DatabaseReference reporterUidChild = mReportRef.child("reporter-uid");
         reporterUidChild.setValue(reporterUID);
@@ -87,7 +89,7 @@ public class WaterSourceReport implements Parcelable {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String displayName = (String) dataSnapshot.getValue();
-                DatabaseReference reporterNameChild = mReportRef.child("reporter-type");
+                DatabaseReference reporterNameChild = mReportRef.child("display-name");
                 reporterNameChild.setValue(displayName);
             }
 
@@ -136,7 +138,7 @@ public class WaterSourceReport implements Parcelable {
         //Get current report information
         DataSnapshot dateChild = dataSnapshot.child("date-time");
         Date date = new Date((long) dateChild.getValue());
-        DataSnapshot reporterNameChild = dataSnapshot.child("reporter-type");
+        DataSnapshot reporterNameChild = dataSnapshot.child("reporter-name");
         String reporterName = (String) reporterNameChild.getValue();
         DataSnapshot reporterUIDChild = dataSnapshot.child("reporter-uid");
         String reporterUID = (String) reporterUIDChild.getValue();
